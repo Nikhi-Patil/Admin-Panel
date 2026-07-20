@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 20, 2026 at 01:49 PM
+-- Generation Time: Jul 20, 2026 at 01:59 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -47,6 +47,23 @@ INSERT INTO `category_master` (`id`, `category_name`, `created_by`, `created_at`
 (6, 'sa', 'Nikhil', '2026-07-20 06:07:36', 'Nikhil', '2026-07-20 06:07:36'),
 (8, 'xc', 'Nikhil', '2026-07-20 06:12:15', 'Nikhil', '2026-07-20 06:17:27'),
 (9, 'safdg', 'Nikhil', '2026-07-20 06:12:35', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `compound_master`
+--
+
+CREATE TABLE `compound_master` (
+  `id` int(11) NOT NULL,
+  `compound_code` varchar(20) NOT NULL,
+  `polymer` varchar(20) NOT NULL,
+  `im_code` varchar(20) NOT NULL,
+  `created_by` varchar(50) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` varchar(50) DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -215,6 +232,23 @@ INSERT INTO `hist_category_master` (`id`, `category_name`, `created_by`, `create
 (4, 'sdsa', 'Nikhil', '2026-07-20 05:15:22', 'Nikhil', '2026-07-20 05:29:43'),
 (3, 'abc', 'Nikhil', '2026-07-16 12:35:29', 'Nikhil', '2026-07-20 05:56:49'),
 (7, 'a', 'Nikhil', '2026-07-20 06:07:08', 'Nikhil', '2026-07-20 06:07:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `hist_compound_master`
+--
+
+CREATE TABLE `hist_compound_master` (
+  `id` int(11) NOT NULL,
+  `compound_code` varchar(20) NOT NULL,
+  `polymer` varchar(20) NOT NULL,
+  `im_code` varchar(20) NOT NULL,
+  `created_by` varchar(50) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` varchar(50) DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -722,6 +756,12 @@ ALTER TABLE `category_master`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `compound_master`
+--
+ALTER TABLE `compound_master`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `currency_master`
 --
 ALTER TABLE `currency_master`
@@ -820,6 +860,12 @@ ALTER TABLE `unit_master`
 --
 ALTER TABLE `category_master`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `compound_master`
+--
+ALTER TABLE `compound_master`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `currency_master`
