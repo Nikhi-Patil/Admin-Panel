@@ -86,30 +86,54 @@ switch ($action) {
 // =================== DELETE ===================
     case "delete":
 
+        header("Content-Type: application/json");
+
+        // Validate ID
+        if (!isset($_POST['id']) || empty($_POST['id'])) {
+            echo json_encode([
+            "status" => "error",
+            "message" => "Invalid record ID."
+            ]);
+            exit;
+        }
+
         $id = intval($_POST['id']);
 
-        mysqli_begin_transaction($conn);
-
+        // Check Session
         $user_id = $_SESSION['user_id'] ?? 0;
 
         if (!$user_id) {
             echo json_encode([
                 "status" => "error",
-                "message" => "Session expired. Please log in again."
+                "message" => "Session expired. Please login again."
             ]);
-            break;
+            exit;
         }
 
-        if (!$check_result) {
+        // Check whether record exists
+        $check = mysqli_query($conn, "SELECT * FROM compound_master WHERE id='$id'");
+
+        if (!$check) {
             echo json_encode([
                 "status" => "error",
                 "message" => mysqli_error($conn)
             ]);
-            break;
+            exit;
         }
-        
+
+        if (mysqli_num_rows($check) == 0) {
+            echo json_encode([
+                "status" => "error",
+                "message" => "Record not found."
+            ]);
+            exit;
+        }
+
+        mysqli_begin_transaction($conn);
+
         try {
 
+            // Copy record to history table
             $sql1 = "
                 INSERT INTO hist_compound_master
                 (
@@ -133,33 +157,42 @@ switch ($action) {
                     NOW()
                 FROM compound_master
                 WHERE id='$id'
-                ";
+            ";
 
-            if(!mysqli_query($conn,$sql1)){
+            if (!mysqli_query($conn, $sql1)) {
+            throw new Exception(mysqli_error($conn));
+            }
+
+            if (mysqli_affected_rows($conn) != 1) {
+            throw new Exception("Failed to move record to history.");
+            }
+
+            // Delete from main table
+            $sql2 = "DELETE FROM compound_master WHERE id='$id'";
+
+            if (!mysqli_query($conn, $sql2)) {
                 throw new Exception(mysqli_error($conn));
             }
 
-            $sql2 = "DELETE FROM compound_master WHERE id='$id'";
-
-            if(!mysqli_query($conn,$sql2)){
-                throw new Exception(mysqli_error($conn));
+            if (mysqli_affected_rows($conn) != 1) {
+                throw new Exception("Failed to delete record.");
             }
 
             mysqli_commit($conn);
 
             echo json_encode([
-                "status"=>"success"
+                "status" => "success",
+                "message" => "Compound deleted successfully."
             ]);
 
-        }catch(Exception $e){
+        } catch (Exception $e) {
 
             mysqli_rollback($conn);
 
             echo json_encode([
-                "status"=>"error",
-                "message"=>$e->getMessage()
+                "status" => "error",
+                "message" => $e->getMessage()
             ]);
-
         }
 
     break;

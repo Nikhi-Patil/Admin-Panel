@@ -75,7 +75,7 @@ $page = $_GET['page'] ?? 'compound';
                             {
                                 title: "Polymer Name",
                                 field: "polymer",
-                                width: 150,
+
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
@@ -235,8 +235,7 @@ $page = $_GET['page'] ?? 'compound';
                         </div>
                         <div class="mb-3">
                             <label>IM Code</label>
-
-                            <textarea id="im_code" name="im_code" class="form-control" required></textarea>
+                            <input type="text" id="im_code" name="im_code" class="form-control" required>
                         </div>
                         <button type="submit" id="saveBtn" class="btn btn-success">
                             Save
@@ -385,6 +384,13 @@ $page = $_GET['page'] ?? 'compound';
                                     headerHozAlign: "center"
                                 },
                                 {
+                                    title: "Polymer Name",
+                                    field: "polymer",
+
+                                    hozAlign: "center",
+                                    headerHozAlign: "center"
+                                },
+                                {
                                     title: "Compund Code",
                                     field: "compound_code",
                                     width: 150,
@@ -392,15 +398,10 @@ $page = $_GET['page'] ?? 'compound';
                                     headerHozAlign: "center"
                                 },
                                 {
-                                    title: "Polymer Name",
-                                    field: "polymer",
-                                    width: 150,
-                                    hozAlign: "center",
-                                    headerHozAlign: "center"
-                                },
-                                {
                                     title: "IM Code",
                                     field: "im_code",
+                                    width: 150,
+                                    hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
