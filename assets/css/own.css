@@ -1,0 +1,155 @@
+
+.app-main{
+    margin-top: 0 !important;
+}
+
+.app-content{
+    padding-top: 10px !important;
+}
+.card-body{
+    padding:8px !important;
+}
+/* Reduce footer height */
+.tabulator .tabulator-footer .tabulator-footer-contents{
+    padding:2px 8px !important;
+}
+
+/* Reduce page button spacing */
+.tabulator .tabulator-footer .tabulator-page{
+    margin:0 !important;
+    padding:4px 8px !important;
+}
+
+/* Reduce footer height */
+.tabulator .tabulator-footer{
+    min-height:35px !important;
+}
+
+/* Remove extra space below table */
+.tabulator .tabulator-tableholder{
+    overflow-y:hidden !important;
+}
+.tabulator .tabulator-footer{
+    padding: 0 !important;
+}
+
+.tabulator .tabulator-footer .tabulator-footer-contents{
+    padding: 2px 6px !important;
+    min-height: 34px !important;
+}
+
+.tabulator .tabulator-footer .tabulator-paginator{
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.tabulator .tabulator-footer .tabulator-page{
+    padding: 4px 10px !important;
+    margin: 0 !important;
+}   
+.app-sidebar{
+    position:fixed;
+    top:70px;
+    left:0;
+    width:250px;
+    height:calc(100vh - 70px);
+}
+.tabulator .tabulator-footer .tabulator-page:disabled {
+    font-size: 10px !important;
+}
+.tabulator .tabulator-footer .tabulator-page.active {
+   font-size: 10px !important;
+}
+button:not(:disabled), [type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled) {
+    cursor: pointer;
+    padding: 3px !important;
+}
+/* Outer table border */
+.tabulator {
+    border: 1px solid #cfd4da !important;
+}
+
+/* Header border */
+.tabulator .tabulator-header {
+    border-bottom: 1px solid #cfd4da !important;
+}
+
+/* Vertical column borders */
+.tabulator .tabulator-col {
+    border-right: 1px solid #cfd4da !important;
+}
+
+/* Horizontal row borders */
+.tabulator .tabulator-row {
+    border-bottom: 1px solid #cfd4da !important;
+}
+
+/* Vertical cell borders */
+.tabulator .tabulator-cell {
+    border-right: 1px solid #cfd4da !important;
+    height: 40px !important;
+    padding: 6px !important;
+}
+
+
+.tabulator:not(.table-dark):not(.thead-dark) .tabulator-header {
+    background:#12315f !important;
+}
+
+.tabulator:not(.table-dark):not(.thead-dark) .tabulator-header .tabulator-col {
+    background:#12315f !important;
+    color: #fff !important;
+}
+
+.tabulator:not(.table-dark):not(.thead-dark) .tabulator-header .tabulator-col .tabulator-col-title {
+    color: #fff !important;
+    font-weight: bold;
+}
+
+.tabulator.table:not(.table-dark):not(.thead-dark) .tabulator-header,
+.tabulator.table:not(.table-dark):not(.thead-dark) .tabulator-header .tabulator-col {
+    background: #12315f !important;
+    color: #fff !important;
+}
+
+.tabulator.table:not(.table-dark):not(.thead-dark) .tabulator-header .tabulator-col .tabulator-col-title {
+    color: #fff !important;
+    font-weight: bold;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content {
+    padding: 6px !important;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+    min-height: 30px !important;
+    border-right: 1px solid #e3e6ea !important;
+    border-bottom: 1px solid #e3e6ea !important;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-col-title {
+    line-height: 18px !important;
+}
+
+.card-header {
+    position: relative;
+    padding: 6px 1rem !important;
+    background-color: transparent;
+    border-bottom: 1px solid var(--bs-border-color-translucent);
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+}
+.card-header:first-child {
+    border-radius: var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius) 0 0;
+    padding: 6px !important;
+}
+
+.card-header > .card-tools .input-group, .card-header > .card-tools .nav, .card-header > .card-tools .pagination {
+    padding: 6px !important;
+}
+[data-overlayscrollbars-viewport]:not([data-overlayscrollbars]) {
+    --os-vaw: 0;
+    --os-vah: 0;
+    outline: none;
+    background-color: #15243a !important;
+}
