@@ -68,28 +68,28 @@ $page = $_GET['page'] ?? 'customer';
                         columns: [{
                                 title: "ID",
                                 field: "id",
-                                width: 120,
+                                width: 55,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Customer Name",
                                 field: "customer_name",
-                                width: 150,
+
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Sub Customer Name",
                                 field: "sub_customer",
-                                width: 150,
+
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Domastic/Export",
                                 field: "geo_type",
-                                width: 150,
+                                width: 170,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
@@ -103,19 +103,21 @@ $page = $_GET['page'] ?? 'customer';
                             {
                                 title: "Created By",
                                 field: "created_by",
+                                width: 150,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Updated By",
                                 field: "updated_by",
+                                width: 150,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
 
                             },
                             {
                                 title: "Action",
-                                width: 100,
+                                width: 90,
                                 hozAlign: "center",
                                 headerHozAlign: "center",
 
@@ -433,28 +435,28 @@ $page = $_GET['page'] ?? 'customer';
                             columns: [{
                                     title: "ID",
                                     field: "id",
-                                    width: 120,
+                                    width: 55,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Customer Name",
                                     field: "customer_name",
-                                    width: 150,
+
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Sub Customer Name",
                                     field: "sub_customer",
-                                    width: 150,
+
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Domastic/Export",
                                     field: "geo_type",
-                                    width: 150,
+                                    width: 170,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
@@ -468,19 +470,21 @@ $page = $_GET['page'] ?? 'customer';
                                 {
                                     title: "Created By",
                                     field: "created_by",
+                                    width: 150,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Updated By",
                                     field: "updated_by",
+                                    width: 150,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
 
                                 },
                                 {
                                     title: "Action",
-                                    width: 100,
+                                    width: 90,
                                     hozAlign: "center",
                                     headerHozAlign: "center",
 

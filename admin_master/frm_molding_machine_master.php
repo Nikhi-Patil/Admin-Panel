@@ -3,23 +3,24 @@ session_start();
 include "../inc/db_cfg.php";
 include "../include/top_header.php";
 include "../include/header.php";
-include "../include/left_nav_bar.php";?>
-<?php
-$page = $_GET['page'] ?? 'department';
+include "../include/left_nav_bar.php";
 ?>
-<?php if($page=="department"){ ?>
+<?php
+$page = $_GET['page'] ?? 'molding_machine';
+?>
+<?php if($page=="molding_machine"){ ?>
 <div class="app-content-header" style="padding: 6px 0.5rem;">
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6">
-                <h1 class="mb-0 fs-3">Department List</h1>
+                <h1 class="mb-0 fs-3">Molding Machine List</h1>
             </div>
             <div class="col-sm-6">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb float-sm-end">
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#departmentModal">
+                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#molding_machineModal">
                             <i class="fas fa-plus"></i>
-                            Add Department
+                            Add Molding Machine
                         </button>
 
                     </ol>
@@ -31,7 +32,6 @@ $page = $_GET['page'] ?? 'department';
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-
                     <button id="export-csv" type="button" class="btn btn-sm btn btn-warning">
                         <i class="fa-solid fa-file-csv"></i>
                         Export CSV
@@ -41,7 +41,6 @@ $page = $_GET['page'] ?? 'department';
                         <i class="fa-solid fa-print"></i>
                         Print
                     </button>
-
                     <div class="card-tools m-0 d-flex align-items-center ms-auto">
                         <div class="input-group input-group-sm" style="width: 16rem">
                             <span class="input-group-text">
@@ -54,11 +53,11 @@ $page = $_GET['page'] ?? 'department';
                 </div>
                 <div class="card-body">
 
-                    <div id="department_table"></div>
+                    <div id="molding_machine_table"></div>
                     <!-- disply table   -->
                     <script>
-                    const table = new Tabulator("#department_table", {
-                        ajaxURL: "qur_department_master.php?action=list",
+                    const table = new Tabulator("#molding_machine_table", {
+                        ajaxURL: "qur_molding_machine_master.php?action=list",
                         ajaxConfig: "GET",
                         layout: "fitColumns",
 
@@ -69,27 +68,34 @@ $page = $_GET['page'] ?? 'department';
                         columns: [{
                                 title: "ID",
                                 field: "id",
-                                width: 120,
+                                width: 100,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
-                                title: "Department",
-                                field: "department_name",
+                                title: "Machine List",
+                                field: "machine_list",
+                                hozAlign: "center",
+                                headerHozAlign: "center"
+                            },
+                            {
+                                title: "Shift Rate",
+                                field: "shift_rate",
+                                width: 150,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Created By",
                                 field: "created_by",
-                                width: 150,
+                                width: 160,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Updated By",
                                 field: "updated_by",
-                                width: 150,
+                                width: 160,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
 
@@ -128,7 +134,7 @@ $page = $_GET['page'] ?? 'department';
 
                             if (confirm("Delete this record?")) {
 
-                                fetch("qur_department_master.php?action=delete", {
+                                fetch("qur_molding_machine_master.php?action=delete", {
                                         method: "POST",
                                         headers: {
                                             "Content-Type": "application/x-www-form-urlencoded"
@@ -140,6 +146,8 @@ $page = $_GET['page'] ?? 'department';
                                         if (res.status == "success") {
                                             table.replaceData();
                                             alert("Deleted Successfully");
+                                        } else {
+                                            alert(res.message || "Delete failed.");
                                         }
                                     });
 
@@ -156,62 +164,69 @@ $page = $_GET['page'] ?? 'department';
 
                             let id = e.target.closest(".edit-btn").dataset.id;
 
-                            fetch("qur_department_master.php?action=get&id=" + id)
+                            fetch("qur_molding_machine_master.php?action=get&id=" + id)
                                 .then(response => response.json())
                                 .then(data => {
 
-                                    document.getElementById("department_id").value = data.id;
-                                    document.getElementById("department_name").value = data.department_name;
+                                    document.getElementById("molding_machine_id").value = data.id;
+                                    document.getElementById("machine_list").value = data
+                                        .machine_list;
+                                    document.getElementById("shift_rate").value = data.shift_rate;
 
-                                    document.getElementById("departmentModalLabel").innerHTML =
-                                        "Edit Department";
+                                    document.getElementById("molding_machineModalLabel").innerHTML =
+                                        "Edit Molding Machine";
                                     document.getElementById("saveBtn").innerHTML = "Update";
 
-                                    new bootstrap.Modal(document.getElementById("departmentModal")).show();
+                                    new bootstrap.Modal(document.getElementById("molding_machineModal"))
+                                        .show();
                                 });
                         }
 
                     });
 
-                    // Add Department Button
-                    document.querySelector('[data-bs-target="#departmentModal"]').addEventListener("click", function() {
+                    // Add Plant Button
+                    document.querySelector('[data-bs-target="#molding_machineModal"]').addEventListener("click",
+                        function() {
 
-                        document.getElementById("departmentForm").reset();
+                            document.getElementById("molding_machineForm").reset();
 
-                        document.getElementById("department_id").value = "";
+                            document.getElementById("molding_machine_id").value = "";
 
-                        document.getElementById("departmentModalLabel").innerHTML = "Add Department";
+                            document.getElementById("molding_machineModalLabel").innerHTML = "Add Molding Machine";
 
-                        document.getElementById("saveBtn").innerHTML = "Save";
+                            document.getElementById("saveBtn").innerHTML = "Save";
 
-                    });
+                        });
                     </script>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- form for  Department  -->
-    <div class="modal fade" id="departmentModal" tabindex="-1" aria-labelledby="departmentModalLabel"
+    <!-- form for  Molding Machine  -->
+    <div class="modal fade" id="molding_machineModal" tabindex="-1" aria-labelledby="molding_machineModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="departmentModalLabel">Add Department</h5>
+                    <h5 class="modal-title" id="molding_machineModalLabel">Add Molding Machine</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
 
-                    <form id="departmentForm">
+                    <form id="molding_machineForm">
 
-                        <input type="hidden" id="department_id" name="id">
+                        <input type="hidden" id="molding_machine_id" name="id">
 
                         <div class="mb-3">
-                            <label>Department</label>
-                            <input type="text" id="department_name" name="department_name" class="form-control"
-                                required>
+                            <label>Machine List</label>
+                            <input type="text" id="machine_list" name="machine_list" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Shift Rate</label>
+                            <input type="text" id="shift_rate" name="shift_rate" class="form-control" required>
                         </div>
                         <button type="submit" id="saveBtn" class="btn btn-success">
                             Save
@@ -222,13 +237,13 @@ $page = $_GET['page'] ?? 'department';
                 </div>
 
                 <script>
-                document.getElementById("departmentForm").addEventListener("submit", function(e) {
+                document.getElementById("molding_machineForm").addEventListener("submit", function(e) {
 
                     e.preventDefault();
 
                     let formData = new FormData(this);
 
-                    fetch("qur_department_master.php?action=save", {
+                    fetch("qur_molding_machine_master.php?action=save", {
                             method: "POST",
                             body: formData
                         })
@@ -238,22 +253,22 @@ $page = $_GET['page'] ?? 'department';
                             if (data.trim() == "success") {
 
                                 bootstrap.Modal.getInstance(
-                                    document.getElementById("departmentModal")
+                                    document.getElementById("molding_machineModal")
                                 ).hide();
 
-                                document.getElementById("departmentForm").reset();
+                                document.getElementById("molding_machineForm").reset();
 
-                                document.getElementById("department_id").value = "";
+                                document.getElementById("molding_machine_id").value = "";
 
-                                document.getElementById("departmentModalLabel").innerHTML =
-                                    "Add Department";
+                                document.getElementById("molding_machineModalLabel").innerHTML =
+                                    "Add Molding Machine";
 
                                 document.getElementById("saveBtn").innerHTML = "Save";
 
                                 table.replaceData();
 
                             } else {
-                                alert(data.message || "Save failed.");
+                                alert(data);
                             }
 
                         });
@@ -284,17 +299,20 @@ $page = $_GET['page'] ?? 'department';
             if (value) {
                 table.setFilter([
                     [{
-                            field: 'department',
+                            field: 'machine_list',
                             type: 'like',
                             value: value
                         },
-
+                        {
+                            field: 'shift_rate',
+                            type: 'like',
+                            value: value
+                        },
                         {
                             field: 'id',
                             type: 'like',
                             value: value
                         },
-
                     ],
                 ]);
             } else {
@@ -308,20 +326,20 @@ $page = $_GET['page'] ?? 'department';
 
         document
             .getElementById('export-csv')
-            .addEventListener('click', () => table.download("csv", "department.csv"););
+            .addEventListener('click', () => table.download('csv', 'molding_machine_master.csv'));
     });
     </script>
 
-
-
     <?php } ?>
+
+
     <?php if($page=="recycle"){ ?>
 
     <div class="app-content-header">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6">
-                    <h1 class="mb-0 fs-3">Department List</h1>
+                    <h1 class="mb-0 fs-3">Molding Machine List</h1>
                 </div>
             </div>
         </div>
@@ -329,15 +347,15 @@ $page = $_GET['page'] ?? 'department';
             <div class="container-fluid">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Department</h3>
+                        <h3 class="card-title">Molding Machine</h3>
 
                     </div>
                     <div class="card-body">
-                        <div id="department_table"></div>
-                        <!-- disply tableb   -->
+                        <div id="molding_machine_table"></div>
+                        <!-- disply table   -->
                         <script>
-                        const table = new Tabulator("#department_table", {
-                            ajaxURL: "qur_department_master.php?action=list1",
+                        const table = new Tabulator("#molding_machine_table", {
+                            ajaxURL: "qur_molding_machine_master.php?action=list1",
                             ajaxConfig: "GET",
                             layout: "fitColumns",
 
@@ -348,25 +366,34 @@ $page = $_GET['page'] ?? 'department';
                             columns: [{
                                     title: "ID",
                                     field: "id",
-                                    width: 120,
+                                    width: 100,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
-                                    title: "department",
-                                    field: "department_name",
+                                    title: "Molding List",
+                                    field: "machine_list",
+                                    hozAlign: "center",
+                                    headerHozAlign: "center"
+                                },
+                                {
+                                    title: "Shift Rate",
+                                    field: "shift_rate",
+                                    width: 150,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Created By",
                                     field: "created_by",
+                                    width: 160,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Deleted By",
                                     field: "updated_by",
+                                    width: 160,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
 
@@ -400,9 +427,9 @@ $page = $_GET['page'] ?? 'department';
 
                             let id = btn.dataset.id;
 
-                            if (confirm("Restore this Department?")) {
+                            if (confirm("Restore this Molding?")) {
 
-                                fetch("qur_department_master.php?action=restore", {
+                                fetch("qur_molding_machine_master.php?action=restore", {
                                         method: "POST",
                                         headers: {
                                             "Content-Type": "application/x-www-form-urlencoded"
@@ -414,7 +441,7 @@ $page = $_GET['page'] ?? 'department';
 
                                         if (res.status == "success") {
                                             table.replaceData();
-                                            alert("Department restored successfully.");
+                                            alert("Molding restored successfully.");
                                         } else {
                                             alert("Restore failed.");
                                         }
@@ -433,6 +460,7 @@ $page = $_GET['page'] ?? 'department';
 
 
         <?php } ?>
+
 
         <?php
 include "../include/footer.php";

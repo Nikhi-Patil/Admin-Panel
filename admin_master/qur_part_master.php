@@ -5,6 +5,7 @@ include "../inc/db_cfg.php";
 $action = $_REQUEST['action'] ?? '';
 
 switch ($action) {
+    // =================== GET TABLE ===================
     case "list":
                 $sql = "SELECT
                     p.id,
@@ -12,19 +13,17 @@ switch ($action) {
                     p.part_no,
                     p.fg_code,
                     p.im_code,
+                    p.quantity,
+                    p.umo,
                     p.department_id,
                     p.sub_department_id,
-                    p.customer_id,
                     d.department_name,
                     sd.sub_department_name,
-                    c.customer_name,
-                    c.sub_customer,
                     p.created_by,
                     p.updated_by
                 FROM part_master p
                 LEFT JOIN department_master d ON p.department_id = d.id
                 LEFT JOIN sub_department_master sd ON p.sub_department_id = sd.id
-                LEFT JOIN customer_master c ON p.customer_id = c.id
                 ORDER BY p.id DESC";
 
         $result = mysqli_query($conn, $sql);
@@ -35,8 +34,8 @@ switch ($action) {
 
         header("Content-Type: application/json");
         echo json_encode($data);
-        break;
-
+    break;
+    // =================== GET SINGLE RECORD ===================
     case "get":
         $id = intval($_GET['id'] ?? 0);
 
@@ -46,26 +45,24 @@ switch ($action) {
                     p.part_no,
                     p.fg_code,
                     p.im_code,
+                    p.quantity,
+                    p.umo,
                     p.department_id,
                     p.sub_department_id,
-                    p.customer_id,
                     d.department_name,
                     sd.sub_department_name,
-                    c.customer_name,
-                    c.sub_customer,
                     p.created_by,
                     p.updated_by
                 FROM part_master p
                 LEFT JOIN department_master d ON p.department_id = d.id
                 LEFT JOIN sub_department_master sd ON p.sub_department_id = sd.id
-                LEFT JOIN customer_master c ON p.customer_id = c.id
                 WHERE p.id = '$id'";
 
         $result = mysqli_query($conn, $sql);
         header("Content-Type: application/json");
         echo json_encode(mysqli_fetch_assoc($result));
-        break;
-
+    break;
+    // =================== GET DEPARTMENT TABLE ===================
     case "departments":
         $sql = "SELECT id, department_name
                 FROM department_master
@@ -77,8 +74,8 @@ switch ($action) {
         }
         header("Content-Type: application/json");
         echo json_encode($data);
-        break;
-
+    break;
+    // =================== GET SUBDEPARTMENT TABLE ===================
     case "sub_departments":
         $sql = "SELECT s.id, s.department_id, d.department_name, s.sub_department_name
                 FROM sub_department_master s
@@ -91,21 +88,8 @@ switch ($action) {
         }
         header("Content-Type: application/json");
         echo json_encode($data);
-        break;
-
-    case "customers":
-        $sql = "SELECT id, customer_name, sub_customer
-                FROM customer_master
-                ORDER BY customer_name";
-        $result = mysqli_query($conn, $sql);
-        $data = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $data[] = $row;
-        }
-        header("Content-Type: application/json");
-        echo json_encode($data);
-        break;
-
+    break;
+    // =================== SAVE TABLE ===================
     case "save":
         header("Content-Type: application/json");
 
@@ -114,8 +98,9 @@ switch ($action) {
         $part_no = mysqli_real_escape_string($conn, $_POST['part_no'] ?? '');
         $fg_code = mysqli_real_escape_string($conn, $_POST['fg_code'] ?? '');
         $im_code = mysqli_real_escape_string($conn, $_POST['im_code'] ?? '');
+        $quantity = mysqli_real_escape_string($conn, $_POST['quantity'] ?? '');
+        $umo = mysqli_real_escape_string($conn, $_POST['umo'] ?? '');
         $sub_department_id = intval($_POST['sub_department_id'] ?? 0);
-        $customer_id = intval($_POST['customer_id'] ?? 0);
         $user_id = $_SESSION['user_id'] ?? 0;
 
         mysqli_begin_transaction($conn);
@@ -136,9 +121,10 @@ switch ($action) {
                             part_no,
                             fg_code,
                             im_code,
+                            quantity,
+                            umo,
                             department_id,
                             sub_department_id,
-                            customer_id,
                             created_by
                         )
                         VALUES
@@ -147,9 +133,10 @@ switch ($action) {
                             '$part_no',
                             '$fg_code',
                             '$im_code',
+                            '$quantity',
+                            '$umo',
                             '$department_id',
                             '$sub_department_id',
-                            '$customer_id',
                             '$user_id'
                         )";
             } else {
@@ -159,9 +146,10 @@ switch ($action) {
                             part_no = '$part_no',
                             fg_code = '$fg_code',
                             im_code = '$im_code',
+                            quantity='$quantity',
+                            umo='$umo',
                             department_id = '$department_id',
                             sub_department_id = '$sub_department_id',
-                            customer_id = '$customer_id',
                             updated_by = '$user_id',
                             updated_at = NOW()
                         WHERE id = '$id'";
@@ -180,8 +168,8 @@ switch ($action) {
                 "message" => $e->getMessage()
             ]);
         }
-        break;
-
+    break;
+    // =================== DELETE TABLE ===================
     case "delete":
         $id = intval($_POST['id'] ?? 0);
         $user_id = $_SESSION['user_id'] ?? 0;
@@ -197,9 +185,10 @@ switch ($action) {
                     part_no,
                     fg_code,
                     im_code,
+                    quantity,
+                    umo,
                     department_id,
                     sub_department_id,
-                    customer_id,
                     created_by,
                     created_at,
                     updated_by,
@@ -211,9 +200,10 @@ switch ($action) {
                     part_no,
                     fg_code,
                     im_code,
+                    quantity,
+                    umo,
                     department_id,
                     sub_department_id,
-                    customer_id,
                     created_by,
                     created_at,
                     '$user_id',
@@ -240,8 +230,8 @@ switch ($action) {
                 "message" => $e->getMessage()
             ]);
         }
-        break;
-
+    break;
+    // =================== GET RECYCLE TABLE ===================
     case "list1":
         $sql = "SELECT
                     p.id,
@@ -249,19 +239,17 @@ switch ($action) {
                     p.part_no,
                     p.fg_code,
                     p.im_code,
+                    p.quantity,
+                    p.umo,
                     p.department_id,
                     p.sub_department_id,
-                    p.customer_id,
                     d.department_name,
                     sd.sub_department_name,
-                    c.customer_name,
-                    c.sub_customer,
                     p.created_by,
                     p.updated_by
                 FROM hist_part_master p
                 LEFT JOIN department_master d ON p.department_id = d.id
                 LEFT JOIN sub_department_master sd ON p.sub_department_id = sd.id
-                LEFT JOIN customer_master c ON p.customer_id = c.id
                 ORDER BY p.id DESC";
 
         $result = mysqli_query($conn, $sql);
@@ -272,8 +260,8 @@ switch ($action) {
 
         header("Content-Type: application/json");
         echo json_encode($data);
-        break;
-
+    break;
+    // =================== RESTORE TABLE ===================
     case "restore":
         $id = intval($_POST['id'] ?? 0);
         $user_id = $_SESSION['user_id'] ?? 0;
@@ -289,9 +277,10 @@ switch ($action) {
                     part_no,
                     fg_code,
                     im_code,
+                    quantity,
+                    umo,
                     department_id,
                     sub_department_id,
-                    customer_id,
                     created_by,
                     created_at,
                     updated_by,
@@ -303,9 +292,10 @@ switch ($action) {
                     part_no,
                     fg_code,
                     im_code,
+                    quantity,
+                    umo,
                     department_id,
                     sub_department_id,
-                    customer_id,
                     created_by,
                     created_at,
                     '$user_id',
@@ -332,10 +322,10 @@ switch ($action) {
                 "message" => $e->getMessage()
             ]);
         }
-        break;
-
+    break;
+    // =================== DEFAULT ===================
     default:
         echo json_encode(["status" => "Invalid Action"]);
-        break;
+    break;
 }
 ?>

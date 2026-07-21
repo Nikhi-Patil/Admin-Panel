@@ -68,7 +68,7 @@ $page = $_GET['page'] ?? 'compound';
                         columns: [{
                                 title: "ID",
                                 field: "id",
-                                width: 120,
+                                width: 100,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
@@ -82,7 +82,7 @@ $page = $_GET['page'] ?? 'compound';
                             {
                                 title: "Compound Code",
                                 field: "compound_code",
-                                width: 150,
+                                width: 180,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
@@ -379,7 +379,7 @@ $page = $_GET['page'] ?? 'compound';
                             columns: [{
                                     title: "ID",
                                     field: "id",
-                                    width: 120,
+                                    width: 100,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
@@ -393,7 +393,7 @@ $page = $_GET['page'] ?? 'compound';
                                 {
                                     title: "Compund Code",
                                     field: "compound_code",
-                                    width: 150,
+                                    width: 180,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },

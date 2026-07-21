@@ -95,12 +95,14 @@ $page = $_GET['page'] ?? 'sub_department';
                             {
                                 title: "Created By",
                                 field: "created_by",
+                                width: 150,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Updated By",
                                 field: "updated_by",
+                                width: 150,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
 
@@ -438,12 +440,14 @@ $page = $_GET['page'] ?? 'sub_department';
                                 {
                                     title: "Created By",
                                     field: "created_by",
+                                    width: 120,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Deleted By",
                                     field: "updated_by",
+                                    width: 120,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
 

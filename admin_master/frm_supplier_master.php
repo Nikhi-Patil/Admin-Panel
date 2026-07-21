@@ -70,21 +70,20 @@ $page = $_GET['page'] ?? 'supplier';
                         columns: [{
                                 title: "ID",
                                 field: "id",
-                                width: 120,
+                                width: 55,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Supplier Name",
                                 field: "supplier_name",
-                                width: 150,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Location",
                                 field: "location",
-                                width: 150,
+                                width: 140,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
@@ -96,26 +95,28 @@ $page = $_GET['page'] ?? 'supplier';
                             {
                                 title: "Contact",
                                 field: "contact_no",
-                                width: 180,
+                                width: 150,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Created By",
                                 field: "created_by",
+                                width: 130,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Updated By",
                                 field: "updated_by",
+                                width: 130,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
 
                             },
                             {
                                 title: "Action",
-                                width: 100,
+                                width: 90,
                                 hozAlign: "center",
                                 headerHozAlign: "center",
 
@@ -394,54 +395,53 @@ $page = $_GET['page'] ?? 'supplier';
                             columns: [{
                                     title: "ID",
                                     field: "id",
-                                    width: 100,
+                                    width: 55,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Supplier Name",
                                     field: "supplier_name",
-                                    width: 180,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Location",
                                     field: "location",
-                                    width: 150,
+                                    width: 140,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
-                                    title: "Eamil",
-                                    field: "eamil",
-                                    width: 180,
-                                    hozAlign: "center",
+                                    title: "Email",
+                                    field: "email",
                                     headerHozAlign: "center"
                                 },
                                 {
-                                    title: "Contact No.",
+                                    title: "Contact",
                                     field: "contact_no",
-                                    width: 180,
+                                    width: 150,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Created By",
                                     field: "created_by",
+                                    width: 130,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
-                                    title: "Deleted By",
+                                    title: "Updated By",
                                     field: "updated_by",
+                                    width: 130,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
 
                                 },
                                 {
                                     title: "Action",
-                                    width: 100,
+                                    width: 90,
                                     hozAlign: "center",
                                     headerHozAlign: "center",
 

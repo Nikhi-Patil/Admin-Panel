@@ -89,6 +89,20 @@ $page = $_GET['page'] ?? 'part';
                             <label>IM Code</label>
                             <input type="text" id="im_code" name="im_code" class="form-control" required>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Quantity</label>
+                            <input type="number" id="quantity" name="quantity" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>UMO</label>
+                            <select id="umo" name="umo" class="form-select" required>
+                                <option value="">Select UMO</option>
+                                <option value="kg">Kg</option>
+                                <option value="mtrs">mtrs</option>
+                                <option value="nos">Nos</option>
+                            </select>
+                        </div>
 
                         <div class="col-md-6 mb-3">
                             <label>Sub Department</label>
@@ -100,18 +114,6 @@ $page = $_GET['page'] ?? 'part';
                         <div class="col-md-6 mb-3">
                             <label>Department</label>
                             <input type="text" id="department_name" class="form-control" readonly>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label>Customer</label>
-                            <select id="customer_id" name="customer_id" class="form-select" required>
-                                <option value="">Select Customer</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label>Sub Customer</label>
-                            <input type="text" id="sub_customer_name" class="form-control" readonly>
                         </div>
                     </div>
 
@@ -138,22 +140,6 @@ function populateSubDepartmentOptions(selectedId = "") {
     });
 }
 
-function populateCustomerOptions() {
-    const select = document.getElementById("customer_id");
-    select.innerHTML = '<option value="">Select Customer</option>';
-    allCustomers.forEach(item => {
-        const label = item.sub_customer ? `${item.customer_name} (${item.sub_customer})` : item.customer_name;
-        select.innerHTML +=
-            `<option value="${item.id}" data-sub-customer="${item.sub_customer || ''}">${label}</option>`;
-    });
-}
-
-function updateSubCustomerName() {
-    const customerSelect = document.getElementById("customer_id");
-    const current = customerSelect.options[customerSelect.selectedIndex];
-    document.getElementById("sub_customer_name").value = current?.dataset?.subCustomer || "";
-}
-
 function updateDepartmentName() {
     const subSelect = document.getElementById("sub_department_id");
     const current = subSelect.options[subSelect.selectedIndex];
@@ -169,7 +155,7 @@ const table = new Tabulator("#part_table", {
     columns: [{
             title: "ID",
             field: "id",
-            width: 80,
+            width: 55,
             hozAlign: "center",
             headerHozAlign: "center"
         },
@@ -183,69 +169,69 @@ const table = new Tabulator("#part_table", {
         {
             title: "Part No",
             field: "part_no",
-            width: 150,
+            width: 100,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "FG Code",
             field: "fg_code",
-            width: 150,
+            width: 105,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "IM Code",
             field: "im_code",
-            width: 150,
+            width: 105,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
+            title: "Quantity",
+            field: "quantity",
+            width: 105,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
+            title: "UMO",
+            field: "umo",
+            width: 90,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Department",
             field: "department_name",
-            width: 150,
+            width: 140,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Sub Department",
             field: "sub_department_name",
-            width: 150,
-            hozAlign: "center",
-            headerHozAlign: "center"
-        },
-        {
-            title: "Customer",
-            field: "customer_name",
-            width: 150,
-            hozAlign: "center",
-            headerHozAlign: "center"
-        },
-        {
-            title: "Sub Customer",
-            field: "sub_customer",
-            width: 150,
+            width: 165,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Created By",
             field: "created_by",
-            width: 150,
+            width: 130,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Updated By",
             field: "updated_by",
-            width: 150,
+            width: 130,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Action",
-            width: 120,
+            width: 90,
             hozAlign: "center",
             headerHozAlign: "center",
             formatter: function(cell) {
@@ -299,11 +285,12 @@ document.addEventListener("click", function(e) {
                 document.getElementById("part_no").value = data.part_no || "";
                 document.getElementById("fg_code").value = data.fg_code || "";
                 document.getElementById("im_code").value = data.im_code || "";
+                document.getElementById("quantity").value = data.quantity || "";;
+                document.getElementById("umo").value = data.umo || "";;
                 populateSubDepartmentOptions(data.sub_department_id);
                 document.getElementById("sub_department_id").value = data.sub_department_id || "";
                 updateDepartmentName();
-                document.getElementById("customer_id").value = data.customer_id || "";
-                updateSubCustomerName();
+
 
                 document.getElementById("partModalLabel").innerHTML = "Edit Part";
                 document.getElementById("saveBtn").innerHTML = "Update";
@@ -319,16 +306,16 @@ document.querySelector('[data-bs-target="#partModal"]').addEventListener("click"
     document.getElementById("saveBtn").innerHTML = "Save";
     document.getElementById("fg_code").value = "";
     document.getElementById("im_code").value = "";
+    document.getElementById("quantity").value = "";
+    document.getElementById("umo").value = "";
     document.getElementById("sub_department_id").value = "";
     document.getElementById("department_name").value = "";
-    document.getElementById("sub_customer_name").value = "";
 });
 
 document.getElementById("sub_department_id").addEventListener("change", function() {
     updateDepartmentName();
 });
 
-document.getElementById("customer_id").addEventListener("change", updateSubCustomerName);
 
 document.getElementById("partForm").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -348,9 +335,10 @@ document.getElementById("partForm").addEventListener("submit", function(e) {
                 document.getElementById("saveBtn").innerHTML = "Save";
                 document.getElementById("fg_code").value = "";
                 document.getElementById("im_code").value = "";
+                document.getElementById("quantity").value = "";
+                document.getElementById("umo").value = "";
                 document.getElementById("sub_department_id").value = "";
                 document.getElementById("department_name").value = "";
-                document.getElementById("sub_customer_name").value = "";
                 table.replaceData();
             } else {
                 alert(data.message || "Save failed.");
@@ -364,13 +352,6 @@ function loadPartLookups() {
         .then(data => {
             allSubDepartments = data;
             populateSubDepartmentOptions();
-        });
-
-    fetch("qur_part_master.php?action=customers")
-        .then(res => res.json())
-        .then(data => {
-            allCustomers = data;
-            populateCustomerOptions();
         });
 }
 
@@ -387,10 +368,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     data.part_no,
                     data.fg_code,
                     data.im_code,
+                    data.quantity,
+                    data.umo,
                     data.sub_department_name,
-                    data.department_name,
-                    data.customer_name,
-                    data.sub_customer
+                    data.department_name
                 ].some(field => String(field ?? "").toLowerCase().includes(term));
             });
         } else {
@@ -435,73 +416,83 @@ document.addEventListener("DOMContentLoaded", () => {
                     columns: [{
                             title: "ID",
                             field: "id",
-                            width: 80,
+                            width: 55,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Part Name",
                             field: "part_name",
+                            width: 150,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Part No",
                             field: "part_no",
+                            width: 100,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "FG Code",
                             field: "fg_code",
+                            width: 105,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "IM Code",
                             field: "im_code",
+                            width: 105,
+                            hozAlign: "center",
+                            headerHozAlign: "center"
+                        },
+                        {
+                            title: "Quantity",
+                            field: "quantity",
+                            width: 105,
+                            hozAlign: "center",
+                            headerHozAlign: "center"
+                        },
+                        {
+                            title: "UMO",
+                            field: "umo",
+                            width: 90,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Department",
                             field: "department_name",
+                            width: 140,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Sub Department",
                             field: "sub_department_name",
-                            hozAlign: "center",
-                            headerHozAlign: "center"
-                        },
-                        {
-                            title: "Customer",
-                            field: "customer_name",
-                            hozAlign: "center",
-                            headerHozAlign: "center"
-                        },
-                        {
-                            title: "Sub Customer",
-                            field: "sub_customer",
+                            width: 165,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Created By",
                             field: "created_by",
+                            width: 130,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
-                            title: "Deleted By",
+                            title: "Updated By",
                             field: "updated_by",
+                            width: 130,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Action",
-                            width: 120,
+                            width: 90,
                             hozAlign: "center",
                             headerHozAlign: "center",
                             formatter: function(cell) {

@@ -184,70 +184,70 @@ const table = new Tabulator("#employee_table", {
     columns: [{
             title: "ID",
             field: "id",
-            width: 90,
+            width: 55,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Employee Name",
             field: "employee_name",
-            width: 120,
+            width: 160,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Email",
             field: "email",
-            width: 150,
+            width: 180,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Location",
             field: "location",
-            width: 120,
+            width: 105,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Contact No",
             field: "contact_no",
-            width: 120,
+            width: 140,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Designation",
             field: "designation_name",
-            width: 120,
+            width: 130,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Department",
             field: "department_name",
-            width: 120,
+            width: 130,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Level",
             field: "level",
-            width: 90,
+            width: 80,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Created By",
             field: "created_by",
-            width: 90,
+            width: 120,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Updated By",
             field: "updated_by",
-            width: 90,
+            width: 130,
             hozAlign: "center",
             headerHozAlign: "center"
         },
@@ -506,55 +506,76 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
     columns: [{
             title: "ID",
             field: "id",
-            width: 90,
+            width: 55,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Employee Name",
             field: "employee_name",
+            width: 160,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Email",
             field: "email",
+            width: 180,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
+            title: "Location",
+            field: "location",
+            width: 105,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
+            title: "Contact No",
+            field: "contact_no",
+            width: 140,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Designation",
             field: "designation_name",
+            width: 130,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Department",
             field: "department_name",
+            width: 130,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Level",
             field: "level",
+            width: 80,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Created By",
             field: "created_by",
+            width: 120,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
-            title: "Deleted By",
+            title: "Updated By",
             field: "updated_by",
+            width: 130,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Action",
-            width: 120,
+            width: 90,
             hozAlign: "center",
             headerHozAlign: "center",
             formatter: function(cell) {

@@ -122,7 +122,6 @@ function refreshUnitSummary() {
                             {
                                 title: "Unit",
                                 field: "unit",
-                                hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
@@ -134,12 +133,14 @@ function refreshUnitSummary() {
                             {
                                 title: "Created By",
                                 field: "created_by",
+                                width: 150,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Updated By",
                                 field: "updated_by",
+                                width: 150,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
@@ -414,12 +415,14 @@ function refreshUnitSummary() {
                                 {
                                     title: "Created By",
                                     field: "created_by",
+                                    width: 150,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Deleted By",
                                     field: "updated_by",
+                                    width: 150,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
