@@ -128,6 +128,12 @@
                                         <p>Molding Machine Master</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_bop_master.php?page=bop" class="nav-link">
+                                        <i class="fa-solid fa-cube"></i>
+                                        <p>BOP Master</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 
@@ -252,6 +258,13 @@
                                                 class="nav-link">
                                                 <i class="fa-solid fa-cube"></i>
                                                 <p>Molding Machine Master</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="<?= BASE_URL ?>admin_master/frm_bop_master.php?page=recycle"
+                                                class="nav-link">
+                                                <i class="fa-solid fa-cube"></i>
+                                                <p>BOP Master</p>
                                             </a>
                                         </li>
                                     </ul>
