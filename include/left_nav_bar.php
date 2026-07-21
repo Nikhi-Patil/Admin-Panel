@@ -117,11 +117,17 @@
                                 <li class="nav-item">
                                     <a href="<?= BASE_URL ?>admin_master/frm_compound_master.php?page=compound"
                                         class="nav-link">
-                                        <i class="fa-solid fa-cubes"></i>
+                                        <i class="fa-solid fa-vials"></i>
                                         <p>Compound Master</p>
                                     </a>
                                 </li>
-
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_molding_machine_master.php?page=molding_machine"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-cube"></i>
+                                        <p>Molding Machine Master</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 
@@ -239,6 +245,13 @@
                                                 class="nav-link">
                                                 <i class="fa-solid fa-vials"></i>
                                                 <p>Compound Master</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="<?= BASE_URL ?>admin_master/frm_molding_machine_master.php?page=recycle"
+                                                class="nav-link">
+                                                <i class="fa-solid fa-cube"></i>
+                                                <p>Molding Machine Master</p>
                                             </a>
                                         </li>
                                     </ul>
