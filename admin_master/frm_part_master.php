@@ -1,11 +1,11 @@
 <?php
-session_start();
-include "../inc/db_cfg.php";
-include "../include/top_header.php";
-include "../include/header.php";
-include "../include/left_nav_bar.php";
+    session_start();
+    include "../inc/db_cfg.php";
+    include "../include/top_header.php";
+    include "../include/header.php";
+    include "../include/left_nav_bar.php";
 
-$page = $_GET['page'] ?? 'part';
+    $page = $_GET['page'] ?? 'part';
 ?>
 
 <?php if ($page == "part") { ?>
@@ -22,13 +22,43 @@ $page = $_GET['page'] ?? 'part';
                             <i class="fas fa-plus"></i>
                             Add Part
                         </button>
+                        <button class="btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#partImportModal">
+                            <i class="fa-solid fa-file-excel"></i>
+                            Excel Bulk Upload
+                        </button>
                     </ol>
                 </nav>
             </div>
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="partImportModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Part Excel Bulk Upload</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="partImportForm" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <p class="text-muted" style="color:red !important">
+                        Use Given Template
+                    </p>
+                    <input type="file" id="part_excel_file" name="excel_file" class="form-control" accept=".xlsx,.csv">
+                </div>
+                <div class="modal-footer">
+                    <a href="qur_part_master.php?action=download_template" class="btn btn-success ms-2">
+                        <i class="fa-solid fa-file-excel"></i>
+                        Download Excel Format
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-upload"></i> Import Excel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="app-content">
     <div class="container-fluid">
         <div class="card">
@@ -57,7 +87,6 @@ $page = $_GET['page'] ?? 'part';
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="partModal" tabindex="-1" aria-labelledby="partModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
@@ -68,84 +97,66 @@ $page = $_GET['page'] ?? 'part';
             <div class="modal-body">
                 <form id="partForm">
                     <input type="hidden" id="part_id" name="id">
-
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label>Part Name</label>
                             <input type="text" id="part_name" name="part_name" class="form-control" required>
                         </div>
-
                         <div class="col-md-6 mb-3">
                             <label>Part No</label>
                             <input type="text" id="part_no" name="part_no" class="form-control" required>
                         </div>
-
                         <div class="col-md-6 mb-3">
-                            <label>FG Code</label>
+                            <label>IM-Compound Code</label>
                             <input type="text" id="fg_code" name="fg_code" class="form-control" required>
                         </div>
-
                         <div class="col-md-6 mb-3">
-                            <label>IM Code</label>
+                            <label>Inter Unit/Dept. Code</label>
+                            <input type="text" id="inter_code" name="inter_code" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label>FG Code </label>
                             <input type="text" id="im_code" name="im_code" class="form-control" required>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Quantity</label>
-                            <input type="number" id="quantity" name="quantity" class="form-control" required>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label>UMO</label>
-                            <select id="umo" name="umo" class="form-select" required>
-                                <option value="">Select UMO</option>
-                                <option value="kg">Kg</option>
-                                <option value="mtrs">mtrs</option>
-                                <option value="nos">Nos</option>
-                            </select>
-                        </div>
-
                         <div class="col-md-6 mb-3">
                             <label>Sub Department</label>
                             <select id="sub_department_id" name="sub_department_id" class="form-select" required>
                                 <option value="">Select Sub Department</option>
                             </select>
                         </div>
-
                         <div class="col-md-6 mb-3">
                             <label>Department</label>
                             <input type="text" id="department_name" class="form-control" readonly>
                         </div>
                     </div>
-
                     <button type="submit" id="saveBtn" class="btn btn-success">Save</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 <script>
+//script for the 
 let allSubDepartments = [];
 let allCustomers = [];
-
+//script for the Subdepartment Option 
 function populateSubDepartmentOptions(selectedId = "") {
     const select = document.getElementById("sub_department_id");
     select.innerHTML = '<option value="">Select Sub Department</option>';
-
     allSubDepartments.forEach(item => {
         const selected = String(selectedId) === String(item.id) ? "selected" : "";
         select.innerHTML += `<option value="${item.id}" data-department-name="${item.department_name || ''}" ${selected}>
-            ${item.sub_department_name} ${item.department_name ? `(${item.department_name})` : ""}
-        </option>`;
+                        ${item.sub_department_name} ${item.department_name ? `(${item.department_name})` : ""}
+                    </option>`;
     });
 }
-
+//script for the department Option 
 function updateDepartmentName() {
     const subSelect = document.getElementById("sub_department_id");
     const current = subSelect.options[subSelect.selectedIndex];
     document.getElementById("department_name").value = current?.dataset?.departmentName || "";
 }
-
+//script for the Display Table
 const table = new Tabulator("#part_table", {
     ajaxURL: "qur_part_master.php?action=list",
     ajaxConfig: "GET",
@@ -188,16 +199,9 @@ const table = new Tabulator("#part_table", {
             headerHozAlign: "center"
         },
         {
-            title: "Quantity",
-            field: "quantity",
-            width: 105,
-            hozAlign: "center",
-            headerHozAlign: "center"
-        },
-        {
-            title: "UMO",
-            field: "umo",
-            width: 90,
+            title: "Inter Unit/Dept Code",
+            field: "inter_code",
+            width: 210,
             hozAlign: "center",
             headerHozAlign: "center"
         },
@@ -237,13 +241,13 @@ const table = new Tabulator("#part_table", {
             formatter: function(cell) {
                 const row = cell.getRow().getData();
                 return `
-                    <button class="btn btn-primary action-btn edit-btn" data-id="${row.id}">
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
-                    <button class="btn btn-danger action-btn delete-btn" data-id="${row.id}">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                `;
+                                <button class="btn btn-primary action-btn edit-btn" data-id="${row.id}">
+                                    <i class="fa-solid fa-pen"></i>
+                                </button>
+                                <button class="btn btn-danger action-btn delete-btn" data-id="${row.id}">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            `;
             }
         }
     ]
@@ -253,6 +257,7 @@ document.addEventListener("click", function(e) {
     const deleteBtn = e.target.closest(".delete-btn");
     const editBtn = e.target.closest(".edit-btn");
 
+    //script for the Delete Button 
     if (deleteBtn) {
         const id = deleteBtn.dataset.id;
         if (confirm("Delete this part?")) {
@@ -274,7 +279,7 @@ document.addEventListener("click", function(e) {
                 });
         }
     }
-
+    //script for the Edit Button
     if (editBtn) {
         const id = editBtn.dataset.id;
         fetch("qur_part_master.php?action=get&id=" + encodeURIComponent(id))
@@ -285,8 +290,7 @@ document.addEventListener("click", function(e) {
                 document.getElementById("part_no").value = data.part_no || "";
                 document.getElementById("fg_code").value = data.fg_code || "";
                 document.getElementById("im_code").value = data.im_code || "";
-                document.getElementById("quantity").value = data.quantity || "";;
-                document.getElementById("umo").value = data.umo || "";;
+                document.getElementById("inter_code").value = data.inter_code || "";
                 populateSubDepartmentOptions(data.sub_department_id);
                 document.getElementById("sub_department_id").value = data.sub_department_id || "";
                 updateDepartmentName();
@@ -298,7 +302,7 @@ document.addEventListener("click", function(e) {
             });
     }
 });
-
+//script for the reset the form
 document.querySelector('[data-bs-target="#partModal"]').addEventListener("click", function() {
     document.getElementById("partForm").reset();
     document.getElementById("part_id").value = "";
@@ -306,8 +310,7 @@ document.querySelector('[data-bs-target="#partModal"]').addEventListener("click"
     document.getElementById("saveBtn").innerHTML = "Save";
     document.getElementById("fg_code").value = "";
     document.getElementById("im_code").value = "";
-    document.getElementById("quantity").value = "";
-    document.getElementById("umo").value = "";
+    document.getElementById("inter_code").value = "";
     document.getElementById("sub_department_id").value = "";
     document.getElementById("department_name").value = "";
 });
@@ -316,10 +319,9 @@ document.getElementById("sub_department_id").addEventListener("change", function
     updateDepartmentName();
 });
 
-
+//script for the save the data
 document.getElementById("partForm").addEventListener("submit", function(e) {
     e.preventDefault();
-
     const formData = new FormData(this);
     fetch("qur_part_master.php?action=save", {
             method: "POST",
@@ -335,8 +337,7 @@ document.getElementById("partForm").addEventListener("submit", function(e) {
                 document.getElementById("saveBtn").innerHTML = "Save";
                 document.getElementById("fg_code").value = "";
                 document.getElementById("im_code").value = "";
-                document.getElementById("quantity").value = "";
-                document.getElementById("umo").value = "";
+                document.getElementById("inter_code").value = "";
                 document.getElementById("sub_department_id").value = "";
                 document.getElementById("department_name").value = "";
                 table.replaceData();
@@ -354,10 +355,9 @@ function loadPartLookups() {
             populateSubDepartmentOptions();
         });
 }
-
+//script for the filter
 document.addEventListener("DOMContentLoaded", () => {
     loadPartLookups();
-
     document.getElementById("table-filter").addEventListener("input", (e) => {
         const value = e.target.value;
         if (value) {
@@ -368,8 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     data.part_no,
                     data.fg_code,
                     data.im_code,
-                    data.quantity,
-                    data.umo,
+                    data.inter_code,
                     data.sub_department_name,
                     data.department_name
                 ].some(field => String(field ?? "").toLowerCase().includes(term));
@@ -378,10 +377,44 @@ document.addEventListener("DOMContentLoaded", () => {
             table.clearFilter();
         }
     });
-
     document.getElementById("print-table").addEventListener("click", () => table.print(false, true));
     document.getElementById("export-csv").addEventListener("click", () => table.download("csv",
         "part_master.csv"));
+});
+</script>
+<script>
+//script for the import Excel
+document.getElementById("partImportForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const fileInput = document.getElementById("part_excel_file");
+
+    if (!fileInput.files.length) {
+        alert("Please select an Excel file.");
+        return;
+    }
+
+    fetch("qur_part_master.php?action=bulk_upload", {
+            method: "POST",
+            body: new FormData(this)
+        })
+        .then(response => response.text())
+        .then(text => {
+            const result = JSON.parse(text);
+
+            if (result.status === "success") {
+                alert(result.message);
+                bootstrap.Modal.getInstance(
+                    document.getElementById("partImportModal")
+                )?.hide();
+
+                this.reset();
+                table.replaceData();
+            } else {
+                alert(result.message || "Part import failed.");
+            }
+        })
+        .catch(error => alert("Part import failed: " + error.message));
 });
 </script>
 </main>
@@ -401,12 +434,10 @@ document.addEventListener("DOMContentLoaded", () => {
 <div class="app-content">
     <div class="container-fluid">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Part</h3>
-            </div>
             <div class="card-body">
                 <div id="part_table"></div>
                 <script>
+                //script for the recycle table
                 const table = new Tabulator("#part_table", {
                     ajaxURL: "qur_part_master.php?action=list1",
                     ajaxConfig: "GET",
@@ -449,16 +480,9 @@ document.addEventListener("DOMContentLoaded", () => {
                             headerHozAlign: "center"
                         },
                         {
-                            title: "Quantity",
-                            field: "quantity",
+                            title: "Inter Unit/Dept Code",
+                            field: "inter_code",
                             width: 105,
-                            hozAlign: "center",
-                            headerHozAlign: "center"
-                        },
-                        {
-                            title: "UMO",
-                            field: "umo",
-                            width: 90,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
@@ -498,15 +522,15 @@ document.addEventListener("DOMContentLoaded", () => {
                             formatter: function(cell) {
                                 const row = cell.getRow().getData();
                                 return `
-                                    <button class="btn btn-primary action-btn recycle-btn" data-id="${row.id}">
-                                        <i class="fa-solid fa-trash-arrow-up"></i>
-                                    </button>
-                                `;
+                                                <button class="btn btn-primary action-btn recycle-btn" data-id="${row.id}">
+                                                    <i class="fa-solid fa-trash-arrow-up"></i>
+                                                </button>
+                                            `;
                             }
                         }
                     ]
                 });
-
+                //script for the restore button
                 document.addEventListener("click", function(e) {
                     const btn = e.target.closest(".recycle-btn");
                     if (!btn) return;
@@ -540,6 +564,6 @@ document.addEventListener("DOMContentLoaded", () => {
 <?php } ?>
 
 <?php
-include "../include/footer.php";
-include "../include/footer_base.php";
+    include "../include/footer.php";
+    include "../include/footer_base.php";
 ?>

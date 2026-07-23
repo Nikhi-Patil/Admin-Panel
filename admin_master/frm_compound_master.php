@@ -22,9 +22,45 @@ $page = $_GET['page'] ?? 'compound';
                             <i class="fas fa-plus"></i>
                             Add Compound
                         </button>
+                        <button class="btn btn-primary ms-2" data-bs-toggle="modal"
+                            data-bs-target="#compoundImportModal">
+                            <i class="fa-solid fa-file-excel"></i>
+                            Excel Bulk Upload
+                        </button>
 
                     </ol>
                 </nav>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="compoundImportModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Compound Excel Bulk Upload</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <form id="compoundImportForm" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <p class="text-muted">
+                            Use Given Template
+                        </p>
+
+                        <input type="file" id="compound_excel_file" name="excel_file" class="form-control"
+                            accept=".xlsx,.csv">
+                    </div>
+
+                    <div class="modal-footer">
+                        <a href="qur_compound_master.php?action=download_template" class="btn btn-success ms-2">
+                            <i class="fa-solid fa-download"></i>
+                            Download Excel Format
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-upload"></i> Import Excel
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -130,6 +166,41 @@ $page = $_GET['page'] ?? 'compound';
                                 }
                             }
                         ]
+                    });
+                    </script>
+                    <!-- script for the Import and download the xecel file -->
+                    <script>
+                    document.getElementById("compoundImportForm").addEventListener("submit", function(e) {
+                        e.preventDefault();
+
+                        const fileInput = document.getElementById("compound_excel_file");
+
+                        if (!fileInput.files.length) {
+                            alert("Please select an Excel file.");
+                            return;
+                        }
+
+                        fetch("qur_compound_master.php?action=bulk_upload", {
+                                method: "POST",
+                                body: new FormData(this)
+                            })
+                            .then(response => response.text())
+                            .then(text => {
+                                const result = JSON.parse(text);
+
+                                if (result.status === "success") {
+                                    alert(result.message);
+                                    bootstrap.Modal.getInstance(
+                                        document.getElementById("compoundImportModal")
+                                    )?.hide();
+
+                                    this.reset();
+                                    table.replaceData();
+                                } else {
+                                    alert(result.message || "Compound import failed.");
+                                }
+                            })
+                            .catch(error => alert("Compound import failed: " + error.message));
                     });
                     </script>
                     <!-- script for the delete and edit button  -->
@@ -352,17 +423,13 @@ $page = $_GET['page'] ?? 'compound';
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6">
-                    <h1 class="mb-0 fs-3">Compound List</h1>
+                    <h1 class="mb-0 fs-3">Compound Recycle Bin</h1>
                 </div>
             </div>
         </div>
         <div class="app-content">
             <div class="container-fluid">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Compound</h3>
-
-                    </div>
                     <div class="card-body">
                         <div id="compound_table"></div>
                         <!-- disply table   -->

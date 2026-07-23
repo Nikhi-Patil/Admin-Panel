@@ -46,6 +46,32 @@ switch ($action) {
         $email = mysqli_real_escape_string($conn, $_POST['email']);
         $contact_no = mysqli_real_escape_string($conn, $_POST['contact_no']);
         $user_id = $_SESSION['user_id'];
+        // Check duplicate supplier name
+        if ($id == "") {
+
+            $check = mysqli_query(
+                $conn,
+                "SELECT id
+                FROM supplier_master
+                WHERE LOWER(TRIM(supplier_name)) = LOWER(TRIM('$supplier_name'))"
+            );
+
+        } else {
+
+            $check = mysqli_query(
+                $conn,
+                "SELECT id
+                FROM supplier_master
+                WHERE LOWER(TRIM(supplier_name)) = LOWER(TRIM('$supplier_name'))
+                AND id != '$id'"
+            );
+
+        }
+
+        if (mysqli_num_rows($check) > 0) {
+            echo "Supplier name already exists.";
+            exit;
+        }
 
         if ($id == "") {
 

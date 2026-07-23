@@ -15,7 +15,7 @@ if (session_status() == PHP_SESSION_NONE) {
         </button>
 
         <!-- Brand -->
-        <a class="navbar-brand fw-bold" href="index.php" style="color: rgb(255 255 255)">
+        <a class="navbar-brand fw-bold" href="frm_employee_master.php" style="color: rgb(255 255 255)">
             Admin Panel
         </a>
         <!-- Right Side -->

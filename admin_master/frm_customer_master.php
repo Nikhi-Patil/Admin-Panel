@@ -22,9 +22,40 @@ $page = $_GET['page'] ?? 'customer';
                             <i class="fas fa-plus"></i>
                             Add Customer
                         </button>
-
+                        <button class="btn btn-primary ms-2" data-bs-toggle="modal"
+                            data-bs-target="#customerImportModal">
+                            <i class="fa-solid fa-file-excel"></i>
+                            Excel Bulk Upload
+                        </button>
                     </ol>
                 </nav>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="customerImportModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Customer Excel Bulk Upload</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="customerImportForm" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <p class="text-muted">Use Given Template</p>
+                        <input type="file" id="customer_excel_file" name="excel_file" class="form-control"
+                            accept=".xlsx,.csv">
+                    </div>
+                    <div class="modal-footer">
+                        <a href="qur_customer_master.php?action=download_template" class="btn btn-success">
+                            <i class="fa-solid fa-download"></i>
+                            Download Excel Format
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-upload"></i>
+                            Import Excel
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -137,6 +168,50 @@ $page = $_GET['page'] ?? 'customer';
                                 }
                             }
                         ]
+                    });
+                    </script>
+                    <!-- script for the Excel Uploade and Download  -->
+                    <script>
+                    document.getElementById("customerImportForm").addEventListener("submit", function(e) {
+
+                        e.preventDefault();
+
+                        const fileInput = document.getElementById("customer_excel_file");
+
+                        if (!fileInput.files.length) {
+                            alert("Please select an Excel file.");
+                            return;
+                        }
+
+                        fetch("qur_customer_master.php?action=bulk_upload", {
+                                method: "POST",
+                                body: new FormData(this)
+                            })
+                            .then(response => response.text())
+                            .then(text => {
+
+                                const result = JSON.parse(text);
+
+                                if (result.status == "success") {
+
+                                    alert(result.message);
+
+                                    bootstrap.Modal.getInstance(
+                                        document.getElementById("customerImportModal")
+                                    )?.hide();
+
+                                    this.reset();
+
+                                    table.replaceData();
+
+                                } else {
+
+                                    alert(result.message);
+                                }
+
+                            })
+                            .catch(error => alert(error.message));
+
                     });
                     </script>
                     <!-- script for the delete and edit button  -->
@@ -408,17 +483,13 @@ $page = $_GET['page'] ?? 'customer';
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6">
-                    <h1 class="mb-0 fs-3">Customer List</h1>
+                    <h1 class="mb-0 fs-3">Customer Recycle Bin</h1>
                 </div>
             </div>
         </div>
         <div class="app-content">
             <div class="container-fluid">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Customer</h3>
-
-                    </div>
                     <div class="card-body">
                         <div id="customer_table"></div>
                         <!-- disply table   -->

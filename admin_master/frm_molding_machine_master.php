@@ -86,6 +86,13 @@ $page = $_GET['page'] ?? 'molding_machine';
                                 headerHozAlign: "center"
                             },
                             {
+                                title: "Molding Process",
+                                field: "molding_process",
+                                width: 150,
+                                hozAlign: "center",
+                                headerHozAlign: "center"
+                            },
+                            {
                                 title: "Created By",
                                 field: "created_by",
                                 width: 160,
@@ -173,6 +180,8 @@ $page = $_GET['page'] ?? 'molding_machine';
                                         .machine_list;
                                     document.getElementById("shift_rate").value = data.shift_rate;
 
+                                    document.getElementById("molding_process").value = data.molding_process;
+
                                     document.getElementById("molding_machineModalLabel").innerHTML =
                                         "Edit Molding Machine";
                                     document.getElementById("saveBtn").innerHTML = "Update";
@@ -191,6 +200,8 @@ $page = $_GET['page'] ?? 'molding_machine';
                             document.getElementById("molding_machineForm").reset();
 
                             document.getElementById("molding_machine_id").value = "";
+
+                            document.getElementById("molding_process").value = "";
 
                             document.getElementById("molding_machineModalLabel").innerHTML = "Add Molding Machine";
 
@@ -223,6 +234,15 @@ $page = $_GET['page'] ?? 'molding_machine';
                         <div class="mb-3">
                             <label>Machine List</label>
                             <input type="text" id="machine_list" name="machine_list" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Molding Process</label>
+                            <select class="form-select" id="molding_process" name="molding_process" required>
+                                <option value="">Select Process</option>
+                                <option value="Compression">Compression</option>
+                                <option value="Transfer">Transfer</option>
+                                <option value="Injection">Injection</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label>Shift Rate</label>
@@ -313,6 +333,11 @@ $page = $_GET['page'] ?? 'molding_machine';
                             type: 'like',
                             value: value
                         },
+                        {
+                            field: 'molding_process',
+                            type: 'like',
+                            value: value
+                        },
                     ],
                 ]);
             } else {
@@ -339,17 +364,13 @@ $page = $_GET['page'] ?? 'molding_machine';
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6">
-                    <h1 class="mb-0 fs-3">Molding Machine List</h1>
+                    <h1 class="mb-0 fs-3">Molding Machine Recycle Bin</h1>
                 </div>
             </div>
         </div>
         <div class="app-content">
             <div class="container-fluid">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Molding Machine</h3>
-
-                    </div>
                     <div class="card-body">
                         <div id="molding_machine_table"></div>
                         <!-- disply table   -->
@@ -371,7 +392,7 @@ $page = $_GET['page'] ?? 'molding_machine';
                                     headerHozAlign: "center"
                                 },
                                 {
-                                    title: "Molding List",
+                                    title: "Machine List",
                                     field: "machine_list",
                                     hozAlign: "center",
                                     headerHozAlign: "center"
@@ -379,6 +400,13 @@ $page = $_GET['page'] ?? 'molding_machine';
                                 {
                                     title: "Shift Rate",
                                     field: "shift_rate",
+                                    width: 150,
+                                    hozAlign: "center",
+                                    headerHozAlign: "center"
+                                },
+                                {
+                                    title: "Molding Process",
+                                    field: "molding_process",
                                     width: 150,
                                     hozAlign: "center",
                                     headerHozAlign: "center"

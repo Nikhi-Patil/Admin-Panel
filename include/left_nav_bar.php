@@ -1,5 +1,22 @@
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
 
+    <style>
+    :root {
+        --main-option-color: #ffffff;
+    }
+
+    .sidebar-menu>.nav-item>.nav-link.main-option {
+        color: var(--main-option-color) !important;
+        font-weight: 600;
+    }
+
+    .sidebar-menu>.nav-item>.nav-link.main-option:hover,
+    .sidebar-menu>.nav-item>.nav-link.main-option.active {
+        color: #ffffff !important;
+        background-color: rgba(0, 186, 242, 0.38) !important;
+    }
+    </style>
+
     <div class="app-wrapper">
 
         <!-- Sidebar -->
@@ -13,7 +30,7 @@
 
                         <!-- Master -->
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link main-option">
                                 <i class="fa-solid fa-folder-tree"></i>
                                 <p>
                                     Master
@@ -110,7 +127,7 @@
                                 <li class="nav-item">
                                     <a href="<?= BASE_URL ?>admin_master/frm_part_master.php?page=part"
                                         class="nav-link">
-                                        <i class="fa-solid fa-cubes"></i>
+                                        <i class="fa-solid fa-puzzle-piece"></i>
                                         <p>Part Master</p>
                                     </a>
                                 </li>
@@ -130,7 +147,132 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="<?= BASE_URL ?>admin_master/frm_bop_master.php?page=bop" class="nav-link">
+                                        <i class="fa-solid fa-boxes-stacked"></i>
+                                        <p>BOP Master</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Recycle Bin -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link main-option">
+                                <i class="fa-solid fa-trash-can"></i>
+                                <p>Recycle Bin</p>
+                                <i class="nav-arrow fa-solid fa-chevron-right"></i>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_employee_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-user-tie"></i>
+                                        <p>Employee Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_unit_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-warehouse"></i>
+                                        <p>Unit Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_plant_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-industry"></i>
+                                        <p>Plant Master</p>
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_department_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-building"></i>
+                                        <p>Department Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_designation_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-id-badge"></i>
+                                        <p>Designation Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_incoterms_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-shipping-fast"></i>
+                                        <p>Incoterms Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_currency_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-coins"></i>
+                                        <p>Currency Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_sub_department_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-diagram-project"></i>
+                                        <p>Sub Department Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_Supplier_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-truck"></i>
+                                        <p>Supplier Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_Category_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-tags"></i>
+                                        <p>Category Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_sub_category_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-sitemap"></i>
+                                        <p>Sub Category Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_customer_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-users"></i>
+                                        <p>Customer Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_part_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-puzzle-piece"></i>
+                                        <p>Part Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_compound_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-vials"></i>
+                                        <p>Compound Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_molding_machine_master.php?page=recycle"
+                                        class="nav-link">
                                         <i class="fa-solid fa-cube"></i>
+                                        <p>Molding Machine Master</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_bop_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-boxes-stacked"></i>
                                         <p>BOP Master</p>
                                     </a>
                                 </li>
@@ -139,137 +281,12 @@
 
                         <!-- Settings -->
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link main-option">
                                 <i class="fa-solid fa-gear"></i>
                                 <p>Settings</p>
                                 <i class="nav-arrow fa-solid fa-chevron-right"></i>
                             </a>
-
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-solid fa-trash-can"></i>
-                                        <p>Recycle Bin</p>
-                                        <i class="nav-arrow fa-solid fa-chevron-right"></i>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_employee_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-user-tie"></i>
-                                                <p>Employee Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_unit_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-warehouse"></i>
-                                                <p>Unit Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_plant_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-industry"></i>
-                                                <p>Plant Master</p>
-                                            </a>
-                                        </li>
-
-
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_department_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-building"></i>
-                                                <p>Department Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_designation_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-id-badge"></i>
-                                                <p>Designation Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_incoterms_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-shipping-fast"></i>
-                                                <p>Incoterms Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_currency_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-coins"></i>
-                                                <p>Currency Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_sub_department_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-diagram-project"></i>
-                                                <p>Sub Department Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_Supplier_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-truck"></i>
-                                                <p>Supplier Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_Category_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-tags"></i>
-                                                <p>Category Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_sub_category_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-sitemap"></i>
-                                                <p>Sub Category Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_customer_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-users"></i>
-                                                <p>Customer Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_part_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-cubes"></i>
-                                                <p>Part Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_compound_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-vials"></i>
-                                                <p>Compound Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_molding_machine_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-cube"></i>
-                                                <p>Molding Machine Master</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="<?= BASE_URL ?>admin_master/frm_bop_master.php?page=recycle"
-                                                class="nav-link">
-                                                <i class="fa-solid fa-cube"></i>
-                                                <p>BOP Master</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-
                                 <li class="nav-item">
                                     <a href="<?= BASE_URL ?>password.php" class="nav-link">
                                         <i class="fa-solid fa-key"></i>

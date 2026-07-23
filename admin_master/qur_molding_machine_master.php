@@ -8,7 +8,7 @@ switch ($action) {
 // =================== GET TABLE ===================
     case "list":
 
-        $sql = "SELECT id,shift_rate,machine_list,updated_by,created_by
+        $sql = "SELECT id,shift_rate,machine_list,molding_process,updated_by,created_by
                 FROM molding_machine_master
                 ORDER BY id DESC";
 
@@ -28,7 +28,7 @@ switch ($action) {
 
         $id = intval($_GET['id']);
 
-        $sql = "SELECT id,shift_rate,machine_list,updated_by,created_by
+        $sql = "SELECT id,shift_rate,machine_list,molding_process,updated_by,created_by
                 FROM molding_machine_master
                 WHERE id='$id'";
 
@@ -43,19 +43,48 @@ switch ($action) {
 
         $machine_list = mysqli_real_escape_string($conn, $_POST['machine_list']);
         $shift_rate = mysqli_real_escape_string($conn, $_POST['shift_rate']);
+        $molding_process = mysqli_real_escape_string($conn, $_POST['molding_process']);
         $user_id = $_SESSION['user_id'];
+        // Check duplicate machine
+        if ($id == "") {
+
+            $check = mysqli_query(
+                $conn,
+                "SELECT id
+                FROM molding_machine_master
+                WHERE LOWER(TRIM(machine_list)) = LOWER(TRIM('$machine_list'))"
+            );
+
+        } else {
+
+            $check = mysqli_query(
+                $conn,
+                "SELECT id
+                FROM molding_machine_master
+                WHERE LOWER(TRIM(machine_list)) = LOWER(TRIM('$machine_list'))
+                AND id != '$id'"
+            );
+
+        }
+
+        if (mysqli_num_rows($check) > 0) {
+            echo "Machine already exists.";
+            exit;
+        }
 
         if ($id == "") {
 
             $sql = "INSERT INTO molding_machine_master
                 (
                     machine_list,
+                    molding_process,
                     shift_rate,
                     created_by
                 )
                 VALUES
                 (
                     '$machine_list',
+                    '$molding_process',
                     '$shift_rate',
                     '$user_id'
                 )";
@@ -66,6 +95,7 @@ switch ($action) {
                 SET
                     machine_list='$machine_list',
                     shift_rate='$shift_rate',
+                    molding_process='$molding_process',
                     updated_by='$user_id',
                     updated_at=NOW()
                 WHERE id='$id'";
@@ -134,6 +164,7 @@ switch ($action) {
                 (
                     id,
                     machine_list,
+                    molding_process,
                     created_by,
                     created_at,
                     shift_rate,
@@ -143,6 +174,7 @@ switch ($action) {
                 SELECT
                     id,
                     machine_list,
+                    molding_process,
                     created_by,
                     created_at,
                     shift_rate,
@@ -192,7 +224,7 @@ switch ($action) {
 // =================== GET TABLE IN RECYCLE ===================
     case "list1":
 
-        $sql = "SELECT id,shift_rate,machine_list,updated_by,created_by
+        $sql = "SELECT id,shift_rate,machine_list,molding_process,updated_by,created_by
                 FROM hist_molding_machine_master
                 ORDER BY id DESC";
 
@@ -231,6 +263,7 @@ switch ($action) {
                 (
                     id,
                     machine_list,
+                    molding_process,
                     created_by,
                     created_at,
                     shift_rate,
@@ -240,6 +273,7 @@ switch ($action) {
                 SELECT
                     id,
                     machine_list,
+                    molding_process,
                     created_by,
                     created_at,
                     shift_rate,

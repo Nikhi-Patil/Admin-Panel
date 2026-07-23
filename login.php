@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ((int)($row['first_login'] ?? 0) === 1) {
                 header("Location: reset_password.php");
             } else {
-                header("Location: admin_master/index.php");
+                header("Location: admin_master/frm_employee_master.php");
             }
 
             exit;

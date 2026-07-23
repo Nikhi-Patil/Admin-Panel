@@ -253,7 +253,7 @@ $page = $_GET['page'] ?? 'department';
                                 table.replaceData();
 
                             } else {
-                                alert(data.message || "Save failed.");
+                                alert(data);
                             }
 
                         });
@@ -321,17 +321,13 @@ $page = $_GET['page'] ?? 'department';
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6">
-                    <h1 class="mb-0 fs-3">Department List</h1>
+                    <h1 class="mb-0 fs-3">Department Recycle Bin</h1>
                 </div>
             </div>
         </div>
         <div class="app-content">
             <div class="container-fluid">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Department</h3>
-
-                    </div>
                     <div class="card-body">
                         <div id="department_table"></div>
                         <!-- disply tableb   -->

@@ -483,12 +483,6 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="app-content">
     <div class="container-fluid">
         <div class="card">
-            <div class="card-header">
-                <button id="export-csv" type="button" class="btn btn-sm btn-warning">
-                    <i class="fa-solid fa-file-csv"></i>
-                    Export CSV
-                </button>
-            </div>
             <div class="card-body">
                 <div id="employee_recycle_table"></div>
             </div>

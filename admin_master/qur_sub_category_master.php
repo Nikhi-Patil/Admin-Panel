@@ -5,6 +5,7 @@ include "../inc/db_cfg.php";
 $action = $_REQUEST['action'] ?? '';
 
 switch ($action) {
+// =================== GET TABLE ===================
     case "list":
         $sql = "SELECT
                     s.id,
@@ -33,7 +34,7 @@ switch ($action) {
         header("Content-Type: application/json");
         echo json_encode($data);
     break;
-
+// =================== GET SINGLE VALUE ===================
     case "get":
         $id = intval($_GET['id'] ?? 0);
 
@@ -59,7 +60,7 @@ switch ($action) {
         header("Content-Type: application/json");
         echo json_encode(mysqli_fetch_assoc($result));
     break;
-
+// =================== SAVE ===================
     case "save":
         $id = $_POST['id'] ?? "";
         $supplier_id_raw = trim($_POST['supplier_id'] ?? '');
@@ -70,6 +71,34 @@ switch ($action) {
         $user_id = $_SESSION['user_id'] ?? 0;
 
         $supplier_value = !empty($supplier_ids) ? "'$supplier_id'" : "NULL";
+        // Check duplicate Category + Sub Category
+        if ($id == "") {
+
+            $check = mysqli_query(
+                $conn,
+                "SELECT id
+                FROM sub_category_master
+                WHERE category_id = '$category_id'
+                AND LOWER(TRIM(sub_category_name)) = LOWER(TRIM('$sub_category_name'))"
+            );
+
+        } else {
+
+            $check = mysqli_query(
+                $conn,
+                "SELECT id
+                FROM sub_category_master
+                WHERE category_id = '$category_id'
+                AND LOWER(TRIM(sub_category_name)) = LOWER(TRIM('$sub_category_name'))
+                AND id != '$id'"
+            );
+
+        }
+
+        if (mysqli_num_rows($check) > 0) {
+            echo "This sub category already exists for the selected category.";
+            exit;
+        }
 
         if ($id == "") {
             $sql = "INSERT INTO sub_category_master
@@ -103,7 +132,7 @@ switch ($action) {
             echo mysqli_error($conn);
         }
     break;
-
+// =================== DELETE ===================
     case "delete":
         $id = intval($_POST['id'] ?? 0);
         $user_id = $_SESSION['user_id'] ?? 0;
@@ -157,7 +186,7 @@ switch ($action) {
             ]);
         }
     break;
-
+// =================== GET TABLE IN RECYCLE ===================
     case "list1":
         $sql = "SELECT
                     h.id,
@@ -186,7 +215,7 @@ switch ($action) {
         header("Content-Type: application/json");
         echo json_encode($data);
     break;
-
+// =================== RESTORE ===================
     case "restore":
         $id = intval($_POST['id'] ?? 0);
         $user_id = $_SESSION['user_id'] ?? 0;
@@ -240,7 +269,7 @@ switch ($action) {
             ]);
         }
     break;
-
+// =================== GET SUPPLIER ===================
     case "suppliers":
         $sql = "SELECT id, supplier_name
                 FROM supplier_master
@@ -256,7 +285,7 @@ switch ($action) {
         header("Content-Type: application/json");
         echo json_encode($data);
     break;
-
+// =================== GET CATEGORY ===================
     case "categories":
         $sql = "SELECT id, category_name
                 FROM category_master
@@ -272,7 +301,7 @@ switch ($action) {
         header("Content-Type: application/json");
         echo json_encode($data);
     break;
-
+// =================== DEFAULT ===================
     default:
         echo json_encode([
             "status" => "Invalid Action"

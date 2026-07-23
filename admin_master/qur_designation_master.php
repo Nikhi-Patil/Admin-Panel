@@ -5,6 +5,7 @@ include "../inc/db_cfg.php";
 $action = $_REQUEST['action'] ?? '';
 
 switch ($action) {
+// =================== GET TABLE ===================
     case "list":
         $sql = "SELECT id, designation, created_by, updated_by
                 FROM designation_master
@@ -19,8 +20,8 @@ switch ($action) {
 
         header("Content-Type: application/json");
         echo json_encode($data);
-        break;
-
+    break;
+// =================== GET SINGLE RECORD ===================
     case "get":
         $id = intval($_GET['id'] ?? 0);
 
@@ -32,12 +33,38 @@ switch ($action) {
 
         header("Content-Type: application/json");
         echo json_encode(mysqli_fetch_assoc($result));
-        break;
-
+    break;
+// =================== SAVE / UPDATE ===================
     case "save":
         $id = $_POST['id'] ?? "";
         $designation = mysqli_real_escape_string($conn, $_POST['designation'] ?? '');
         $user_id = $_SESSION['user_id'] ?? 0;
+        // Check duplicate designation
+        if ($id == "") {
+
+            $check = mysqli_query(
+                $conn,
+                "SELECT id
+                FROM designation_master
+                WHERE LOWER(TRIM(designation)) = LOWER(TRIM('$designation'))"
+            );
+
+        } else {
+
+            $check = mysqli_query(
+                $conn,
+                "SELECT id
+                FROM designation_master
+                WHERE LOWER(TRIM(designation)) = LOWER(TRIM('$designation'))
+                AND id != '$id'"
+            );
+
+        }
+
+        if (mysqli_num_rows($check) > 0) {
+            echo "Designation name already exists.";
+            exit;
+        }
 
         if ($id == "") {
             $sql = "INSERT INTO designation_master
@@ -64,8 +91,8 @@ switch ($action) {
         } else {
             echo mysqli_error($conn);
         }
-        break;
-
+    break;
+// =================== DELETE ===================
     case "delete":
         $id = intval($_POST['id'] ?? 0);
         $user_id = $_SESSION['user_id'] ?? 0;
@@ -114,8 +141,8 @@ switch ($action) {
                 "message" => $e->getMessage()
             ]);
         }
-        break;
-
+    break;
+// =================== GET TABLE IN RECYCLE ===================
     case "list1":
         $sql = "SELECT id, designation, created_by, updated_by
                 FROM hist_designation_master
@@ -130,8 +157,8 @@ switch ($action) {
 
         header("Content-Type: application/json");
         echo json_encode($data);
-        break;
-
+    break;
+// =================== RESTOR ===================
     case "restore":
         $id = intval($_POST['id'] ?? 0);
         $user_id = $_SESSION['user_id'] ?? 0;
@@ -180,12 +207,12 @@ switch ($action) {
                 "message" => $e->getMessage()
             ]);
         }
-        break;
-
+    break;
+// =================== DEFAULT ===================
     default:
         echo json_encode([
             "status" => "Invalid Action"
         ]);
-        break;
+    break;
 }
 ?>

@@ -46,6 +46,24 @@ switch ($action) {
         $address = mysqli_real_escape_string($conn, $_POST['address']);
 
         $user_id = $_SESSION['user_id'];
+        $unit = trim(mysqli_real_escape_string($conn, $_POST['unit']));
+
+        // Check if unit already exists
+        if ($id == "") {
+            $check = mysqli_query($conn,
+                "SELECT id FROM unit_master
+                WHERE LOWER(TRIM(unit)) = LOWER(TRIM('$unit'))");
+        } else {
+            $check = mysqli_query($conn,
+                "SELECT id FROM unit_master
+                WHERE LOWER(TRIM(unit)) = LOWER(TRIM('$unit'))
+                AND id != '$id'");
+        }
+
+        if (mysqli_num_rows($check) > 0) {
+            echo "Unit name already exists.";
+            exit;
+        }
 
         if ($id == "") {
 

@@ -71,32 +71,51 @@ $page = $_GET['page'] ?? 'bop';
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label>Part No</label>
+                            <label> Main Part No</label>
                             <select id="part_id" name="part_id" class="form-select" required>
                                 <option value="">Select Part No</option>
                             </select>
                         </div>
-
                         <div class="col-md-6 mb-3">
-                            <label>BOP Part Name</label>
-                            <input type="text" id="bop_part_name" name="bop_part_name" class="form-control" required>
+                            <label>FG Code</label>
+                            <input type="text" id="fg_code" name="fg_code" class="form-control" readonly>
                         </div>
+
 
                         <div class="col-md-6 mb-3">
                             <label>BOP Part No</label>
                             <input type="text" id="bop_part_no" name="bop_part_no" class="form-control" required>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label>BOP Part Name</label>
+                            <input type="text" id="bop_part_name" name="bop_part_name" class="form-control" required>
+                        </div>
+
 
                         <div class="col-md-6 mb-3">
-                            <label>Supplier Name</label>
-                            <select id="supplier_id" name="supplier_id" class="form-control" required>
-                                <option value="">Select Supplier</option>
-                            </select>
+                            <label>BOP ERP Code</label>
+                            <input type="text" id="bop_erp_code" name="bop_erp_code" class="form-control" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label>Quantity</label>
-                            <input type="number" id="quantity" name="quantity" class="form-control" required>
+                            <label class="form-label">Supplier</label>
+
+                            <div class="dropdown w-100">
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button"
+                                    id="supplierButton" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                    aria-expanded="false">
+                                    Select Suppliers
+                                </button>
+
+                                <ul class="dropdown-menu w-100 p-2" id="supplierMenu"
+                                    style="max-height:260px;overflow:auto;">
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Quantity Per Part</label>
+                            <input type="number" id="bop_quantity" name="bop_quantity" class="form-control" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -109,10 +128,7 @@ $page = $_GET['page'] ?? 'bop';
                             </select>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label>FG Code</label>
-                            <input type="text" id="fg_code" name="fg_code" class="form-control" required>
-                        </div>
+
 
                     </div>
 
@@ -126,6 +142,8 @@ $page = $_GET['page'] ?? 'bop';
 <script>
 let allPartNo = [];
 let allSupplierNames = [];
+let selectedSupplierIds = [];
+let selectedSupplierNames = [];
 
 function populatePartNoOptions(selectedId = "") {
     const select = document.getElementById("part_id");
@@ -150,15 +168,93 @@ function updateFGcode() {
 }
 
 function populateSupplierOptions() {
-    const select = document.getElementById("supplier_id");
-    select.innerHTML = '<option value="">Select Supplier</option>';
-    allSupplierNames.forEach(item => {
-        const label = item.supplier_name ? `${item.supplier_name}` : item.supplier_name;
-        select.innerHTML +=
-            `<option value="${item.id}" data-supplier-name="${item.supplier_name || ''}">${label}</option>`;
-    });
+
+    const holder = document.getElementById("supplierMenu");
+
+    holder.innerHTML = allSupplierNames.map(item => `
+        <li>
+            <label class="dropdown-item d-flex align-items-center gap-2 mb-0">
+                <input
+                    class="form-check-input supplier-checkbox m-0"
+                    type="checkbox"
+                    name="supplier_id[]"
+                    value="${item.id}"
+                    data-name="${item.supplier_name}"
+                    id="supplier_${item.id}">
+
+                <span>${item.supplier_name}</span>
+            </label>
+        </li>
+    `).join("");
+
+    applySelectedSuppliers();
 }
 
+
+
+function normalizeIds(value) {
+
+    if (Array.isArray(value))
+        return value.map(v => String(v).trim()).filter(Boolean);
+
+    if (!value)
+        return [];
+
+    return String(value)
+        .split(",")
+        .map(v => v.trim())
+        .filter(Boolean);
+}
+
+function applySelectedSuppliers() {
+
+    document.querySelectorAll(".supplier-checkbox").forEach(cb => {
+        cb.checked = selectedSupplierIds.includes(cb.value);
+    });
+
+    const btn = document.getElementById("supplierButton");
+
+    if (!selectedSupplierIds.length) {
+
+        btn.textContent = "Select Suppliers";
+
+    } else if (selectedSupplierNames.length <= 3) {
+
+        btn.textContent = selectedSupplierNames.join(", ");
+
+    } else {
+
+        btn.textContent = `${selectedSupplierIds.length} Suppliers Selected`;
+    }
+}
+
+function setSelectedSuppliers(ids, names) {
+
+    selectedSupplierIds = normalizeIds(ids);
+    selectedSupplierNames = normalizeIds(names);
+
+    applySelectedSuppliers();
+}
+
+function refreshSupplierSummary() {
+
+    selectedSupplierIds =
+        Array.from(document.querySelectorAll(".supplier-checkbox:checked"))
+        .map(cb => cb.value);
+
+    selectedSupplierNames =
+        Array.from(document.querySelectorAll(".supplier-checkbox:checked"))
+        .map(cb => cb.dataset.name);
+
+    applySelectedSuppliers();
+}
+document.addEventListener("change", function(e) {
+
+    if (e.target.classList.contains("supplier-checkbox")) {
+        refreshSupplierSummary();
+    }
+
+})
 const table = new Tabulator("#bop_table", {
     ajaxURL: "qur_bop_master.php?action=list",
     ajaxConfig: "GET",
@@ -175,57 +271,64 @@ const table = new Tabulator("#bop_table", {
         {
             title: "Part No",
             field: "part_no",
-            width: 165,
-            hozAlign: "center",
-            headerHozAlign: "center"
-        },
-        {
-            title: "BOP Part Name",
-            field: "bop_part_name",
-            width: 150,
-            hozAlign: "center",
-            headerHozAlign: "center"
-        },
-        {
-            title: "BOP Part No",
-            field: "bop_part_no",
-            width: 100,
-            hozAlign: "center",
-            headerHozAlign: "center"
-        },
-        {
-            title: "Supplier Name",
-            field: "supplier_name",
-            width: 105,
-            hozAlign: "center",
-            headerHozAlign: "center"
-        },
-        {
-            title: "Quantity",
-            field: "quantity",
-            width: 105,
-            hozAlign: "center",
-            headerHozAlign: "center"
-        },
-        {
-            title: "UMO",
-            field: "umo",
-            width: 90,
+            width: 135,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "FG Code",
             field: "fg_code",
-            width: 105,
+            width: 135,
             hozAlign: "center",
             headerHozAlign: "center"
         },
 
         {
+            title: "BOP Part Name",
+            field: "bop_part_name",
+            width: 160,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
+            title: "BOP Part No",
+            field: "bop_part_no",
+            width: 140,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
+            title: "BOP ERP Code",
+            field: "bop_erp_code",
+            width: 150,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
+            title: "Supplier Name",
+            field: "supplier_name",
+            width: 170,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
+            title: "Quantity",
+            field: "bop_quantity",
+            width: 110,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
+            title: "UMO",
+            field: "umo",
+            width: 80,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
             title: "Created By",
             field: "created_by",
-            width: 130,
+            width: 120,
             hozAlign: "center",
             headerHozAlign: "center"
         },
@@ -292,8 +395,9 @@ document.addEventListener("click", function(e) {
                 document.getElementById("bop_part_name").value = data.bop_part_name || "";
                 document.getElementById("bop_part_no").value = data.bop_part_no || "";
                 document.getElementById("fg_code").value = data.fg_code || "";
-                document.getElementById("supplier_id").value = data.supplier_name || "";
-                document.getElementById("quantity").value = data.quantity || "";
+                document.getElementById("bop_erp_code").value = data.bop_erp_code || "";
+                setSelectedSuppliers(data.supplier_id, data.supplier_name);
+                document.getElementById("bop_quantity").value = data.bop_quantity || "";
                 document.getElementById("umo").value = data.umo || "";
                 populatePartNoOptions(data.part_id);
                 document.getElementById("part_id").value = data.part_id || "";
@@ -315,8 +419,8 @@ document.querySelector('[data-bs-target="#bopModal"]').addEventListener("click",
     document.getElementById("bopModalLabel").innerHTML = "Add BOP";
     document.getElementById("saveBtn").innerHTML = "Save";
     document.getElementById("fg_code").value = "";
-    document.getElementById("supplier_id").value = "";
-    document.getElementById("quantity").value = "";
+    setSelectedSuppliers([], []);
+    document.getElementById("bop_quantity").value = "";
     document.getElementById("umo").value = "";
     document.getElementById("part_id").value = "";
 });
@@ -343,8 +447,7 @@ document.getElementById("bopForm").addEventListener("submit", function(e) {
                 document.getElementById("bopModalLabel").innerHTML = "Add BOP";
                 document.getElementById("saveBtn").innerHTML = "Save";
                 document.getElementById("fg_code").value = "";
-                document.getElementById("supplier_id").value = "";
-                document.getElementById("quantity").value = "";
+                document.getElementById("bop_quantity").value = "";
                 document.getElementById("umo").value = "";
                 document.getElementById("part_id").value = "";
                 table.replaceData();
@@ -383,7 +486,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     data.bop_part_no,
                     data.fg_code,
                     data.supplier_name,
-                    data.quantity,
+                    data.bop_quantity,
                     data.umo,
                     data.fg_code
 
@@ -416,9 +519,6 @@ document.addEventListener("DOMContentLoaded", () => {
 <div class="app-content">
     <div class="container-fluid">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">BOP</h3>
-            </div>
             <div class="card-body">
                 <div id="part_table"></div>
                 <script>
@@ -438,57 +538,64 @@ document.addEventListener("DOMContentLoaded", () => {
                         {
                             title: "Part No",
                             field: "part_no",
-                            width: 165,
-                            hozAlign: "center",
-                            headerHozAlign: "center"
-                        },
-                        {
-                            title: "BOP Part Name",
-                            field: "bop_part_name",
-                            width: 150,
-                            hozAlign: "center",
-                            headerHozAlign: "center"
-                        },
-                        {
-                            title: "BOP Part No",
-                            field: "bop_part_no",
-                            width: 100,
-                            hozAlign: "center",
-                            headerHozAlign: "center"
-                        },
-
-                        {
-                            title: "Supplier Name",
-                            field: "supplier_name",
-                            width: 105,
-                            hozAlign: "center",
-                            headerHozAlign: "center"
-                        },
-                        {
-                            title: "Quantity",
-                            field: "quantity",
-                            width: 105,
-                            hozAlign: "center",
-                            headerHozAlign: "center"
-                        },
-                        {
-                            title: "UMO",
-                            field: "umo",
-                            width: 90,
+                            width: 135,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "FG Code",
                             field: "fg_code",
-                            width: 105,
+                            width: 135,
+                            hozAlign: "center",
+                            headerHozAlign: "center"
+                        },
+
+                        {
+                            title: "BOP Part Name",
+                            field: "bop_part_name",
+                            width: 160,
+                            hozAlign: "center",
+                            headerHozAlign: "center"
+                        },
+                        {
+                            title: "BOP Part No",
+                            field: "bop_part_no",
+                            width: 140,
+                            hozAlign: "center",
+                            headerHozAlign: "center"
+                        },
+                        {
+                            title: "BOP ERP Code",
+                            field: "bop_erp_code",
+                            width: 150,
+                            hozAlign: "center",
+                            headerHozAlign: "center"
+                        },
+                        {
+                            title: "Supplier Name",
+                            field: "supplier_name",
+                            width: 170,
+                            hozAlign: "center",
+                            headerHozAlign: "center"
+                        },
+                        {
+                            title: "Quantity",
+                            field: "bop_quantity",
+                            width: 110,
+                            hozAlign: "center",
+                            headerHozAlign: "center"
+                        },
+                        {
+                            title: "UMO",
+                            field: "umo",
+                            width: 80,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Created By",
                             field: "created_by",
-                            width: 130,
+                            width: 120,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },

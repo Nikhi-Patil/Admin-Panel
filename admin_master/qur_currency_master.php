@@ -5,6 +5,7 @@ include "../inc/db_cfg.php";
 $action = $_REQUEST['action'] ?? '';
 
 switch ($action) {
+// =================== GET TABLE ===================
     case "list":
         $sql = "SELECT id, currency_name, currency_symbol, exchange_rate, created_by, updated_by
                 FROM currency_master
@@ -19,8 +20,8 @@ switch ($action) {
 
         header("Content-Type: application/json");
         echo json_encode($data);
-        break;
-
+    break;
+// =================== GET SINGLE RECORD ===================
     case "get":
         $id = intval($_GET['id'] ?? 0);
 
@@ -32,13 +33,13 @@ switch ($action) {
 
         header("Content-Type: application/json");
         echo json_encode(mysqli_fetch_assoc($result));
-        break;
-
+    break;
+// =================== SAVE / UPDATE ===================
     case "save":
         $id = $_POST['id'] ?? "";
         $currency_name = mysqli_real_escape_string($conn, $_POST['currency_name'] ?? '');
         $currency_symbol = mysqli_real_escape_string($conn, $_POST['currency_symbol'] ?? '');
-        $exchange_rate = mysqli_real_escape_string($conn, $_POST['exchange_rate'] ?? '');
+       $exchange_rate = round((float)($_POST['exchange_rate'] ?? 0), 2);
         $user_id = $_SESSION['user_id'] ?? 0;
 
         if ($id == "") {
@@ -72,8 +73,8 @@ switch ($action) {
         } else {
             echo mysqli_error($conn);
         }
-        break;
-
+    break;
+// =================== DELETE ===================
     case "delete":
         $id = intval($_POST['id'] ?? 0);
         $user_id = $_SESSION['user_id'] ?? 0;
@@ -125,8 +126,8 @@ switch ($action) {
                 "message" => $e->getMessage()
             ]);
         }
-        break;
-
+    break;
+// =================== GET TABLE IN RECYCLE ===================
     case "list1":
         $sql = "SELECT id, currency_name, currency_symbol, exchange_rate, created_by, updated_by
                 FROM hist_currency_master
@@ -141,8 +142,8 @@ switch ($action) {
 
         header("Content-Type: application/json");
         echo json_encode($data);
-        break;
-
+    break;
+// =================== Restore ===================
     case "restore":
         $id = intval($_POST['id'] ?? 0);
         $user_id = $_SESSION['user_id'] ?? 0;
@@ -194,12 +195,12 @@ switch ($action) {
                 "message" => $e->getMessage()
             ]);
         }
-        break;
-
+    break;
+// =================== Default ===================
     default:
         echo json_encode([
             "status" => "Invalid Action"
         ]);
-        break;
+    break;
 }
 ?>

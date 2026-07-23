@@ -350,17 +350,13 @@ $page = $_GET['page'] ?? 'plant';
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6">
-                    <h1 class="mb-0 fs-3">Unit List</h1>
+                    <h1 class="mb-0 fs-3">Unit Recycle Bin</h1>
                 </div>
             </div>
         </div>
         <div class="app-content">
             <div class="container-fluid">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Unit</h3>
-
-                    </div>
                     <div class="card-body">
                         <div id="unit_table"></div>
                         <!-- disply table   -->

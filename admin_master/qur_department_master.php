@@ -46,6 +46,28 @@ switch ($action) {
         $id = $_POST['id'] ?? "";
         $department_name = mysqli_real_escape_string($conn, $_POST['department_name']);
         $user_id = $_SESSION['user_id'] ?? 0;
+                // Check duplicate department name
+        if ($id == "") {
+            $check = mysqli_query(
+                $conn,
+                "SELECT id
+                FROM department_master
+                WHERE LOWER(TRIM(department_name)) = LOWER(TRIM('$department_name'))"
+            );
+        } else {
+            $check = mysqli_query(
+                $conn,
+                "SELECT id
+                FROM department_master
+                WHERE LOWER(TRIM(department_name)) = LOWER(TRIM('$department_name'))
+                AND id != '$id'"
+            );
+        }
+
+        if (mysqli_num_rows($check) > 0) {
+            echo "Department name already exists.";
+            exit;
+        }
 
         if ($id == "") {
 
@@ -69,9 +91,7 @@ switch ($action) {
             echo mysqli_error($conn);
         }
 
-        break;
-
-
+    break;
 // =================== DELETE ===================
     case "delete":
 

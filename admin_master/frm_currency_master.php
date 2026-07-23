@@ -84,7 +84,11 @@ $page = $_GET['page'] ?? 'currency';
                             title: "Exchange Rate",
                             field: "exchange_rate",
                             hozAlign: "center",
-                            headerHozAlign: "center"
+                            headerHozAlign: "center",
+                            formatter: function(cell) {
+                                let value = parseFloat(cell.getValue());
+                                return isNaN(value) ? "" : Number(value.toFixed(2));
+                            }
                         },
                         {
                             title: "Created By",
@@ -135,14 +139,14 @@ $page = $_GET['page'] ?? 'currency';
                                     body: "id=" + encodeURIComponent(id)
                                 })
                                 .then(res => res.json())
-                                    .then(res => {
-                                        if (res.status === "success") {
-                                            table.replaceData();
-                                            alert("Deleted Successfully");
-                                        } else {
-                                            alert(res.message || "Delete failed.");
-                                        }
-                                    });
+                                .then(res => {
+                                    if (res.status === "success") {
+                                        table.replaceData();
+                                        alert("Deleted Successfully");
+                                    } else {
+                                        alert(res.message || "Delete failed.");
+                                    }
+                                });
                         }
                     }
                 });
@@ -157,7 +161,8 @@ $page = $_GET['page'] ?? 'currency';
                                 document.getElementById("currency_id").value = data.id;
                                 document.getElementById("currency_name").value = data.currency_name;
                                 document.getElementById("currency_symbol").value = data.currency_symbol;
-                                document.getElementById("exchange_rate").value = data.exchange_rate;
+                                document.getElementById("exchange_rate").value =
+                                    parseFloat(data.exchange_rate).toFixed(2);
                                 document.getElementById("currencyModalLabel").innerHTML = "Edit Currency";
                                 document.getElementById("saveBtn").innerHTML = "Update";
                                 new bootstrap.Modal(document.getElementById("currencyModal")).show();
@@ -197,7 +202,7 @@ $page = $_GET['page'] ?? 'currency';
                     </div>
                     <div class="mb-3">
                         <label>Exchange Rate</label>
-                        <input type="number" step="0.0001" id="exchange_rate" name="exchange_rate" class="form-control"
+                        <input type="number" step="0.001" id="exchange_rate" name="exchange_rate" class="form-control"
                             required>
                     </div>
                     <button type="submit" id="saveBtn" class="btn btn-success">Save</button>
@@ -295,9 +300,6 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="app-content">
     <div class="container-fluid">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Currency</h3>
-            </div>
             <div class="card-body">
                 <div id="currency_table"></div>
 

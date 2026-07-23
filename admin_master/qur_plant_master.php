@@ -98,6 +98,26 @@ switch ($action) {
         $unit_ids = array_values(array_filter(array_map('intval', $unit_ids)));
         $plant_name = mysqli_real_escape_string($conn, trim($_POST['plant_name'] ?? ''));
         $user_id = $_SESSION['user_id'] ?? '';
+                // Check duplicate plant name
+        if ($id == '') {
+            $check = mysqli_query($conn,
+                "SELECT id
+                FROM plant_master
+                WHERE LOWER(TRIM(plant_name)) = LOWER(TRIM('$plant_name'))");
+        } else {
+            $check = mysqli_query($conn,
+                "SELECT id
+                FROM plant_master
+                WHERE LOWER(TRIM(plant_name)) = LOWER(TRIM('$plant_name'))
+                AND id != '$id'");
+        }
+
+        if (mysqli_num_rows($check) > 0) {
+            send_json([
+                'status'  => 'error',
+                'message' => 'Plant name already exists.'
+            ]);
+        }
 
         if ($user_id === '') {
             send_json([

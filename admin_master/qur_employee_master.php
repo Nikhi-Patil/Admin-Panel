@@ -14,6 +14,7 @@ $generateTempPassword = function(int $length = 10): string {
 $action = $_REQUEST['action'] ?? '';
 
 switch ($action) {
+// =================== GET TABLE ===================
     case "list":
         $sql = "SELECT
                     e.id,
@@ -41,8 +42,8 @@ switch ($action) {
 
         header("Content-Type: application/json");
         echo json_encode($data);
-        break;
-
+    break;
+// =================== GET SINGLE RECORD ===================
     case "get":
         $id = intval($_GET['id'] ?? 0);
 
@@ -67,8 +68,8 @@ switch ($action) {
         $result = mysqli_query($conn, $sql);
         header("Content-Type: application/json");
         echo json_encode(mysqli_fetch_assoc($result));
-        break;
-
+    break;
+// =================== GET designations TABLE ===================
     case "designations":
         $sql = "SELECT id, designation
                 FROM designation_master
@@ -80,8 +81,8 @@ switch ($action) {
         }
         header("Content-Type: application/json");
         echo json_encode($data);
-        break;
-
+    break;
+// =================== GET DEPARTMENT TABLE ===================
     case "departments":
         $sql = "SELECT id, department_name
                 FROM department_master
@@ -93,8 +94,8 @@ switch ($action) {
         }
         header("Content-Type: application/json");
         echo json_encode($data);
-        break;
-
+    break;
+// =================== GET SAVE ===================
     case "save":
         header("Content-Type: application/json");
         $id = $_POST['id'] ?? "";
@@ -170,7 +171,6 @@ switch ($action) {
                     "temp_password" => $temp_password,
                     "username" => $email
                 ]);
-                break;
             }
 
             $sql = "UPDATE employee_master
@@ -233,16 +233,17 @@ switch ($action) {
                 $response["username"] = $email;
             }
             echo json_encode($response);
-            break;
+
         } catch (Exception $e) {
             mysqli_rollback($conn);
             echo json_encode([
                 "status" => "error",
                 "message" => $e->getMessage()
             ]);
-            break;
-        }
 
+        }
+    break;
+// =================== GET DELETE ===================
     case "delete":
         $id = intval($_POST['id'] ?? 0);
         $user_id = $_SESSION['user_id'] ?? 0;
@@ -301,8 +302,8 @@ switch ($action) {
                 "message" => $e->getMessage()
             ]);
         }
-        break;
-
+    break;
+// =================== GET RESTORE TABLE ===================
     case "list1":
         $sql = "SELECT
                     e.id,
@@ -330,8 +331,8 @@ switch ($action) {
 
         header("Content-Type: application/json");
         echo json_encode($data);
-        break;
-
+    break;
+// =================== GET REDTORE ===================
     case "restore":
         $id = intval($_POST['id'] ?? 0);
         $user_id = $_SESSION['user_id'] ?? 0;
@@ -390,10 +391,10 @@ switch ($action) {
                 "message" => $e->getMessage()
             ]);
         }
-        break;
-
+    break;
+// =================== GET DEFAULT ===================
     default:
         echo json_encode(["status" => "Invalid Action"]);
-        break;
+    break;
 }
 ?>

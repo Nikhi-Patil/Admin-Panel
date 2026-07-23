@@ -11,18 +11,20 @@ switch ($action) {
                     p.id,
                     p.bop_part_name,
                     p.bop_part_no,
-                    p.quantity,
+                    p.bop_quantity,
                     p.umo,
                     p.supplier_id,
                     p.part_id,
-                    d.supplier_name,
+                    GROUP_CONCAT(DISTINCT d.supplier_name ORDER BY d.supplier_name SEPARATOR ', ') AS supplier_name,
                     sd.part_no,
                     sd.fg_code,
+                    p.bop_erp_code,
                     p.created_by,
                     p.updated_by
                 FROM bop_master p
-                LEFT JOIN supplier_master d ON p.supplier_id = d.id
+                LEFT JOIN supplier_master d ON FIND_IN_SET(d.id, p.supplier_id)
                 LEFT JOIN part_master sd ON p.part_id = sd.id
+                GROUP BY p.id
                 ORDER BY p.id DESC";
 
         $result = mysqli_query($conn, $sql);
@@ -42,19 +44,21 @@ switch ($action) {
                     p.id,
                     p.bop_part_name,
                     p.bop_part_no,
-                    p.quantity,
+                    p.bop_quantity,
                     p.umo,
                     p.supplier_id,
                     p.part_id,
-                    d.supplier_name,
+                    GROUP_CONCAT(DISTINCT d.supplier_name ORDER BY d.supplier_name SEPARATOR ', ') AS supplier_name,
                     sd.part_no,
-                    p.fg_code,
+                    sd.fg_code,
+                    p.bop_erp_code,
                     p.created_by,
                     p.updated_by
                 FROM bop_master p
-                LEFT JOIN supplier_master d ON p.supplier_id = d.id
+                LEFT JOIN supplier_master d ON FIND_IN_SET(d.id, p.supplier_id)
                 LEFT JOIN part_master sd ON p.part_id = sd.id
-                WHERE p.id = '$id'";
+                WHERE p.id = '$id'
+                GROUP BY p.id";
 
         $result = mysqli_query($conn, $sql);
         header("Content-Type: application/json");
@@ -97,8 +101,8 @@ switch ($action) {
         $id = $_POST['id'] ?? "";
         $bop_part_name = mysqli_real_escape_string($conn, $_POST['bop_part_name'] ?? '');
         $bop_part_no = mysqli_real_escape_string($conn, $_POST['bop_part_no'] ?? '');
-        $fg_code = mysqli_real_escape_string($conn, $_POST['fg_code'] ?? '');
-        $quantity = mysqli_real_escape_string($conn, $_POST['quantity'] ?? '');
+        $bop_erp_code = mysqli_real_escape_string($conn, $_POST['bop_erp_code'] ?? '');
+        $bop_quantity = intval($_POST['bop_quantity'] ?? 0);
         $umo = mysqli_real_escape_string($conn, $_POST['umo'] ?? '');
         $part_id = intval($_POST['part_id'] ?? 0);
         $user_id = $_SESSION['user_id'] ?? 0;
@@ -106,15 +110,20 @@ switch ($action) {
         mysqli_begin_transaction($conn);
 
         try {
-            $supplier_id = intval($_POST['supplier_id']);
+            $supplier_ids = $_POST['supplier_id'] ?? [];
+            if (!is_array($supplier_ids)) {
+                $supplier_ids = [$supplier_ids];
+            }
+            $supplier_ids = array_values(array_filter(array_map('intval', $supplier_ids)));
+            $supplier_id = mysqli_real_escape_string($conn, implode(',', $supplier_ids));
 
             if ($id == "") {
                 $sql = "INSERT INTO bop_master
                         (
                             bop_part_name,
                             bop_part_no,
-                            fg_code,
-                            quantity,
+                            bop_erp_code,
+                            bop_quantity,
                             umo,
                             supplier_id,
                             part_id,
@@ -124,8 +133,8 @@ switch ($action) {
                         (
                             '$bop_part_name',
                             '$bop_part_no',
-                            '$fg_code',
-                            '$quantity',
+                            '$bop_erp_code',
+                            '$bop_quantity',
                             '$umo',
                             '$supplier_id',
                             '$part_id',
@@ -136,8 +145,8 @@ switch ($action) {
                         SET
                             bop_part_name = '$bop_part_name',
                             bop_part_no = '$bop_part_no',
-                            fg_code = '$fg_code',
-                            quantity='$quantity',
+                            bop_erp_code = '$bop_erp_code',
+                            bop_quantity='$bop_quantity',
                             umo='$umo',
                             supplier_id = '$supplier_id',
                             part_id = '$part_id',
@@ -174,8 +183,8 @@ switch ($action) {
                     id,
                     bop_part_name,
                     bop_part_no,
-                    fg_code,
-                    quantity,
+                    bop_erp_code,
+                    bop_quantity,
                     umo,
                     supplier_id,
                     part_id,
@@ -188,8 +197,8 @@ switch ($action) {
                     id,
                     bop_part_name,
                     bop_part_no,
-                    fg_code,
-                    quantity,
+                    bop_erp_code,
+                    bop_quantity,
                     umo,
                     supplier_id,
                     part_id,
@@ -226,18 +235,20 @@ switch ($action) {
                     p.id,
                     p.bop_part_name,
                     p.bop_part_no,
-                    p.fg_code,
-                    p.quantity,
+                    sd.fg_code,
+                    p.bop_quantity,
                     p.umo,
                     p.supplier_id,
                     p.part_id,
-                    d.supplier_name,
+                    GROUP_CONCAT(DISTINCT d.supplier_name ORDER BY d.supplier_name SEPARATOR ', ') AS supplier_name,
                     sd.part_no,
+                    p.bop_erp_code,
                     p.created_by,
                     p.updated_by
                 FROM hist_bop_master p
-                LEFT JOIN supplier_master d ON p.supplier_id = d.id
+                LEFT JOIN supplier_master d ON FIND_IN_SET(d.id, p.supplier_id)
                 LEFT JOIN part_master sd ON p.part_id = sd.id
+                GROUP BY p.id
                 ORDER BY p.id DESC";
 
         $result = mysqli_query($conn, $sql);
@@ -263,8 +274,8 @@ switch ($action) {
                     id,
                     bop_part_name,
                     bop_part_no,
-                    fg_code,
-                    quantity,
+                    bop_erp_code,
+                    bop_quantity,
                     umo,
                     supplier_id,
                     part_id,
@@ -277,8 +288,8 @@ switch ($action) {
                     id,
                     bop_part_name,
                     bop_part_no,
-                    fg_code,
-                    quantity,
+                    bop_erp_code,
+                    bop_quantity,
                     umo,
                     supplier_id,
                     part_id,
