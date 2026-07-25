@@ -19,6 +19,7 @@ switch ($action) {
         $sql = "SELECT
                     e.id,
                     e.employee_name,
+                    e.user_name,
                     e.email,
                     e.location,
                     e.contact_no,
@@ -50,6 +51,7 @@ switch ($action) {
         $sql = "SELECT
                     e.id,
                     e.employee_name,
+                    e.user_name,
                     e.email,
                     e.location,
                     e.contact_no,
@@ -100,13 +102,14 @@ switch ($action) {
         header("Content-Type: application/json");
         $id = $_POST['id'] ?? "";
         $employee_name = mysqli_real_escape_string($conn, $_POST['employee_name'] ?? '');
+        $user_name = mysqli_real_escape_string($conn,$_POST['user_name']);
         $email = mysqli_real_escape_string($conn, $_POST['email'] ?? '');
         $location = mysqli_real_escape_string($conn, $_POST['location'] ?? '');
         $contact_no = mysqli_real_escape_string($conn, $_POST['contact_no'] ?? '');
         $designation_id = mysqli_real_escape_string($conn, $_POST['designation_id'] ?? '');
         $department_id = mysqli_real_escape_string($conn, $_POST['department_id'] ?? '');
         $level = mysqli_real_escape_string($conn, $_POST['level'] ?? '');
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
         $creator = substr((string)$user_id, 0, 10);
 
         mysqli_begin_transaction($conn);
@@ -116,6 +119,7 @@ switch ($action) {
                 $sql = "INSERT INTO employee_master
                         (
                             employee_name,
+                            user_name,
                             email,
                             location,
                             contact_no,
@@ -127,6 +131,7 @@ switch ($action) {
                         VALUES
                         (
                             '$employee_name',
+                            '$user_name',
                             '$email',
                             '$location',
                             '$contact_no',
@@ -142,11 +147,12 @@ switch ($action) {
 
                 $employee_id = mysqli_insert_id($conn);
                 $temp_password = $generateTempPassword(10);
-                $hashed_password = password_hash($temp_password, PASSWORD_DEFAULT);
+                //$hashed_password = password_hash($temp_password, PASSWORD_DEFAULT);
 
                 $loginSql = "INSERT INTO login
                             (
                                 username,
+                                user_name,
                                 password,
                                 user_id,
                                 created_by,
@@ -155,7 +161,8 @@ switch ($action) {
                             VALUES
                             (
                                 '$email',
-                                '$hashed_password',
+                                '$user_name',
+                                '$temp_password',
                                 '$employee_id',
                                 '$creator',
                                 1
@@ -165,24 +172,26 @@ switch ($action) {
                     throw new Exception(mysqli_error($conn));
                 }
 
-                mysqli_commit($conn);
+               mysqli_commit($conn);
                 echo json_encode([
                     "status" => "success",
                     "temp_password" => $temp_password,
                     "username" => $email
                 ]);
+                exit;
             }
 
             $sql = "UPDATE employee_master
                     SET
                         employee_name = '$employee_name',
+                        user_name='$user_name',
                         email = '$email',
                         location = '$location',
                         contact_no = '$contact_no',
                         designation_id = '$designation_id',
                         level = '$level',
                         department_id = '$department_id',
-                        updated_by = '$user_id',
+                        updated_by='".$_SESSION['user_name']."'
                         updated_at = NOW()
                     WHERE id = '$id'";
 
@@ -194,7 +203,8 @@ switch ($action) {
             if ($loginCheck && mysqli_num_rows($loginCheck) > 0) {
                 $loginSql = "UPDATE login
                             SET
-                                username = '$email'
+                                username = '$email',
+                                user_name='$user_name'
                             WHERE user_id = '$id'";
 
                 if (!mysqli_query($conn, $loginSql)) {
@@ -202,10 +212,11 @@ switch ($action) {
                 }
             } else {
                 $temp_password = $generateTempPassword(10);
-                $hashed_password = password_hash($temp_password, PASSWORD_DEFAULT);
+                //$hashed_password = password_hash($temp_password, PASSWORD_DEFAULT);
                 $loginSql = "INSERT INTO login
                             (
                                 username,
+                                user_name,
                                 password,
                                 user_id,
                                 created_by,
@@ -214,9 +225,10 @@ switch ($action) {
                             VALUES
                             (
                                 '$email',
-                                '$hashed_password',
+                                '$user_name',
+                                '$temp_password',
                                 '$id',
-                                '$creator',
+                                '".$_SESSION['user_name']."',
                                 1
                             )";
 
@@ -246,7 +258,7 @@ switch ($action) {
 // =================== GET DELETE ===================
     case "delete":
         $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 
@@ -256,6 +268,7 @@ switch ($action) {
                 (
                     id,
                     employee_name,
+                    user_name,
                     email,
                     location,
                     contact_no,
@@ -270,6 +283,7 @@ switch ($action) {
                 SELECT
                     id,
                     employee_name,
+                    user_name,
                     email,
                     location,
                     contact_no,
@@ -308,6 +322,7 @@ switch ($action) {
         $sql = "SELECT
                     e.id,
                     e.employee_name,
+                    e.user_name,
                     e.email,
                     e.location,
                     e.contact_no,
@@ -335,7 +350,7 @@ switch ($action) {
 // =================== GET REDTORE ===================
     case "restore":
         $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 
@@ -345,6 +360,7 @@ switch ($action) {
                 (
                     id,
                     employee_name,
+                    user_name,
                     email,
                     location,
                     contact_no,
@@ -359,6 +375,7 @@ switch ($action) {
                 SELECT
                     id,
                     employee_name,
+                    user_name,
                     email,
                     location,
                     contact_no,

@@ -45,7 +45,7 @@ switch ($action) {
         $location = mysqli_real_escape_string($conn, $_POST['location']);
         $address = mysqli_real_escape_string($conn, $_POST['address']);
 
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION['user_name'];
         $unit = trim(mysqli_real_escape_string($conn, $_POST['unit']));
 
         // Check if unit already exists
@@ -108,7 +108,7 @@ switch ($action) {
 
         mysqli_begin_transaction($conn);
 
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         if (!$user_id) {
             echo json_encode([
@@ -221,7 +221,7 @@ switch ($action) {
 
         mysqli_begin_transaction($conn);
 
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         if (!$user_id) {
             echo json_encode([

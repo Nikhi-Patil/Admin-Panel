@@ -2,14 +2,14 @@
 session_start();
 include "inc/db_cfg.php";
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_name'])) {
     header("Location: login.php");
     exit;
 }
 
 $message = "";
 $error = "";
-$user_id = (string)$_SESSION['user_id'];
+$user_id = (string)$_SESSION['user_name'];
 $username = $_SESSION['username'] ?? '';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } elseif ($new_password !== $confirm_password) {
         $error = "Passwords do not match.";
     } else {
-        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+        $hashed_password = $new_password ;
 
         $stmt = $conn->prepare("UPDATE login SET password = ?, first_login = 0 WHERE user_id = ?");
         $stmt->bind_param("ss", $hashed_password, $user_id);
@@ -37,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,18 +46,50 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <title>Reset Password</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, Helvetica, sans-serif; background: #f4f6f9; }
-        .page-wrap { min-height: 100vh; display: flex; align-items: center; }
-        .card-shell { max-width: 460px; width: 100%; margin: 0 auto; }
-        .password-wrapper { position: relative; width: 100%; }
-        .password-wrapper input { padding-right: 45px; }
-        .toggle-password {
-            position: absolute; top: 50%; right: 15px; transform: translateY(-50%);
-            cursor: pointer; color: #6c757d; font-size: 18px;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f4f6f9;
+    }
+
+    .page-wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .card-shell {
+        max-width: 460px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .password-wrapper {
+        position: relative;
+        width: 100%;
+    }
+
+    .password-wrapper input {
+        padding-right: 45px;
+    }
+
+    .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #6c757d;
+        font-size: 18px;
+    }
     </style>
 </head>
+
 <body>
     <div class="container page-wrap">
         <div class="card card-shell shadow-sm">
@@ -68,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
 
                 <?php if ($error !== "") { ?>
-                    <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+                <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
                 <?php } ?>
 
                 <form method="POST">
@@ -83,7 +116,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <div class="form-group">
                         <label>Confirm Password</label>
                         <div class="password-wrapper">
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                                required>
                             <i class="fa-solid fa-eye toggle-password" data-target="confirm_password"></i>
                         </div>
                     </div>
@@ -111,4 +145,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     });
     </script>
 </body>
+
 </html>

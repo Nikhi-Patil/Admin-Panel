@@ -281,7 +281,7 @@ switch ($action) {
         $sub_customer = mysqli_real_escape_string($conn, $_POST['sub_customer']);
         $geo_type = mysqli_real_escape_string($conn, $_POST['geo_type']);
         $zone = mysqli_real_escape_string($conn, $_POST['zone']);
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION['user_name'];
         // Check duplicate Customer + Sub Customer
         if ($id == "") {
 
@@ -357,7 +357,7 @@ switch ($action) {
 
         mysqli_begin_transaction($conn);
 
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         try {
 
@@ -441,7 +441,7 @@ switch ($action) {
 
         mysqli_begin_transaction($conn);
 
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         try {
 

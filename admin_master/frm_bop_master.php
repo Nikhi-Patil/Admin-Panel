@@ -22,13 +22,113 @@ $page = $_GET['page'] ?? 'bop';
                             <i class="fas fa-plus"></i>
                             Add BOP
                         </button>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bulkUploadModal">
+
+                            <i class="fa-solid fa-file-excel"></i>
+
+                            Bulk Upload
+
+                        </button>
                     </ol>
                 </nav>
             </div>
         </div>
     </div>
 </div>
+<div class="modal fade" id="bulkUploadModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
 
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fa-solid fa-file-excel"></i>
+                    Bulk Upload BOP Master
+                </h5>
+
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <!-- STEP 1 -->
+
+                <div class="card border-success mb-4">
+
+                    <div class="card-header bg-success text-white">
+
+                        <strong>
+                            Step 1 : Download Template
+                        </strong>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <p class="mb-3">
+
+                            Download the latest Excel template.
+                            Fill all the required columns without
+                            changing the header names.
+
+                        </p>
+
+                        <a href="qur_bop_master.php?action=download_template" class="btn btn-success">
+
+                            <i class="fa-solid fa-download"></i>
+
+                            Download Template
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- STEP 2 -->
+
+                <div class="card border-primary">
+
+                    <div class="card-header bg-primary text-white">
+
+                        <strong>
+                            Step 2 : Import Excel File
+                        </strong>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <form id="bulkUploadForm" enctype="multipart/form-data">
+
+                            <label class="form-label">
+
+                                Select Excel File
+
+                            </label>
+
+                            <input type="file" name="excel_file" accept=".xlsx,.csv" class="form-control mb-3" required>
+
+                            <button type="submit" class="btn btn-primary">
+
+                                <i class="fa-solid fa-file-import"></i>
+
+                                Import Excel
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 <div class="app-content">
     <div class="container-fluid">
         <div class="card">
@@ -287,28 +387,24 @@ const table = new Tabulator("#bop_table", {
             title: "BOP Part Name",
             field: "bop_part_name",
             width: 160,
-            hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "BOP Part No",
             field: "bop_part_no",
             width: 140,
-            hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "BOP ERP Code",
             field: "bop_erp_code",
             width: 150,
-            hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Supplier Name",
             field: "supplier_name",
             width: 170,
-            hozAlign: "center",
             headerHozAlign: "center"
         },
         {
@@ -502,6 +598,36 @@ document.addEventListener("DOMContentLoaded", () => {
         "bop_master.csv"));
 });
 </script>
+<script>
+document.getElementById("bulkUploadForm")
+    .addEventListener("submit", function(e) {
+
+        e.preventDefault();
+
+        let fd = new FormData(this);
+
+        fetch("qur_bop_master.php?action=bulk_upload", {
+
+                method: "POST",
+
+                body: fd
+
+            })
+            .then(r => r.json())
+            .then(res => {
+
+                alert(res.message);
+
+                table.replaceData();
+
+                bootstrap.Modal.getInstance(
+                    document.getElementById("bulkUploadModal")
+                ).hide();
+
+            });
+
+    });
+</script>
 </main>
 <?php } ?>
 
@@ -554,28 +680,24 @@ document.addEventListener("DOMContentLoaded", () => {
                             title: "BOP Part Name",
                             field: "bop_part_name",
                             width: 160,
-                            hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "BOP Part No",
                             field: "bop_part_no",
                             width: 140,
-                            hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "BOP ERP Code",
                             field: "bop_erp_code",
                             width: 150,
-                            hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Supplier Name",
                             field: "supplier_name",
                             width: 170,
-                            hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {

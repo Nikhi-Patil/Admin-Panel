@@ -45,7 +45,7 @@ switch ($action) {
 
         $id = $_POST['id'] ?? "";
         $department_name = mysqli_real_escape_string($conn, $_POST['department_name']);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
                 // Check duplicate department name
         if ($id == "") {
             $check = mysqli_query(

@@ -96,6 +96,10 @@ body {
                             <label>Employee Name</label>
                             <input type="text" id="employee_name" name="employee_name" class="form-control" required>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label>User Name</label>
+                            <input type="text" id="user_name" name="user_name" class="form-control" required>
+                        </div>
 
                         <div class="col-md-6 mb-3">
                             <label>Email</label>
@@ -192,6 +196,13 @@ const table = new Tabulator("#employee_table", {
             title: "Employee Name",
             field: "employee_name",
             width: 160,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
+            title: "User Name",
+            field: "user_name",
+            width: 150,
             hozAlign: "center",
             headerHozAlign: "center"
         },
@@ -319,6 +330,7 @@ document.addEventListener("click", function(e) {
             .then(data => {
                 document.getElementById("employee_id").value = data.id || "";
                 document.getElementById("employee_name").value = data.employee_name || "";
+                document.getElementById("user_name").value = data.user_name || "";
                 document.getElementById("email").value = data.email || "";
                 document.getElementById("location").value = data.location || "";
                 document.getElementById("contact_no").value = data.contact_no || "";
@@ -448,6 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return [
                     data.id,
                     data.employee_name,
+                    data.user_name,
                     data.email,
                     data.location,
                     data.contact_no,
@@ -508,6 +521,13 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
             title: "Employee Name",
             field: "employee_name",
             width: 160,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
+            title: "User Name",
+            field: "user_name",
+            width: 150,
             hozAlign: "center",
             headerHozAlign: "center"
         },

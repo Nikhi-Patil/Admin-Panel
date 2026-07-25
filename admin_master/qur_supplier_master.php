@@ -45,7 +45,7 @@ switch ($action) {
         $location = mysqli_real_escape_string($conn, $_POST['location']);
         $email = mysqli_real_escape_string($conn, $_POST['email']);
         $contact_no = mysqli_real_escape_string($conn, $_POST['contact_no']);
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION['user_name'];
         // Check duplicate supplier name
         if ($id == "") {
 
@@ -119,7 +119,7 @@ switch ($action) {
 
         mysqli_begin_transaction($conn);
 
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         try {
 
@@ -203,7 +203,7 @@ switch ($action) {
 
         mysqli_begin_transaction($conn);
 
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         try {
 

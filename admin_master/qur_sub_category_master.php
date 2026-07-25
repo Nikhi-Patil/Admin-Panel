@@ -68,7 +68,7 @@ switch ($action) {
         $supplier_id = mysqli_real_escape_string($conn, implode(',', $supplier_ids));
         $category_id = intval($_POST['category_id'] ?? 0);
         $sub_category_name = mysqli_real_escape_string($conn, $_POST['sub_category_name'] ?? '');
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         $supplier_value = !empty($supplier_ids) ? "'$supplier_id'" : "NULL";
         // Check duplicate Category + Sub Category
@@ -135,7 +135,7 @@ switch ($action) {
 // =================== DELETE ===================
     case "delete":
         $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 
@@ -218,7 +218,7 @@ switch ($action) {
 // =================== RESTORE ===================
     case "restore":
         $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 

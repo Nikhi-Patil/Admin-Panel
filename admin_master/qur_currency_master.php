@@ -40,7 +40,7 @@ switch ($action) {
         $currency_name = mysqli_real_escape_string($conn, $_POST['currency_name'] ?? '');
         $currency_symbol = mysqli_real_escape_string($conn, $_POST['currency_symbol'] ?? '');
        $exchange_rate = round((float)($_POST['exchange_rate'] ?? 0), 2);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         if ($id == "") {
             $sql = "INSERT INTO currency_master
@@ -77,7 +77,7 @@ switch ($action) {
 // =================== DELETE ===================
     case "delete":
         $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 
@@ -146,7 +146,7 @@ switch ($action) {
 // =================== Restore ===================
     case "restore":
         $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 

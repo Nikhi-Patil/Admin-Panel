@@ -38,7 +38,7 @@ switch ($action) {
     case "save":
         $id = $_POST['id'] ?? "";
         $category_name = mysqli_real_escape_string($conn, $_POST['category_name'] ?? '');
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
         // Check duplicate category name
         if ($id == "") {
 
@@ -95,7 +95,7 @@ switch ($action) {
 // =================== DELETE ===================
     case "delete":
         $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 
@@ -161,7 +161,7 @@ switch ($action) {
 // =================== Restore ===================
     case "restore":
         $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 

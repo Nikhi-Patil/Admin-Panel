@@ -254,7 +254,7 @@ switch ($action) {
         $unit_id = mysqli_real_escape_string($conn, $_POST['unit_id']);
         $department_id = mysqli_real_escape_string($conn, $_POST['department_id']);
         $sub_department_name = mysqli_real_escape_string($conn, $_POST['sub_department_name']);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
         // Check duplicate sub department name
         if ($id == "") {
 

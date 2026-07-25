@@ -34,33 +34,83 @@ $page = $_GET['page'] ?? 'compound';
         </div>
     </div>
     <div class="modal fade" id="compoundImportModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Compound Excel Bulk Upload</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+                <!-- Header -->
+                <div class="modal-header bg-primary text-white">
+
+                    <h5 class="modal-title">
+                        <i class="fa-solid fa-file-excel"></i>
+                        Bulk Upload Compound Master
+                    </h5>
+
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal">
+                    </button>
+
                 </div>
 
-                <form id="compoundImportForm" enctype="multipart/form-data">
-                    <div class="modal-body">
-                        <p class="text-muted">
-                            Use Given Template
-                        </p>
+                <div class="modal-body">
 
-                        <input type="file" id="compound_excel_file" name="excel_file" class="form-control"
-                            accept=".xlsx,.csv">
+                    <!-- STEP 1 -->
+                    <div class="card border-success mb-4">
+
+                        <div class="card-header bg-success text-white">
+                            <strong>Step 1 : Download Template</strong>
+                        </div>
+
+                        <div class="card-body">
+
+                            <p class="mb-3">
+                                Download the latest Compound Master Excel template.
+                                Fill all the required columns without changing
+                                the header names.
+                            </p>
+
+                            <a href="qur_compound_master.php?action=download_template" class="btn btn-success">
+
+                                <i class="fa-solid fa-download"></i>
+                                Download Template
+
+                            </a>
+
+                        </div>
+
                     </div>
 
-                    <div class="modal-footer">
-                        <a href="qur_compound_master.php?action=download_template" class="btn btn-success ms-2">
-                            <i class="fa-solid fa-download"></i>
-                            Download Excel Format
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa-solid fa-upload"></i> Import Excel
-                        </button>
+                    <!-- STEP 2 -->
+                    <div class="card border-primary">
+
+                        <div class="card-header bg-primary text-white">
+                            <strong>Step 2 : Import Excel File</strong>
+                        </div>
+
+                        <div class="card-body">
+
+                            <form id="compoundImportForm" enctype="multipart/form-data">
+
+                                <label class="form-label">
+                                    Select Excel File
+                                </label>
+
+                                <input type="file" id="compound_excel_file" name="excel_file" class="form-control mb-3"
+                                    accept=".xlsx,.csv" required>
+
+                                <button type="submit" class="btn btn-primary">
+
+                                    <i class="fa-solid fa-file-import"></i>
+                                    Import Excel
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
                     </div>
-                </form>
+
+                </div>
+
             </div>
         </div>
     </div>

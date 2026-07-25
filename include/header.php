@@ -32,7 +32,7 @@ if (session_status() == PHP_SESSION_NONE) {
                     <img src="<?= BASE_URL ?>assets/img/profile.jpg" width="35" height="35" class="rounded-circle me-2">
 
                     <span style="color: rgb(255 255 255) ">
-                        <b><?php echo $_SESSION['user_id']; ?></b>
+                        <b><?php echo $_SESSION['user_name']; ?></b>
                     </span>
 
                 </a>

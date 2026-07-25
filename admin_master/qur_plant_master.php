@@ -97,7 +97,7 @@ switch ($action) {
 
         $unit_ids = array_values(array_filter(array_map('intval', $unit_ids)));
         $plant_name = mysqli_real_escape_string($conn, trim($_POST['plant_name'] ?? ''));
-        $user_id = $_SESSION['user_id'] ?? '';
+        $user_id = $_SESSION['user_name'] ?? '';
                 // Check duplicate plant name
         if ($id == '') {
             $check = mysqli_query($conn,
@@ -201,7 +201,7 @@ switch ($action) {
 // =================== DELETE ===================
     case 'delete':
         $id = intval($_POST['id']);
-        $user_id = $_SESSION['user_id'] ?? '';
+        $user_id = $_SESSION['user_name'] ?? '';
 
         if ($user_id === '') {
             send_json([
@@ -282,7 +282,7 @@ switch ($action) {
 // =================== RESTORE ===================
     case 'restore':
         $id = intval($_POST['id']);
-        $user_id = $_SESSION['user_id'] ?? '';
+        $user_id = $_SESSION['user_name'] ?? '';
 
         if ($user_id === '') {
             send_json([

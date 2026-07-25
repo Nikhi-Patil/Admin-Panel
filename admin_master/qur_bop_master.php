@@ -5,6 +5,250 @@ include "../inc/db_cfg.php";
 $action = $_REQUEST['action'] ?? '';
 
 switch ($action) {
+// =================== DOWNLOAD TEMPLATE ===================
+    case "download_template":
+
+        header("Content-Type: text/csv; charset=utf-8");
+        header("Content-Disposition: attachment; filename=bop_master_import_template.csv");
+
+        $output = fopen("php://output", "w");
+
+        fputcsv($output, [
+            "part_no",
+            "bop_part_no",
+            "bop_part_name",
+            "bop_erp_code",
+            "supplier_name",
+            "bop_quantity",
+            "umo"
+        ]);
+
+        fputcsv($output, [
+            "PT-001",
+            "BOP-001",
+            "Bolt",
+            "ERP-001",
+            "ABC Supplier",
+            "10",
+            "Nos"
+        ]);
+
+        fclose($output);
+        exit;
+
+    break;
+// =================== BULK UPLOAD ===================
+    case "bulk_upload":
+
+        header("Content-Type: application/json");
+        $transactionStarted = false;
+
+        try {
+
+            if (
+                empty($_FILES["excel_file"]) ||
+                $_FILES["excel_file"]["error"] !== UPLOAD_ERR_OK
+            ) {
+                throw new Exception("Please select a valid Excel/CSV file.");
+            }
+
+            $extension = strtolower(
+                pathinfo($_FILES["excel_file"]["name"], PATHINFO_EXTENSION)
+            );
+
+            if (!in_array($extension, ["xlsx", "csv"])) {
+                throw new Exception("Only .xlsx or .csv files are allowed.");
+            }
+
+            require_once __DIR__ . "/../../capex/includes/SimpleXLSX.php";
+
+            if ($extension == "csv") {
+
+                $sheet = [];
+
+                $handle = fopen($_FILES["excel_file"]["tmp_name"], "r");
+
+                while (($row = fgetcsv($handle)) !== false) {
+                    $sheet[] = $row;
+                }
+
+                fclose($handle);
+
+            } else {
+
+                $xlsx = \Shuchkin\SimpleXLSX::parse($_FILES["excel_file"]["tmp_name"]);
+
+                if (!$xlsx) {
+                    throw new Exception(\Shuchkin\SimpleXLSX::parseError());
+                }
+
+                $sheet = $xlsx->rows();
+            }
+
+            if (count($sheet) <= 1) {
+                throw new Exception("Excel file is empty.");
+            }
+
+            $user_id = $_SESSION['user_name'] ?? "";
+
+            mysqli_begin_transaction($conn);
+            $transactionStarted = true;
+
+            $inserted = 0;
+            $duplicate = 0;
+            $failed = 0;
+
+            foreach ($sheet as $index => $row) {
+
+                if ($index == 0)
+                    continue;
+
+                if (count(array_filter($row)) == 0)
+                    continue;
+
+                $part_no        = trim($row[0] ?? "");
+                $bop_part_no    = trim($row[1] ?? "");
+                $bop_part_name  = trim($row[2] ?? "");
+                $bop_erp_code   = trim($row[3] ?? "");
+                $supplier_names = trim($row[4] ?? "");
+                $bop_quantity   = trim($row[5] ?? "");
+                $umo            = trim($row[6] ?? "");
+
+                if (
+                    $part_no == "" ||
+                    $bop_part_no == "" ||
+                    $bop_part_name == "" ||
+                    $supplier_names == ""
+                ) {
+                    $failed++;
+                    continue;
+                }
+
+                // ================= PART =================
+
+                $part_sql = mysqli_query(
+                    $conn,
+                    "SELECT id
+                    FROM part_master
+                    WHERE part_no='" .
+                    mysqli_real_escape_string($conn, $part_no) . "'
+                    LIMIT 1"
+                );
+
+                if (mysqli_num_rows($part_sql) == 0) {
+                    $failed++;
+                    continue;
+                }
+
+                $part = mysqli_fetch_assoc($part_sql);
+                $part_id = $part["id"];
+
+                // ================= SUPPLIER =================
+
+                $supplierArray = array_map("trim", explode(",", $supplier_names));
+
+                $supplier_ids = [];
+
+                foreach ($supplierArray as $supplier_name) {
+
+                    if ($supplier_name == "")
+                        continue;
+
+                    $supplier_sql = mysqli_query(
+                        $conn,
+                        "SELECT id
+                        FROM supplier_master
+                        WHERE supplier_name='" .
+                        mysqli_real_escape_string($conn, $supplier_name) . "'
+                        LIMIT 1"
+                    );
+
+                    if (mysqli_num_rows($supplier_sql) > 0) {
+
+                        $supplier = mysqli_fetch_assoc($supplier_sql);
+
+                        $supplier_ids[] = $supplier["id"];
+                    }
+                }
+
+                if (empty($supplier_ids)) {
+                    $failed++;
+                    continue;
+                }
+
+                $supplier_id = implode(",", $supplier_ids);
+
+                // ================= DUPLICATE =================
+
+                $dup = mysqli_query(
+                    $conn,
+                    "SELECT id
+                    FROM bop_master
+                    WHERE bop_part_no='" .
+                    mysqli_real_escape_string($conn, $bop_part_no) . "'
+                    LIMIT 1"
+                );
+
+                if (mysqli_num_rows($dup) > 0) {
+                    $duplicate++;
+                    continue;
+                }
+
+                // ================= INSERT =================
+
+                $sql = "INSERT INTO bop_master
+                (
+                    bop_part_name,
+                    bop_part_no,
+                    bop_erp_code,
+                    bop_quantity,
+                    umo,
+                    supplier_id,
+                    part_id,
+                    created_by
+                )
+                VALUES
+                (
+                    '" . mysqli_real_escape_string($conn,$bop_part_name) . "',
+                    '" . mysqli_real_escape_string($conn,$bop_part_no) . "',
+                    '" . mysqli_real_escape_string($conn,$bop_erp_code) . "',
+                    '" . mysqli_real_escape_string($conn,$bop_quantity) . "',
+                    '" . mysqli_real_escape_string($conn,$umo) . "',
+                    '$supplier_id',
+                    '$part_id',
+                    '$user_id'
+                )";
+
+                if (!mysqli_query($conn, $sql)) {
+                    throw new Exception(mysqli_error($conn));
+                }
+
+                $inserted++;
+            }
+
+            mysqli_commit($conn);
+
+            echo json_encode([
+                "status" => "success",
+                "message" => "Import Completed Successfully",
+                "inserted" => $inserted,
+                "duplicate" => $duplicate,
+                "failed" => $failed
+            ]);
+
+        } catch (Throwable $e) {
+
+            if ($transactionStarted) {
+                mysqli_rollback($conn);
+            }
+
+            echo json_encode([
+                "status" => "error",
+                "message" => $e->getMessage()
+            ]);
+        }
+
+    break;
     // =================== GET TABLE ===================
     case "list":
                 $sql = "SELECT
@@ -105,7 +349,7 @@ switch ($action) {
         $bop_quantity = intval($_POST['bop_quantity'] ?? 0);
         $umo = mysqli_real_escape_string($conn, $_POST['umo'] ?? '');
         $part_id = intval($_POST['part_id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 
@@ -172,7 +416,7 @@ switch ($action) {
     // =================== DELETE TABLE ===================
     case "delete":
         $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 
@@ -263,7 +507,7 @@ switch ($action) {
     // =================== RESTORE TABLE ===================
     case "restore":
         $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 

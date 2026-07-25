@@ -12,9 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 ///$
     $stmt = $conn->prepare("
-        SELECT user_id, username, password, first_login
-        FROM login
-        WHERE username = ?
+            SELECT
+                user_id,
+                username,
+                user_name,
+                password,
+                first_login
+            FROM login
+            WHERE username=?
     
 
     ");
@@ -31,11 +36,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
 
         // Verify hashed password
-        if (password_verify($password, $row['password'])) {
+        if ($password == $row['password']) {
 
-            $_SESSION['user_id'] = $row['user_id'];
-            $_SESSION['username'] = $row['username'];
-            $_SESSION['level'] = 'employee';
+            $_SESSION['user_id']   = $row['user_id'];
+$_SESSION['username']  = $row['username'];   // Email
+$_SESSION['user_name'] = $row['user_name'];  // Display Name
+$_SESSION['level']     = 'employee';
 
             if ((int)($row['first_login'] ?? 0) === 1) {
                 header("Location: reset_password.php");

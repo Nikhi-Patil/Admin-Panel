@@ -39,7 +39,7 @@ switch ($action) {
     case "save":
         $id = $_POST['id'] ?? "";
         $incoterms = mysqli_real_escape_string($conn, $_POST['incoterms'] ?? '');
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
         // Check duplicate incoterms
         if ($id == "") {
 
@@ -96,7 +96,7 @@ switch ($action) {
 // =================== DELETE ===================
     case "delete":
         $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 
@@ -162,7 +162,7 @@ switch ($action) {
 // =================== RESTOR ===================
     case "restore":
         $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         mysqli_begin_transaction($conn);
 

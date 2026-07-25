@@ -247,7 +247,7 @@ switch ($action) {
         $im_code = mysqli_real_escape_string($conn, $_POST['im_code']);
         $polymer = mysqli_real_escape_string($conn, $_POST['polymer']);
 
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION['user_name'];
         $compound_code = trim($_POST["compound_code"] ?? "");
         
 
@@ -324,7 +324,7 @@ switch ($action) {
         $id = intval($_POST['id']);
 
         // Check Session
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         if (!$user_id) {
             echo json_encode([
@@ -445,7 +445,7 @@ switch ($action) {
 
         mysqli_begin_transaction($conn);
 
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         if (!$user_id) {
             echo json_encode([

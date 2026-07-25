@@ -44,7 +44,7 @@ switch ($action) {
         $machine_list = mysqli_real_escape_string($conn, $_POST['machine_list']);
         $shift_rate = mysqli_real_escape_string($conn, $_POST['shift_rate']);
         $molding_process = mysqli_real_escape_string($conn, $_POST['molding_process']);
-        $user_id = $_SESSION['user_id'];
+        $user_id = $_SESSION['user_name'];
         // Check duplicate machine
         if ($id == "") {
 
@@ -125,7 +125,7 @@ switch ($action) {
         $id = intval($_POST['id']);
 
         // Check Session
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         if (!$user_id) {
             echo json_encode([
@@ -246,7 +246,7 @@ switch ($action) {
 
         mysqli_begin_transaction($conn);
 
-        $user_id = $_SESSION['user_id'] ?? 0;
+        $user_id = $_SESSION['user_name'] ?? 0;
 
         if (!$user_id) {
             echo json_encode([
