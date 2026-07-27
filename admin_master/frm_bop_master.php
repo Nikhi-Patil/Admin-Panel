@@ -18,7 +18,7 @@ $page = $_GET['page'] ?? 'bop';
             <div class="col-sm-6">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb float-sm-end">
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#bopModal">
+                        <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#bopModal">
                             <i class="fas fa-plus"></i>
                             Add BOP
                         </button>

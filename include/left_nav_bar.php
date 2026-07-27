@@ -1,3 +1,8 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors',1);
+?>
+
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
 
     <style>
@@ -30,7 +35,7 @@
 
                         <!-- Master -->
                         <li class="nav-item">
-                            <a href="#" class="nav-link main-option">
+                            <a href="javascript:void(0)" class="nav-link main-option">
                                 <i class="fa-solid fa-folder-tree"></i>
                                 <p>
                                     Master
@@ -156,7 +161,7 @@
 
                         <!-- Recycle Bin -->
                         <li class="nav-item">
-                            <a href="#" class="nav-link main-option">
+                            <a href="javascript:void(0)" class="nav-link main-option">
                                 <i class="fa-solid fa-trash-can"></i>
                                 <p>Recycle Bin</p>
                                 <i class="nav-arrow fa-solid fa-chevron-right"></i>
@@ -183,8 +188,6 @@
                                         <p>Plant Master</p>
                                     </a>
                                 </li>
-
-
                                 <li class="nav-item">
                                     <a href="<?= BASE_URL ?>admin_master/frm_department_master.php?page=recycle"
                                         class="nav-link">
@@ -281,38 +284,45 @@
 
                         <!-- Settings -->
                         <li class="nav-item">
-                            <a href="#" class="nav-link main-option">
+                            <a href="javascript:void(0)" class="nav-link main-option">
                                 <i class="fa-solid fa-gear"></i>
-                                <p>Settings</p>
-                                <i class="nav-arrow fa-solid fa-chevron-right"></i>
+                                <p>
+                                    Settings
+                                    <i class="nav-arrow fa-solid fa-chevron-right"></i>
+                                </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>password.php" class="nav-link">
+                                    <a href="<?= BASE_URL ?>reset_password.php" class="nav-link">
                                         <i class="fa-solid fa-key"></i>
                                         <p>Reset Password</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>pass_on_user.php" class="nav-link">
+                                    <a href="<?= BASE_URL ?>admin_master/index.php" class="nav-link">
                                         <i class="fa-solid fa-user-plus"></i>
                                         <p>Pass on User</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>active_inactive_user.php" class="nav-link">
+                                    <a href="<?= BASE_URL ?>admin_master/index.php" class="nav-link">
                                         <i class="fas fa-user-cog"></i>
                                         <p>Active/Inactive User</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_software_access.php?page=software"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-laptop-code"></i>
+                                        <p>Software Access</p>
+                                    </a>
+                                </li>
                             </ul>
-                        </li>
+                        </li> <!-- Settings -->
 
                     </ul>
                 </nav>
-
-            </div>
-
+            </div> <!-- sidebar-wrapper -->
         </aside>
 
         <!-- Main Content -->

@@ -153,3 +153,13 @@ button:not(:disabled), [type=button]:not(:disabled), [type=reset]:not(:disabled)
     outline: none;
     background-color: #15243a !important;
 }
+.main-sidebar {
+    min-height: 100vh !important;
+}
+.app-sidebar {
+    height: 100vh !important;
+    position: fixed;
+    top: 57px; /* Your top navbar height */
+    left: 0;
+    bottom: 0;
+}
