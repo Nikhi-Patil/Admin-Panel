@@ -142,7 +142,7 @@ $page = $_GET['page'] ?? 'customer';
                         pagination: true,
                         paginationSize: 10,
                         hozAlign: "center",
-
+                        paginationSizeSelector: [10, 25, 50, 100],
                         columns: [{
                                 title: "ID",
                                 field: "id",
@@ -165,7 +165,7 @@ $page = $_GET['page'] ?? 'customer';
                                 headerHozAlign: "center"
                             },
                             {
-                                title: "Domastic/Export",
+                                title: "Domestic/Export",
                                 field: "geo_type",
                                 width: 170,
                                 hozAlign: "center",
@@ -311,23 +311,31 @@ $page = $_GET['page'] ?? 'customer';
                                     document.getElementById("geo_type").value = data.geo_type || "";
 
                                     const zone = document.getElementById("zone");
+                                    const zoneLabel = document.getElementById("zoneLabel");
+
                                     zone.innerHTML = '<option value="">Select Zone</option>';
 
-                                    if (data.geo_type === "Domastic") {
-                                        ["North", "South", "Central"].forEach(function(item) {
-                                            let option = document.createElement("option");
-                                            option.value = item;
-                                            option.text = item;
-                                            zone.appendChild(option);
-                                        });
+                                    if (data.geo_type === "Domestic") {
+                                        zoneLabel.innerHTML = "Zone *";
                                     } else if (data.geo_type === "Export") {
-                                        let option = document.createElement("option");
-                                        option.value = "Export";
-                                        option.text = "Export";
-                                        zone.appendChild(option);
+                                        zoneLabel.innerHTML = "Continent *";
                                     }
 
-                                    zone.value = data.zone || "";
+                                    fetch("qur_customer_master.php?action=geo_options&geo_type=" +
+                                            encodeURIComponent(data.geo_type))
+                                        .then(response => response.json())
+                                        .then(options => {
+                                            options.forEach(function(regionName) {
+                                                const option = document.createElement("option");
+
+                                                option.value = regionName;
+                                                option.textContent = regionName;
+
+                                                zone.appendChild(option);
+                                            });
+
+                                            zone.value = data.zone || "";
+                                        });
 
                                     document.getElementById("customerModalLabel").innerHTML =
                                         "Edit Customer";
@@ -383,17 +391,21 @@ $page = $_GET['page'] ?? 'customer';
                             <input type="text" id="sub_customer" name="sub_customer" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Domastic/Export</label>
+                            <label class="form-label">Domestic/Export *</label>
+
                             <select id="geo_type" name="geo_type" class="form-select" required>
-                                <option value="">Select Domastic/Export</option>
-                                <option value="Domastic">Domastic</option>
+
+                                <option value="">Select Domestic/Export</option>
+                                <option value="Domestic">Domestic</option>
                                 <option value="Export">Export</option>
                             </select>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Zone</label>
+                            <label id="zoneLabel" class="form-label">Zone *</label>
+
                             <select id="zone" name="zone" class="form-select" required>
+
                                 <option value="">Select Zone</option>
                             </select>
                         </div>
@@ -408,31 +420,38 @@ $page = $_GET['page'] ?? 'customer';
                 <script>
                 document.getElementById("geo_type").addEventListener("change", function() {
 
-                    let geoType = this.value;
-                    let zone = document.getElementById("zone");
+                    const geoType = this.value;
+                    const zone = document.getElementById("zone");
+                    const zoneLabel = document.getElementById("zoneLabel");
 
-                    // Clear existing options
                     zone.innerHTML = '<option value="">Select Zone</option>';
 
-                    if (geoType === "Domastic") {
-
-                        let domesticZones = ["North", "South", "Central"];
-
-                        domesticZones.forEach(function(item) {
-                            let option = document.createElement("option");
-                            option.value = item;
-                            option.text = item;
-                            zone.appendChild(option);
-                        });
-
+                    if (geoType === "Domestic") {
+                        zoneLabel.innerHTML = "Zone *";
                     } else if (geoType === "Export") {
-
-                        let option = document.createElement("option");
-                        option.value = "Export";
-                        option.text = "Export";
-                        zone.appendChild(option);
+                        zoneLabel.innerHTML = "Continent *";
+                    } else {
+                        zoneLabel.innerHTML = "Zone *";
+                        return;
                     }
 
+                    fetch("qur_customer_master.php?action=geo_options&geo_type=" +
+                            encodeURIComponent(geoType))
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(function(regionName) {
+                                const option = document.createElement("option");
+
+                                option.value = regionName;
+                                option.textContent = regionName;
+
+                                zone.appendChild(option);
+                            });
+                        })
+                        .catch(error => {
+                            console.error("Geographical data error:", error);
+                            alert("Unable to load geographical data.");
+                        });
                 });
                 document.getElementById("customerForm").addEventListener("submit", function(e) {
 

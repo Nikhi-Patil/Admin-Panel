@@ -39,9 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($password == $row['password']) {
 
             $_SESSION['user_id']   = $row['user_id'];
-$_SESSION['username']  = $row['username'];   // Email
-$_SESSION['user_name'] = $row['user_name'];  // Display Name
-$_SESSION['level']     = 'employee';
+            $_SESSION['username']  = $row['username'];   // Email
+            $_SESSION['user_name'] = $row['user_name'];  // Display Name
+            $_SESSION['level']     = 'employee';
 
             if ((int)($row['first_login'] ?? 0) === 1) {
                 header("Location: reset_password.php");

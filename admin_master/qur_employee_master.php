@@ -191,7 +191,7 @@ switch ($action) {
                         designation_id = '$designation_id',
                         level = '$level',
                         department_id = '$department_id',
-                        updated_by='".$_SESSION['user_name']."'
+                        updated_by='$user_id',
                         updated_at = NOW()
                     WHERE id = '$id'";
 

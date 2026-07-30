@@ -13,7 +13,7 @@ $page = $_GET['page'] ?? 'molding_machine';
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6">
-                <h1 class="mb-0 fs-3">Molding Machine List</h1>
+                <h1 class="mb-0 fs-3">Shift Rate</h1>
             </div>
             <div class="col-sm-6">
                 <nav aria-label="breadcrumb">
@@ -73,7 +73,7 @@ $page = $_GET['page'] ?? 'molding_machine';
                                 headerHozAlign: "center"
                             },
                             {
-                                title: "Machine List",
+                                title: "Machine tonnage",
                                 field: "machine_list",
                                 hozAlign: "center",
                                 headerHozAlign: "center"

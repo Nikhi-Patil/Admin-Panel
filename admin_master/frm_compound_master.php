@@ -151,17 +151,23 @@ $page = $_GET['page'] ?? 'compound';
                         paginationSize: 10,
                         hozAlign: "center",
 
+
+                        resizableColumns: false,
+                        movableColumns: false,
+
+
                         columns: [{
                                 title: "ID",
                                 field: "id",
                                 width: 100,
+                                resizable: false,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Polymer Name",
                                 field: "polymer",
-
+                                resizable: false,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
@@ -169,6 +175,7 @@ $page = $_GET['page'] ?? 'compound';
                                 title: "Compound Code",
                                 field: "compound_code",
                                 width: 180,
+                                resizable: false,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
@@ -176,6 +183,7 @@ $page = $_GET['page'] ?? 'compound';
                                 title: "IM Code",
                                 field: "im_code",
                                 width: 150,
+                                resizable: false,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
@@ -183,6 +191,7 @@ $page = $_GET['page'] ?? 'compound';
                                 title: "Created By",
                                 field: "created_by",
                                 width: 160,
+                                resizable: false,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
                             },
@@ -190,6 +199,7 @@ $page = $_GET['page'] ?? 'compound';
                                 title: "Updated By",
                                 field: "updated_by",
                                 width: 160,
+                                resizable: false,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
 
@@ -197,6 +207,7 @@ $page = $_GET['page'] ?? 'compound';
                             {
                                 title: "Action",
                                 width: 100,
+                                resizable: false,
                                 hozAlign: "center",
                                 headerHozAlign: "center",
 
@@ -230,27 +241,25 @@ $page = $_GET['page'] ?? 'compound';
                             return;
                         }
 
-                        fetch("qur_compound_master.php?action=bulk_upload", {
+                        fetch("qur_customer_master.php?action=bulk_upload", {
                                 method: "POST",
                                 body: new FormData(this)
                             })
-                            .then(response => response.text())
-                            .then(text => {
-                                const result = JSON.parse(text);
+                            .then(async response => {
+                                const text = await response.text();
 
-                                if (result.status === "success") {
+                                console.log("Response:");
+                                console.log(text);
+
+                                alert(text); // Temporary
+
+                                try {
+                                    const result = JSON.parse(text);
                                     alert(result.message);
-                                    bootstrap.Modal.getInstance(
-                                        document.getElementById("compoundImportModal")
-                                    )?.hide();
-
-                                    this.reset();
-                                    table.replaceData();
-                                } else {
-                                    alert(result.message || "Compound import failed.");
+                                } catch (e) {
+                                    console.error(e);
                                 }
-                            })
-                            .catch(error => alert("Compound import failed: " + error.message));
+                            });
                     });
                     </script>
                     <!-- script for the delete and edit button  -->

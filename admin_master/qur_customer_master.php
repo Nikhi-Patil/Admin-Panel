@@ -5,6 +5,31 @@ include "../inc/db_cfg.php";
 $action = $_REQUEST['action'] ?? '';
 
 switch ($action) {
+// =================== GET GEO TYPES ===================
+    case "geo_options":
+
+        $geo_type = mysqli_real_escape_string(
+            $conn,
+            $_GET['geo_type'] ?? ''
+        );
+
+        $sql = "SELECT DISTINCT region_name
+                FROM geographical_master
+                WHERE geo_type='$geo_type'
+                ORDER BY region_name ASC";
+
+        $result = mysqli_query($conn, $sql);
+
+        $data = [];
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $data[] = $row['region_name'];
+        }
+
+        header("Content-Type: application/json");
+        echo json_encode($data);
+
+    break;
 // =================== download template of xecel ===================
     case "download_template":
 
@@ -14,7 +39,7 @@ switch ($action) {
         $output = fopen("php://output", "w");
 
         fputcsv($output, ["customer_name", "sub_customer", "geo_type", "zone"]);
-        fputcsv($output, ["ABC Ltd", "ABC Pune", "Domastic", "North"]);
+        fputcsv($output, ["ABC Ltd", "ABC Pune", "Domestic", "North"]);
 
         fclose($output);
         exit;
@@ -40,7 +65,7 @@ switch ($action) {
                 throw new Exception("Only .xlsx or .csv files are allowed.");
             }
 
-            require_once __DIR__ . "/../../capex/includes/SimpleXLSX.php";
+            require_once __DIR__ . "/../include/SimpleXLSX.php";
 
             if ($extension == "csv") {
 

@@ -60,7 +60,7 @@ switch ($action) {
                 throw new Exception("Only .xlsx or .csv files are allowed.");
             }
 
-            require_once __DIR__ . "/../../capex/includes/SimpleXLSX.php";
+            require_once __DIR__ . "/../include/SimpleXLSX.php";
 
             if ($extension == "csv") {
 

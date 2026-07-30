@@ -21,6 +21,7 @@ switch ($action) {
             "fg_code",
             "im_code",
             "inter_code",
+            "unit",
             "department",
             "sub_department"
         ]);
@@ -32,6 +33,7 @@ switch ($action) {
             "FG-001",
             "IM-001",
             "INTER-001",
+            "unit 1",
             "Production",
             "Assembly"
         ]);
@@ -58,7 +60,7 @@ switch ($action) {
                 throw new Exception("Only .xlsx or .csv files are allowed.");
             }
 
-            require_once __DIR__ . "/../../capex/includes/SimpleXLSX.php";
+            require_once __DIR__ . "/../include/SimpleXLSX.php";
 
             if ($extension === "csv") {
                 $rows = [];
@@ -82,8 +84,14 @@ switch ($action) {
             }
 
             $requiredHeaders = [
-                "part_name", "part_no", "fg_code", "im_code",
-                "inter_code",  "department", "sub_department"
+                "part_name",
+                "part_no",
+                "fg_code",
+                "im_code",
+                "inter_code",
+                "unit",
+                "department",
+                "sub_department"
             ];
 
             $headerRowIndex = null;
@@ -113,7 +121,7 @@ switch ($action) {
 
             if ($headerRowIndex === null) {
                 throw new Exception(
-                    "Required columns: part_name, part_no, fg_code, im_code, inter_code, department, sub_department"
+                    "Required columns: part_name, part_no, fg_code, im_code, inter_code, unit, department, sub_department"
                 );
             }
 
@@ -133,13 +141,16 @@ switch ($action) {
 
             $findDepartment = mysqli_prepare(
                 $conn,
-                "SELECT d.id AS department_id, s.id AS sub_department_id
-                 FROM department_master d
-                 INNER JOIN sub_department_master s
+                "SELECT s.id AS sub_department_id
+                FROM sub_department_master s
+                INNER JOIN department_master d
                     ON s.department_id = d.id
-                 WHERE LOWER(d.department_name) = LOWER(?)
-                    AND LOWER(s.sub_department_name) = LOWER(?)
-                 LIMIT 1"
+                INNER JOIN unit_master u
+                    ON s.unit_id = u.id
+                WHERE LOWER(u.unit)=LOWER(?)
+                AND LOWER(d.department_name)=LOWER(?)
+                AND LOWER(s.sub_department_name)=LOWER(?)
+                LIMIT 1"
             );
 
             $insertPart = mysqli_prepare(
@@ -147,10 +158,10 @@ switch ($action) {
                 "INSERT INTO part_master
                     (
                         part_name, part_no, fg_code, im_code,
-                        inter_code,  department_id, sub_department_id,
+                        inter_code,  sub_department_id,
                         created_by
                     )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+                VALUES (?, ?, ?, ?, ?, ?, ?)"
             );
 
             if (!$checkPart || !$findDepartment || !$insertPart) {
@@ -168,6 +179,7 @@ switch ($action) {
                 $fgCode = trim((string)($row[$headerIndexes["fg_code"]] ?? ""));
                 $imCode = trim((string)($row[$headerIndexes["im_code"]] ?? ""));
                 $inter_code = trim((string)($row[$headerIndexes["inter_code"]] ?? ""));
+                $unit = trim((string)($row[$headerIndexes["unit"]] ?? ""));
                 $department = trim((string)($row[$headerIndexes["department"]] ?? ""));
                 $subDepartment = trim((string)($row[$headerIndexes["sub_department"]] ?? ""));
 
@@ -206,7 +218,8 @@ switch ($action) {
 
                 mysqli_stmt_bind_param(
                     $findDepartment,
-                    "ss",
+                    "sss",
+                    $unit,
                     $department,
                     $subDepartment
                 );
@@ -221,18 +234,16 @@ switch ($action) {
                     );
                 }
 
-                $departmentId = (int)$departmentRow["department_id"];
                 $subDepartmentId = (int)$departmentRow["sub_department_id"];
 
                 mysqli_stmt_bind_param(
                     $insertPart,
-                    "sssssiis",
+                    "sssssis",
                     $partName,
                     $partNo,
                     $fgCode,
                     $imCode,
                     $inter_code,
-                    $departmentId,
                     $subDepartmentId,
                     $userId
                 );
@@ -267,22 +278,26 @@ switch ($action) {
     break;
     // =================== GET TABLE ===================
     case "list":
-                $sql = "SELECT
+        $sql = "SELECT
                     p.id,
                     p.part_name,
                     p.part_no,
                     p.fg_code,
                     p.im_code,
                     p.inter_code,
-                    p.department_id,
                     p.sub_department_id,
                     d.department_name,
                     sd.sub_department_name,
+                    u.unit,
                     p.created_by,
                     p.updated_by
                 FROM part_master p
-                LEFT JOIN department_master d ON p.department_id = d.id
-                LEFT JOIN sub_department_master sd ON p.sub_department_id = sd.id
+                LEFT JOIN sub_department_master sd
+                    ON p.sub_department_id = sd.id
+                LEFT JOIN department_master d
+                    ON sd.department_id = d.id
+                LEFT JOIN unit_master u
+                    ON sd.unit_id = u.id
                 ORDER BY p.id DESC";
 
         $result = mysqli_query($conn, $sql);
@@ -298,23 +313,27 @@ switch ($action) {
     case "get":
         $id = intval($_GET['id'] ?? 0);
 
-                $sql = "SELECT
+        $sql = "SELECT
                     p.id,
                     p.part_name,
                     p.part_no,
                     p.fg_code,
                     p.im_code,
                     p.inter_code,
-                    p.department_id,
                     p.sub_department_id,
                     d.department_name,
                     sd.sub_department_name,
+                    u.unit,
                     p.created_by,
                     p.updated_by
                 FROM part_master p
-                LEFT JOIN department_master d ON p.department_id = d.id
-                LEFT JOIN sub_department_master sd ON p.sub_department_id = sd.id
-                WHERE p.id = '$id'";
+                LEFT JOIN sub_department_master sd
+                    ON p.sub_department_id = sd.id
+                LEFT JOIN department_master d
+                    ON sd.department_id = d.id
+                LEFT JOIN unit_master u
+                    ON sd.unit_id = u.id
+                WHERE p.id='$id'    ";
 
         $result = mysqli_query($conn, $sql);
         header("Content-Type: application/json");
@@ -335,10 +354,19 @@ switch ($action) {
     break;
     // =================== GET SUBDEPARTMENT TABLE ===================
     case "sub_departments":
-        $sql = "SELECT s.id, s.department_id, d.department_name, s.sub_department_name
+        $sql = "SELECT
+                    s.id,
+                    s.department_id,
+                    s.unit_id,
+                    s.sub_department_name,
+                    d.department_name,
+                    u.unit
                 FROM sub_department_master s
-                LEFT JOIN department_master d ON s.department_id = d.id
-                ORDER BY sub_department_name";
+                LEFT JOIN department_master d
+                    ON s.department_id = d.id
+                LEFT JOIN unit_master u
+                    ON s.unit_id = u.id
+                ORDER BY s.sub_department_name";
         $result = mysqli_query($conn, $sql);
         $data = [];
         while ($row = mysqli_fetch_assoc($result)) {
@@ -386,14 +414,7 @@ switch ($action) {
             }
             mysqli_stmt_close($part_check);
 
-            $dept_result = mysqli_query($conn, "SELECT department_id FROM sub_department_master WHERE id = '$sub_department_id' LIMIT 1");
-            if (!$dept_result || mysqli_num_rows($dept_result) === 0) {
-                throw new Exception("Invalid sub department selected.");
-            }
-
-            $dept_row = mysqli_fetch_assoc($dept_result);
-            $department_id = intval($dept_row['department_id']);
-
+            
             if ($id === 0) {
                 $sql = "INSERT INTO part_master
                         (
@@ -402,7 +423,6 @@ switch ($action) {
                             fg_code,
                             im_code,
                             inter_code,
-                            department_id,
                             sub_department_id,
                             created_by
                         )
@@ -413,7 +433,6 @@ switch ($action) {
                             '$fg_code',
                             '$im_code',
                             '$inter_code',
-                            '$department_id',
                             '$sub_department_id',
                             '$user_id'
                         )";
@@ -425,7 +444,6 @@ switch ($action) {
                             fg_code = '$fg_code',
                             im_code = '$im_code',
                             inter_code='$inter_code',
-                            department_id = '$department_id',
                             sub_department_id = '$sub_department_id',
                             updated_by = '$user_id',
                             updated_at = NOW()
@@ -463,7 +481,6 @@ switch ($action) {
                     fg_code,
                     im_code,
                     inter_code,
-                    department_id,
                     sub_department_id,
                     created_by,
                     created_at,
@@ -477,7 +494,6 @@ switch ($action) {
                     fg_code,
                     im_code,
                     inter_code,
-                    department_id,
                     sub_department_id,
                     created_by,
                     created_at,
@@ -515,15 +531,19 @@ switch ($action) {
                     p.fg_code,
                     p.im_code,
                     p.inter_code,
-                    p.department_id,
                     p.sub_department_id,
                     d.department_name,
                     sd.sub_department_name,
+                    u.unit,
                     p.created_by,
                     p.updated_by
                 FROM hist_part_master p
-                LEFT JOIN department_master d ON p.department_id = d.id
-                LEFT JOIN sub_department_master sd ON p.sub_department_id = sd.id
+                LEFT JOIN sub_department_master sd
+                    ON p.sub_department_id = sd.id
+                LEFT JOIN department_master d
+                    ON sd.department_id = d.id
+                LEFT JOIN unit_master u
+                    ON sd.unit_id = u.id
                 ORDER BY p.id DESC";
 
         $result = mysqli_query($conn, $sql);
@@ -544,15 +564,13 @@ switch ($action) {
 
         try {
             $sql1 = "
-                INSERT INTO part_master
-                (
+                INSERT INTO part_master(
                     id,
                     part_name,
                     part_no,
                     fg_code,
                     im_code,
                     inter_code,
-                    department_id,
                     sub_department_id,
                     created_by,
                     created_at,
@@ -566,16 +584,14 @@ switch ($action) {
                     fg_code,
                     im_code,
                     inter_code,
-                    department_id,
                     sub_department_id,
                     created_by,
                     created_at,
                     '$user_id',
                     NOW()
                 FROM hist_part_master
-                WHERE id = '$id'
-            ";
-
+                WHERE id ='$id'
+                ";
             if (!mysqli_query($conn, $sql1)) {
                 throw new Exception(mysqli_error($conn));
             }

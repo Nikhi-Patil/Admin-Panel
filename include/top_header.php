@@ -32,6 +32,7 @@ include "../inc/db_cfg.php";
     })(window, document, 'script', 'dataLayer');
     </script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
     <title>Admin</title>
 
     <!--begin::Theme Init (prevents flash of incorrect theme on load, #6043)-->

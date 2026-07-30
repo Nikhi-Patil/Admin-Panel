@@ -2,6 +2,46 @@
 error_reporting(E_ALL);
 ini_set('display_errors',1);
 ?>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    // Restore state
+    document.querySelectorAll(".has-treeview").forEach(function(menu) {
+
+        if (localStorage.getItem(menu.id) === "open") {
+            menu.classList.add("menu-open");
+
+            let tree = menu.querySelector(".nav-treeview");
+            if (tree) {
+                tree.style.display = "block";
+            }
+        }
+
+    });
+
+    // Save state
+    document.querySelectorAll(".has-treeview > .nav-link").forEach(function(link) {
+
+        link.addEventListener("click", function() {
+
+            let menu = this.parentElement;
+
+            setTimeout(function() {
+
+                if (menu.classList.contains("menu-open")) {
+                    localStorage.setItem(menu.id, "open");
+                } else {
+                    localStorage.setItem(menu.id, "closed");
+                }
+
+            }, 100);
+
+        });
+
+    });
+
+});
+</script>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
 
@@ -34,7 +74,7 @@ ini_set('display_errors',1);
                     <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" data-accordion="false">
 
                         <!-- Master -->
-                        <li class="nav-item">
+                        <li class="nav-item has-treeview" id="mastersMenu">
                             <a href="javascript:void(0)" class="nav-link main-option">
                                 <i class="fa-solid fa-folder-tree"></i>
                                 <p>
@@ -44,10 +84,122 @@ ini_set('display_errors',1);
                             </a>
 
                             <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_bop_master.php?page=bop" class="nav-link">
+                                        <i class="fa-solid fa-boxes-stacked"></i>
+                                        <p>BOP Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_category_master.php?page=category"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-tags"></i>
+                                        <p>Category Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_compound_master.php?page=compound"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-vials"></i>
+                                        <p>Compound Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_currency_master.php?page=currency"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-coins"></i>
+                                        <p>Currency Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_customer_master.php?page=customer"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-users"></i>
+                                        <p>Customer Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_department_master.php?page=department"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-building"></i>
+                                        <p>Department Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_designation_master.php?page=designation"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-id-badge"></i>
+                                        <p>Designation Master</p>
+                                    </a>
+                                </li>
+
                                 <li class="nav-item">
                                     <a href="<?= BASE_URL ?>admin_master/frm_employee_master.php" class="nav-link">
                                         <i class="fa-solid fa-user-tie"></i>
                                         <p>Employee Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_incoterms_master.php?page=incoterms"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-shipping-fast"></i>
+                                        <p>Incoterms Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_molding_machine_master.php?page=molding_machine"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-cube"></i>
+                                        <p>Molding Machine Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_part_master.php?page=part"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-puzzle-piece"></i>
+                                        <p>Part Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_plant_master.php?page=plant"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-industry"></i>
+                                        <p>Plant Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_sub_category_master.php?page=sub_category"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-sitemap"></i>
+                                        <p>Sub Category Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_sub_department_master.php?page=sub_department"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-diagram-project"></i>
+                                        <p>Sub Department Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_supplier_master.php?page=supplier"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-truck"></i>
+                                        <p>Supplier Master</p>
                                     </a>
                                 </li>
 
@@ -59,108 +211,18 @@ ini_set('display_errors',1);
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_plant_master.php?page=plant"
+                                    <a href="<?= BASE_URL ?>admin_master/frm_geographical_master.php?page=geographical"
                                         class="nav-link">
-                                        <i class="fa-solid fa-industry"></i>
-                                        <p>Plant Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_department_master.php?page=department"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-building"></i>
-                                        <p>Department Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_sub_department_master.php?page=sub_department"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-diagram-project"></i>
-                                        <p>Sub Department Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_designation_master.php?page=designation"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-id-badge"></i>
-                                        <p>Designation Master</p>
+                                        <i class="fa-solid fa-boxes-stacked"></i>
+                                        <p>Geographical Master</p>
                                     </a>
                                 </li>
 
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_incoterms_master.php?page=incoterms"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-shipping-fast"></i>
-                                        <p>Incoterms Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_currency_master.php?page=currency"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-coins"></i>
-                                        <p>Currency Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_supplier_master.php?page=supplier"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-truck"></i>
-                                        <p>Supplier Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_category_master.php?page=category"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-tags"></i>
-                                        <p>Category Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_sub_category_master.php?page=sub_category"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-sitemap"></i>
-                                        <p>Sub Category Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_customer_master.php?page=customer"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-users"></i>
-                                        <p>Customer Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_part_master.php?page=part"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-puzzle-piece"></i>
-                                        <p>Part Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_compound_master.php?page=compound"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-vials"></i>
-                                        <p>Compound Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_molding_machine_master.php?page=molding_machine"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-cube"></i>
-                                        <p>Molding Machine Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_bop_master.php?page=bop" class="nav-link">
-                                        <i class="fa-solid fa-boxes-stacked"></i>
-                                        <p>BOP Master</p>
-                                    </a>
-                                </li>
                             </ul>
                         </li>
 
                         <!-- Recycle Bin -->
-                        <li class="nav-item">
+                        <li class="nav-item has-treeview" id="recycleMenu">
                             <a href="javascript:void(0)" class="nav-link main-option">
                                 <i class="fa-solid fa-trash-can"></i>
                                 <p>Recycle Bin</p>
@@ -279,11 +341,18 @@ ini_set('display_errors',1);
                                         <p>BOP Master</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_geographical_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-boxes-stacked"></i>
+                                        <p>Geographical Master</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 
                         <!-- Settings -->
-                        <li class="nav-item">
+                        <li class="nav-item has-treeview" id="settingsMenu">
                             <a href="javascript:void(0)" class="nav-link main-option">
                                 <i class="fa-solid fa-gear"></i>
                                 <p>

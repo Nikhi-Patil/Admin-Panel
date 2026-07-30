@@ -161,7 +161,7 @@
                             <input type="text" id="part_no" name="part_no" class="form-control" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label>IM-Compound Code</label>
+                            <label> FG Code</label>
                             <input type="text" id="fg_code" name="fg_code" class="form-control" required>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -169,7 +169,7 @@
                             <input type="text" id="inter_code" name="inter_code" class="form-control" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label>FG Code </label>
+                            <label> IM-Compound Code</label>
                             <input type="text" id="im_code" name="im_code" class="form-control" required>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -182,6 +182,10 @@
                             <label>Department</label>
                             <input type="text" id="department_name" class="form-control" readonly>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label>Unit</label>
+                            <input type="text" id="unit_name" class="form-control" readonly>
+                        </div>
                     </div>
                     <button type="submit" id="saveBtn" class="btn btn-success">Save</button>
                 </form>
@@ -193,22 +197,32 @@
 //script for the 
 let allSubDepartments = [];
 let allCustomers = [];
+
 //script for the Subdepartment Option 
 function populateSubDepartmentOptions(selectedId = "") {
     const select = document.getElementById("sub_department_id");
     select.innerHTML = '<option value="">Select Sub Department</option>';
     allSubDepartments.forEach(item => {
         const selected = String(selectedId) === String(item.id) ? "selected" : "";
-        select.innerHTML += `<option value="${item.id}" data-department-name="${item.department_name || ''}" ${selected}>
-                        ${item.sub_department_name} ${item.department_name ? `(${item.department_name})` : ""}
+
+        select.innerHTML += ` 
+                    <option
+                        value="${item.id}"
+                        data-department-name="${item.department_name}"
+                        data-unit="${item.unit}"
+                        ${selected}>
+                        ${item.unit} | ${item.department_name} | ${item.sub_department_name}
                     </option>`;
+
     });
 }
 //script for the department Option 
 function updateDepartmentName() {
-    const subSelect = document.getElementById("sub_department_id");
-    const current = subSelect.options[subSelect.selectedIndex];
-    document.getElementById("department_name").value = current?.dataset?.departmentName || "";
+    const option = document.getElementById("sub_department_id").selectedOptions[0];
+    document.getElementById("department_name").value =
+        option.dataset.departmentName || "";
+    document.getElementById("unit_name").value =
+        option.dataset.unit || "";
 }
 //script for the Display Table
 const table = new Tabulator("#part_table", {
@@ -260,6 +274,13 @@ const table = new Tabulator("#part_table", {
             headerHozAlign: "center"
         },
         {
+            title: "Unit",
+            field: "unit",
+            width: 140,
+            hozAlign: "center",
+            headerHozAlign: "center"
+        },
+        {
             title: "Department",
             field: "department_name",
             width: 140,
@@ -294,14 +315,18 @@ const table = new Tabulator("#part_table", {
             headerHozAlign: "center",
             formatter: function(cell) {
                 const row = cell.getRow().getData();
-                return `
-                                <button class="btn btn-primary action-btn edit-btn" data-id="${row.id}">
-                                    <i class="fa-solid fa-pen"></i>
-                                </button>
-                                <button class="btn btn-danger action-btn delete-btn" data-id="${row.id}">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            `;
+                return ` <
+                    button class = "btn btn-primary action-btn edit-btn"
+                data - id = "${row.id}" >
+                    <
+                    i class = "fa-solid fa-pen" > < /i> < /
+                button > <
+                    button class = "btn btn-danger action-btn delete-btn"
+                data - id = "${row.id}" >
+                    <
+                    i class = "fa-solid fa-trash" > < /i> < /
+                button >
+                    `;
             }
         }
     ]
@@ -537,6 +562,13 @@ document.getElementById("partImportForm").addEventListener("submit", function(e)
                             title: "Inter Unit/Dept Code",
                             field: "inter_code",
                             width: 105,
+                            hozAlign: "center",
+                            headerHozAlign: "center"
+                        },
+                        {
+                            title: "Unit",
+                            field: "unit",
+                            width: 140,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },

@@ -163,3 +163,6 @@ button:not(:disabled), [type=button]:not(:disabled), [type=reset]:not(:disabled)
     left: 0;
     bottom: 0;
 }
+.tabulator {
+    font-size: 14px !important  ;   /* Change to 12px, 13px, 15px, etc. */
+}

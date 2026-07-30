@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_name'])) {
 
 $message = "";
 $error = "";
-$user_id = (string)$_SESSION['user_name'];
+$user_id = (int)$_SESSION['user_id'];
 $username = $_SESSION['username'] ?? '';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -23,14 +23,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         $hashed_password = $new_password ;
 
-        $stmt = $conn->prepare("UPDATE login SET password = ?, first_login = 0 WHERE user_id = ?");
-        $stmt->bind_param("ss", $hashed_password, $user_id);
+        $stmt = $conn->prepare(
+            "UPDATE login
+            SET password = ?, first_login = 0
+            WHERE user_id = ?"
+        );
+        $stmt->bind_param("si", $new_password, $user_id);
 
         if ($stmt->execute()) {
-            header("Location: admin_master/index.php");
-            exit;
+
+            if ($stmt->affected_rows > 0) {
+                header("Location: admin_master/index.php");
+                exit;
+            } else {
+                $error = "Password was not updated. User not found.";
+            }
+
         } else {
-            $error = "Unable to update password.";
+            $error = $stmt->error;
         }
     }
 }

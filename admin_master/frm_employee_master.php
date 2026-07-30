@@ -190,6 +190,7 @@ const table = new Tabulator("#employee_table", {
             field: "id",
             width: 55,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -197,6 +198,7 @@ const table = new Tabulator("#employee_table", {
             field: "employee_name",
             width: 160,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -204,6 +206,7 @@ const table = new Tabulator("#employee_table", {
             field: "user_name",
             width: 150,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -211,6 +214,7 @@ const table = new Tabulator("#employee_table", {
             field: "email",
             width: 180,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -218,6 +222,7 @@ const table = new Tabulator("#employee_table", {
             field: "location",
             width: 105,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -225,6 +230,7 @@ const table = new Tabulator("#employee_table", {
             field: "contact_no",
             width: 140,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -232,6 +238,7 @@ const table = new Tabulator("#employee_table", {
             field: "designation_name",
             width: 130,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -239,6 +246,7 @@ const table = new Tabulator("#employee_table", {
             field: "department_name",
             width: 130,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -246,6 +254,7 @@ const table = new Tabulator("#employee_table", {
             field: "level",
             width: 80,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -253,6 +262,7 @@ const table = new Tabulator("#employee_table", {
             field: "created_by",
             width: 120,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -260,12 +270,14 @@ const table = new Tabulator("#employee_table", {
             field: "updated_by",
             width: 130,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
             title: "Action",
             width: 90,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center",
             formatter: function(cell) {
                 let row = cell.getRow().getData();
@@ -390,22 +402,51 @@ document.getElementById("employeeForm").addEventListener("submit", function(e) {
                     toggleLevelOther();
                     table.replaceData();
 
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: "Saved Successfully",
-                        html: data.temp_password ?
-                            "Username: <b>" + (data.username || "") + "</b><br>" +
-                            "Temporary Password: <b>" + data.temp_password + "</b><br><br>" +
-                            "The employee will be asked to reset it on first login." : "",
-                        showConfirmButton: false,
-                        timer: data.temp_password ? 2500 : 1500,
-                        width: data.temp_password ? "320px" : "260px",
-                        customClass: {
-                            popup: "small-popup",
-                            title: "small-title"
-                        }
-                    });
+                    if (data.temp_password) {
+
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "Employee Created Successfully",
+                            html: `
+                                    <div style="text-align:left">
+                                        <p><strong>Username:</strong> ${data.username}</p>
+                                        <p><strong>Temporary Password:</strong> ${data.temp_password}</p>
+                                        <hr>
+                                        <small>
+                                            Please note these credentials before closing this window.
+                                            The employee will be required to change the password on the first login.
+                                        </small>
+                                    </div>
+                                `,
+                            confirmButtonText: "I have noted the credentials",
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            width: "430px",
+                            customClass: {
+                                popup: "small-popup",
+                                title: "small-title"
+                            }
+
+                        });
+
+                    } else {
+
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "Employee Updated Successfully",
+                            confirmButtonText: "OK",
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            width: "280px",
+                            customClass: {
+                                popup: "small-popup",
+                                title: "small-title"
+                            }
+                        });
+
+                    }
                 } catch (uiError) {
                     console.error("Employee save UI error:", uiError);
                     table.replaceData();
@@ -515,6 +556,7 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
             field: "id",
             width: 55,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -522,6 +564,7 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
             field: "employee_name",
             width: 160,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -529,6 +572,7 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
             field: "user_name",
             width: 150,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -536,6 +580,7 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
             field: "email",
             width: 180,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -543,6 +588,7 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
             field: "location",
             width: 105,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -550,6 +596,7 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
             field: "contact_no",
             width: 140,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -557,6 +604,7 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
             field: "designation_name",
             width: 130,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -564,6 +612,7 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
             field: "department_name",
             width: 130,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -571,6 +620,7 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
             field: "level",
             width: 80,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -578,6 +628,7 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
             field: "created_by",
             width: 120,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -585,12 +636,14 @@ const recycleTable = new Tabulator("#employee_recycle_table", {
             field: "updated_by",
             width: 130,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
             title: "Action",
             width: 90,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center",
             formatter: function(cell) {
                 let row = cell.getRow().getData();
