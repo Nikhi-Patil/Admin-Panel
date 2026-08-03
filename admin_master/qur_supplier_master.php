@@ -75,25 +75,20 @@ switch ($action) {
 
         if ($id == "") {
 
-            $sql = "INSERT INTO supplier_master
-                (
+            $sql = "INSERT INTO supplier_master(
                     supplier_name,
                     location,
                     email,
                     contact_no,
                     created_by
-                )
-                VALUES
-                (
+                )VALUES(
                     '$supplier_name',
                     '$location',
                     '$email',
                     '$contact_no',
                     '$user_id'
                 )";
-
         } else {
-
             $sql = "UPDATE supplier_master
                 SET
                     supplier_name='$supplier_name',

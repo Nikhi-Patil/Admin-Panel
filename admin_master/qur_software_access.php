@@ -79,13 +79,15 @@ switch ($action) {
         $module = intval($_GET['module_id']);
         $selected = [];
         $sql = mysqli_query($conn,"
-            SELECT master_id
-            FROM module_permission
-            WHERE module_id='$module'
+            SELECT master_access
+            FROM module_master
+            WHERE id='$module'
+            AND status='1'
         ");
-        while($row=mysqli_fetch_assoc($sql))
-        {
-            $selected[]=$row['master_id'];
+        if ($row = mysqli_fetch_assoc($sql)) {
+            $selected = array_filter(
+                array_map('intval', explode(',', (string)$row['master_access']))
+            );
         }
         $master=mysqli_query($conn,"
             SELECT
@@ -127,71 +129,29 @@ switch ($action) {
         $module = intval($_POST['module_id']);
         $user = $_SESSION['user_name'];
         $newPermissions = isset($_POST['master_id']) ? array_map('intval', $_POST['master_id']) : [];
-        mysqli_begin_transaction($conn);
-        try {
-             // Get existing permissions
-            $existingPermissions = [];
-            $sql = mysqli_query($conn,"
-                SELECT master_id
-                FROM module_permission
-                WHERE module_id='$module'
-                AND status='1'
-            ");
-            while($row = mysqli_fetch_assoc($sql)){
-                $existingPermissions[] = (int)$row['master_id'];
-            }
-            // Compare
-            $toInsert = array_diff($newPermissions, $existingPermissions);
-            $toDelete = array_diff($existingPermissions, $newPermissions);
-            $toKeep   = array_intersect($existingPermissions, $newPermissions);
-            // Insert new permissions
-            foreach($toInsert as $master){
-                mysqli_query($conn,"
-                    INSERT INTO module_permission(
-                        module_id,
-                        master_id,
-                        status,
-                        created_by,
-                        created_at
-                    )
-                    VALUES(
-                        '$module',
-                        '$master',
-                        '1',
-                        '$user',
-                        NOW()
-                    )
-                ");
-            }
-            // Remove unchecked permissions
-            foreach($toDelete as $master){
-                mysqli_query($conn,"
-                    DELETE FROM module_permission
-                    WHERE module_id='$module'
-                    AND master_id='$master'
-                ");
-            }
-            // Update audit fields for unchanged permissions
-            foreach($toKeep as $master){
-                mysqli_query($conn,"
-                    UPDATE module_permission
-                    SET
-                        updated_by='$user',
-                        updated_at=NOW()
-                    WHERE module_id='$module'
-                    AND master_id='$master'
-                ");
-            }
-            mysqli_commit($conn);
+        $newPermissions = array_values(array_unique($newPermissions));
+        $master_access = mysqli_real_escape_string($conn, implode(',', $newPermissions));
+        $user = mysqli_real_escape_string($conn, $user);
+
+        $updated = mysqli_query($conn,"
+            UPDATE module_master
+            SET
+                master_access='$master_access',
+                updated_by='$user',
+                updated_at=NOW()
+            WHERE id='$module'
+            AND status='1'
+        ");
+
+        if ($updated) {
             echo json_encode([
                 "status" => "success",
                 "message" => "Permission Saved Successfully."
             ]);
-        } catch(Exception $e) {
-            mysqli_rollback($conn);
+        } else {
             echo json_encode([
                 "status" => "error",
-                "message" => $e->getMessage()
+                "message" => mysqli_error($conn)
             ]);
         }
     break;
@@ -213,11 +173,9 @@ switch ($action) {
                 mm.created_by,
                 mm.updated_by
             FROM module_master mm
-            LEFT JOIN module_permission mp
-                ON mm.id = mp.module_id
-                AND mp.status='1'
             LEFT JOIN master_master mst
-                ON mst.id = mp.master_id
+                ON FIND_IN_SET(mst.id, mm.master_access) > 0
+                AND mst.status='1'
             WHERE mm.status='1'
             GROUP BY
                 mm.id,
@@ -237,10 +195,10 @@ switch ($action) {
         header("Content-Type:application/json");
         $id = intval($_GET['id']);
         $sql = mysqli_query($conn,"
-        SELECT module_id
-        FROM module_permission
-        WHERE module_id='$id'
-        LIMIT 1
+        SELECT id AS module_id, master_access
+        FROM module_master
+        WHERE id='$id'
+        AND status='1'
         ");
         echo json_encode(mysqli_fetch_assoc($sql));
     break;
@@ -257,8 +215,7 @@ switch ($action) {
         $count = 0;
         $ignoreTables = [
             'master_master',
-            'module_master',
-            'module_permission'
+            'module_master'
         ];
         while ($row = mysqli_fetch_assoc($tables)) {
             $table = $row['table_name'];

@@ -124,26 +124,20 @@ body {
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label>Department</label>
-                            <select class="form-select" id="department_id" name="department_id" required>
-                                <option value="">Select Department</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
                             <label>Level</label>
                             <select class="form-select" id="level_select" required>
                                 <option value="">Select Level</option>
-                                <option value="Level 1">Level 1</option>
-                                <option value="Level 2">Level 2</option>
-                                <option value="Level 3">Level 3</option>
-                                <option value="Other">Other</option>
+                                <option value="Level 1">Level 1(Admin)</option>
+                                <option value="Level 2">Level 2(Plant Head)</option>
+                                <option value="Level 3">Level 3(User)</option>
                             </select>
                         </div>
-
-                        <div class="col-md-6 mb-3 d-none" id="level_other_wrap">
-                            <label>Other Level</label>
-                            <input type="text" id="level_other" class="form-control" placeholder="Enter level">
+                        <div class="col-md-6 mb-3">
+                            <label>Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="Active" selected>Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
                         </div>
                     </div>
 
@@ -155,6 +149,8 @@ body {
 </div>
 
 <script>
+document.getElementById("status").value = "Active";
+
 const presetLevels = ["Level 1", "Level 2", "Level 3"];
 
 const levelSelect = document.getElementById("level_select");
@@ -197,7 +193,6 @@ const table = new Tabulator("#employee_table", {
             title: "Employee Name",
             field: "employee_name",
             width: 160,
-            hozAlign: "center",
             resizable: false,
             headerHozAlign: "center"
         },
@@ -242,20 +237,25 @@ const table = new Tabulator("#employee_table", {
             headerHozAlign: "center"
         },
         {
-            title: "Department",
-            field: "department_name",
-            width: 130,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
             title: "Level",
             field: "level",
             width: 80,
             hozAlign: "center",
             resizable: false,
             headerHozAlign: "center"
+        },
+        {
+            title: "Status",
+            field: "status",
+            width: 100,
+            hozAlign: "center",
+            headerHozAlign: "center",
+            formatter: function(cell) {
+                if (cell.getValue() === "Active") {
+                    return "<span class='badge bg-success'>Active</span>";
+                }
+                return "<span class='badge bg-danger'>Inactive</span>";
+            }
         },
         {
             title: "Created By",
@@ -285,9 +285,6 @@ const table = new Tabulator("#employee_table", {
                     <button class="btn btn-primary action-btn edit-btn" data-id="${row.id}">
                         <i class="fa-solid fa-pen"></i>
                     </button>
-                    <button class="btn btn-danger action-btn delete-btn" data-id="${row.id}">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
                 `;
             }
         }
@@ -307,33 +304,9 @@ function loadOptions(url, elementId, labelField) {
 }
 
 loadOptions("qur_employee_master.php?action=designations", "designation_id", "designation");
-loadOptions("qur_employee_master.php?action=departments", "department_id", "department_name");
 
 document.addEventListener("click", function(e) {
-    const deleteBtn = e.target.closest(".delete-btn");
     const editBtn = e.target.closest(".edit-btn");
-
-    if (deleteBtn) {
-        const id = deleteBtn.dataset.id;
-        if (confirm("Delete this employee?")) {
-            fetch("qur_employee_master.php?action=delete", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: "id=" + encodeURIComponent(id)
-                })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.status === "success") {
-                        table.replaceData();
-                        alert("Deleted Successfully");
-                    } else {
-                        alert(res.message || "Delete failed.");
-                    }
-                });
-        }
-    }
 
     if (editBtn) {
         const id = editBtn.dataset.id;
@@ -347,7 +320,7 @@ document.addEventListener("click", function(e) {
                 document.getElementById("location").value = data.location || "";
                 document.getElementById("contact_no").value = data.contact_no || "";
                 document.getElementById("designation_id").value = data.designation_id || "";
-                document.getElementById("department_id").value = data.department_id || "";
+                document.getElementById("status").value = data.status || "Active";
 
                 if (presetLevels.includes(data.level)) {
                     levelSelect.value = data.level;
@@ -370,6 +343,9 @@ document.querySelector('[data-bs-target="#employeeModal"]').addEventListener("cl
     document.getElementById("employee_id").value = "";
     document.getElementById("employeeModalLabel").innerHTML = "Add Employee";
     document.getElementById("saveBtn").innerHTML = "Save";
+
+    document.getElementById("status").value = "Active";
+
     toggleLevelOther();
 });
 
@@ -506,7 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     data.location,
                     data.contact_no,
                     data.designation_name,
-                    data.department_name,
+                    data.status,
                     data.level
                 ].some(field => String(field ?? "").toLowerCase().includes(term));
             });
@@ -523,170 +499,6 @@ document.addEventListener('DOMContentLoaded', () => {
 </main>
 <?php } ?>
 
-<?php if ($page == "recycle") { ?>
-<div class="app-content-header">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <h1 class="mb-0 fs-3">Employee Recycle Bin</h1>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="app-content">
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-body">
-                <div id="employee_recycle_table"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-const recycleTable = new Tabulator("#employee_recycle_table", {
-    ajaxURL: "qur_employee_master.php?action=list1",
-    ajaxConfig: "GET",
-    layout: "fitColumns",
-    pagination: true,
-    paginationSize: 10,
-    columns: [{
-            title: "ID",
-            field: "id",
-            width: 55,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Employee Name",
-            field: "employee_name",
-            width: 160,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "User Name",
-            field: "user_name",
-            width: 150,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Email",
-            field: "email",
-            width: 180,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Location",
-            field: "location",
-            width: 105,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Contact No",
-            field: "contact_no",
-            width: 140,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Designation",
-            field: "designation_name",
-            width: 130,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Department",
-            field: "department_name",
-            width: 130,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Level",
-            field: "level",
-            width: 80,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Created By",
-            field: "created_by",
-            width: 120,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Updated By",
-            field: "updated_by",
-            width: 130,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Action",
-            width: 90,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center",
-            formatter: function(cell) {
-                let row = cell.getRow().getData();
-                return `
-                    <button class="btn btn-primary action-btn recycle-btn" data-id="${row.id}">
-                        <i class="fa-solid fa-trash-arrow-up"></i>
-                    </button>
-                `;
-            }
-        }
-    ]
-});
-
-document.addEventListener("click", function(e) {
-    const btn = e.target.closest(".recycle-btn");
-    if (!btn) return;
-
-    const id = btn.dataset.id;
-    if (confirm("Restore this employee?")) {
-        fetch("qur_employee_master.php?action=restore", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: "id=" + encodeURIComponent(id)
-            })
-            .then(res => res.json())
-            .then(res => {
-                if (res.status === "success") {
-                    recycleTable.replaceData();
-                    alert("Employee restored successfully.");
-                } else {
-                    alert(res.message || "Restore failed.");
-                }
-            });
-    }
-});
-
-document.getElementById('export-csv').addEventListener('click', () => recycleTable.download('csv',
-    'employee_recycle_bin.csv'));
-</script>
-</main>
-<?php } ?>
 
 <?php
 include "../include/footer.php";

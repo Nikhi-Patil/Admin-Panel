@@ -20,9 +20,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 first_login
             FROM login
             WHERE username=?
+            AND status='Active'
     
 
     ");
+    
+    $error = "Your account has been deactivated. Please contact the administrator.";
     
 
     $stmt->bind_param("s", $username);
@@ -35,8 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $row = $result->fetch_assoc();
 
-        // Verify hashed password
-        if ($password == $row['password']) {
+        // Verify status
+        if ($row['status'] == "Inactive") {
+        $error = "Your account has been deactivated. Please contact the administrator.";
+        } elseif ($password == $row['password']) {
+            // Verify hashed password
 
             $_SESSION['user_id']   = $row['user_id'];
             $_SESSION['username']  = $row['username'];   // Email

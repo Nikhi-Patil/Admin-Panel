@@ -386,9 +386,14 @@ document.addEventListener("DOMContentLoaded", function() {
                                         <p>Software Access</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_user_access.php" class="nav-link">
+                                        <i class="fa-solid fa-user-lock"></i>
+                                        <p>User Access</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li> <!-- Settings -->
-
                     </ul>
                 </nav>
             </div> <!-- sidebar-wrapper -->

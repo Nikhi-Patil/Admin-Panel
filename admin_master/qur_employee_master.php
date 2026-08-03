@@ -24,15 +24,13 @@ switch ($action) {
                     e.location,
                     e.contact_no,
                     e.designation_id,
-                    e.department_id,
                     e.level,
+                    e.status,
                     e.created_by,
                     e.updated_by,
-                    d.designation AS designation_name,
-                    dep.department_name AS department_name
+                    d.designation AS designation_name
                 FROM employee_master e
                 LEFT JOIN designation_master d ON e.designation_id = d.id
-                LEFT JOIN department_master dep ON e.department_id = dep.id
                 ORDER BY e.id DESC";
 
         $result = mysqli_query($conn, $sql);
@@ -56,15 +54,13 @@ switch ($action) {
                     e.location,
                     e.contact_no,
                     e.designation_id,
-                    e.department_id,
                     e.level,
+                    e.status,
                     e.created_by,
                     e.updated_by,
-                    d.designation AS designation_name,
-                    dep.department_name AS department_name
+                    d.designation AS designation_name
                 FROM employee_master e
                 LEFT JOIN designation_master d ON e.designation_id = d.id
-                LEFT JOIN department_master dep ON e.department_id = dep.id
                 WHERE e.id = '$id'";
 
         $result = mysqli_query($conn, $sql);
@@ -84,19 +80,6 @@ switch ($action) {
         header("Content-Type: application/json");
         echo json_encode($data);
     break;
-// =================== GET DEPARTMENT TABLE ===================
-    case "departments":
-        $sql = "SELECT id, department_name
-                FROM department_master
-                ORDER BY department_name";
-        $result = mysqli_query($conn, $sql);
-        $data = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $data[] = $row;
-        }
-        header("Content-Type: application/json");
-        echo json_encode($data);
-    break;
 // =================== GET SAVE ===================
     case "save":
         header("Content-Type: application/json");
@@ -107,8 +90,8 @@ switch ($action) {
         $location = mysqli_real_escape_string($conn, $_POST['location'] ?? '');
         $contact_no = mysqli_real_escape_string($conn, $_POST['contact_no'] ?? '');
         $designation_id = mysqli_real_escape_string($conn, $_POST['designation_id'] ?? '');
-        $department_id = mysqli_real_escape_string($conn, $_POST['department_id'] ?? '');
         $level = mysqli_real_escape_string($conn, $_POST['level'] ?? '');
+        $status = mysqli_real_escape_string($conn, $_POST['status'] ?? 'Active');
         $user_id = $_SESSION['user_name'] ?? 0;
         $creator = substr((string)$user_id, 0, 10);
 
@@ -125,7 +108,7 @@ switch ($action) {
                             contact_no,
                             designation_id,
                             level,
-                            department_id,
+                            status,
                             created_by
                         )
                         VALUES
@@ -137,7 +120,7 @@ switch ($action) {
                             '$contact_no',
                             '$designation_id',
                             '$level',
-                            '$department_id',
+                            '$status',
                             '$user_id'
                         )";
 
@@ -155,6 +138,7 @@ switch ($action) {
                                 user_name,
                                 password,
                                 user_id,
+                                status,
                                 created_by,
                                 first_login
                             )
@@ -164,6 +148,7 @@ switch ($action) {
                                 '$user_name',
                                 '$temp_password',
                                 '$employee_id',
+                                '$status',
                                 '$creator',
                                 1
                             )";
@@ -179,7 +164,7 @@ switch ($action) {
                     "username" => $email
                 ]);
                 exit;
-            }
+             }
 
             $sql = "UPDATE employee_master
                     SET
@@ -190,7 +175,7 @@ switch ($action) {
                         contact_no = '$contact_no',
                         designation_id = '$designation_id',
                         level = '$level',
-                        department_id = '$department_id',
+                        status = '$status',
                         updated_by='$user_id',
                         updated_at = NOW()
                     WHERE id = '$id'";
@@ -219,6 +204,7 @@ switch ($action) {
                                 user_name,
                                 password,
                                 user_id,
+                                status,
                                 created_by,
                                 first_login
                             )
@@ -228,6 +214,7 @@ switch ($action) {
                                 '$user_name',
                                 '$temp_password',
                                 '$id',
+                                '$status',
                                 '".$_SESSION['user_name']."',
                                 1
                             )";
@@ -253,160 +240,6 @@ switch ($action) {
                 "message" => $e->getMessage()
             ]);
 
-        }
-    break;
-// =================== GET DELETE ===================
-    case "delete":
-        $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_name'] ?? 0;
-
-        mysqli_begin_transaction($conn);
-
-        try {
-            $sql1 = "
-                INSERT INTO hist_employee_master
-                (
-                    id,
-                    employee_name,
-                    user_name,
-                    email,
-                    location,
-                    contact_no,
-                    designation_id,
-                    level,
-                    department_id,
-                    created_by,
-                    created_at,
-                    updated_by,
-                    updated_at
-                )
-                SELECT
-                    id,
-                    employee_name,
-                    user_name,
-                    email,
-                    location,
-                    contact_no,
-                    designation_id,
-                    level,
-                    department_id,
-                    created_by,
-                    created_at,
-                    '$user_id',
-                    NOW()
-                FROM employee_master
-                WHERE id = '$id'
-            ";
-
-            if (!mysqli_query($conn, $sql1)) {
-                throw new Exception(mysqli_error($conn));
-            }
-
-            $sql2 = "DELETE FROM employee_master WHERE id = '$id'";
-            if (!mysqli_query($conn, $sql2)) {
-                throw new Exception(mysqli_error($conn));
-            }
-
-            mysqli_commit($conn);
-            echo json_encode(["status" => "success"]);
-        } catch (Exception $e) {
-            mysqli_rollback($conn);
-            echo json_encode([
-                "status" => "error",
-                "message" => $e->getMessage()
-            ]);
-        }
-    break;
-// =================== GET RESTORE TABLE ===================
-    case "list1":
-        $sql = "SELECT
-                    e.id,
-                    e.employee_name,
-                    e.user_name,
-                    e.email,
-                    e.location,
-                    e.contact_no,
-                    e.designation_id,
-                    e.department_id,
-                    e.level,
-                    e.created_by,
-                    e.updated_by,
-                    d.designation AS designation_name,
-                    dep.department_name AS department_name
-                FROM hist_employee_master e
-                LEFT JOIN designation_master d ON e.designation_id = d.id
-                LEFT JOIN department_master dep ON e.department_id = dep.id
-                ORDER BY e.id DESC";
-
-        $result = mysqli_query($conn, $sql);
-        $data = [];
-        while ($row = mysqli_fetch_assoc($result)) {
-            $data[] = $row;
-        }
-
-        header("Content-Type: application/json");
-        echo json_encode($data);
-    break;
-// =================== GET REDTORE ===================
-    case "restore":
-        $id = intval($_POST['id'] ?? 0);
-        $user_id = $_SESSION['user_name'] ?? 0;
-
-        mysqli_begin_transaction($conn);
-
-        try {
-            $sql1 = "
-                INSERT INTO employee_master
-                (
-                    id,
-                    employee_name,
-                    user_name,
-                    email,
-                    location,
-                    contact_no,
-                    designation_id,
-                    level,
-                    department_id,
-                    created_by,
-                    created_at,
-                    updated_by,
-                    updated_at
-                )
-                SELECT
-                    id,
-                    employee_name,
-                    user_name,
-                    email,
-                    location,
-                    contact_no,
-                    designation_id,
-                    level,
-                    department_id,
-                    created_by,
-                    created_at,
-                    '$user_id',
-                    NOW()
-                FROM hist_employee_master
-                WHERE id = '$id'
-            ";
-
-            if (!mysqli_query($conn, $sql1)) {
-                throw new Exception(mysqli_error($conn));
-            }
-
-            $sql2 = "DELETE FROM hist_employee_master WHERE id = '$id'";
-            if (!mysqli_query($conn, $sql2)) {
-                throw new Exception(mysqli_error($conn));
-            }
-
-            mysqli_commit($conn);
-            echo json_encode(["status" => "success"]);
-        } catch (Exception $e) {
-            mysqli_rollback($conn);
-            echo json_encode([
-                "status" => "error",
-                "message" => $e->getMessage()
-            ]);
         }
     break;
 // =================== GET DEFAULT ===================
