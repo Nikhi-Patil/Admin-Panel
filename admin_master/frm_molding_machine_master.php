@@ -64,18 +64,27 @@ $page = $_GET['page'] ?? 'molding_machine';
                         pagination: true,
                         paginationSize: 10,
                         hozAlign: "center",
+                        paginationSizeSelector: [10, 25, 50, 100],
+
+                        initialSort: [{
+                            column: "id",
+                            dir: "asc"
+                        }],
 
                         columns: [{
                                 title: "ID",
                                 field: "id",
                                 width: 100,
+                                sorter: "number",
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Machine tonnage",
                                 field: "machine_list",
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -83,6 +92,7 @@ $page = $_GET['page'] ?? 'molding_machine';
                                 field: "shift_rate",
                                 width: 150,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -90,6 +100,7 @@ $page = $_GET['page'] ?? 'molding_machine';
                                 field: "molding_process",
                                 width: 150,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -97,6 +108,7 @@ $page = $_GET['page'] ?? 'molding_machine';
                                 field: "created_by",
                                 width: 160,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -104,6 +116,7 @@ $page = $_GET['page'] ?? 'molding_machine';
                                 field: "updated_by",
                                 width: 160,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
 
                             },
@@ -111,6 +124,7 @@ $page = $_GET['page'] ?? 'molding_machine';
                                 title: "Action",
                                 width: 100,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center",
 
                                 formatter: function(cell) {
@@ -383,18 +397,27 @@ $page = $_GET['page'] ?? 'molding_machine';
                             pagination: true,
                             paginationSize: 10,
                             hozAlign: "center",
+                            paginationSizeSelector: [10, 25, 50, 100],
+
+                            initialSort: [{
+                                column: "id",
+                                dir: "asc"
+                            }],
 
                             columns: [{
                                     title: "ID",
                                     field: "id",
                                     width: 100,
+                                    sorter: "number",
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Machine List",
                                     field: "machine_list",
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -402,6 +425,7 @@ $page = $_GET['page'] ?? 'molding_machine';
                                     field: "shift_rate",
                                     width: 150,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -409,6 +433,7 @@ $page = $_GET['page'] ?? 'molding_machine';
                                     field: "molding_process",
                                     width: 150,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -416,6 +441,7 @@ $page = $_GET['page'] ?? 'molding_machine';
                                     field: "created_by",
                                     width: 160,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -423,6 +449,7 @@ $page = $_GET['page'] ?? 'molding_machine';
                                     field: "updated_by",
                                     width: 160,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
 
                                 },
@@ -430,6 +457,7 @@ $page = $_GET['page'] ?? 'molding_machine';
                                     title: "Action",
                                     width: 100,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center",
 
                                     formatter: function(cell) {

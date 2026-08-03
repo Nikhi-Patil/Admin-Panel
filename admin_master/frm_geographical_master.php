@@ -175,10 +175,17 @@ document.addEventListener("DOMContentLoaded", function() {
                     layout: "fitColumns",
                     pagination: true,
                     paginationSize: 10,
+                    paginationSizeSelector: [10, 25, 50, 100],
+
+                    initialSort: [{
+                        column: "id",
+                        dir: "asc"
+                    }],
                     columns: [{
                             title: "ID",
                             field: "id",
                             width: 90,
+                            sorter: "number",
                             hozAlign: "center",
                             resizable: false,
                             headerHozAlign: "center"
@@ -397,10 +404,17 @@ document.addEventListener("DOMContentLoaded", function() {
                             layout: "fitColumns",
                             pagination: true,
                             paginationSize: 10,
+                            paginationSizeSelector: [10, 25, 50, 100],
+
+                            initialSort: [{
+                                column: "id",
+                                dir: "asc"
+                            }],
                             columns: [{
                                     title: "ID",
                                     field: "id",
                                     width: 90,
+                                    sorter: "number",
                                     resizable: false,
                                     headerHozAlign: "center",
                                     hozAlign: "center"

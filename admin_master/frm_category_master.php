@@ -62,15 +62,24 @@ $page = $_GET['page'] ?? 'category';
                     layout: "fitColumns",
                     pagination: true,
                     paginationSize: 10,
+                    paginationSizeSelector: [10, 25, 50, 100],
+
+                    initialSort: [{
+                        column: "id",
+                        dir: "asc"
+                    }],
                     columns: [{
                             title: "ID",
                             field: "id",
+                            sorter: "number",
                             width: 120,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Category Name",
+                            resizable: false,
                             field: "category_name",
                             headerHozAlign: "center"
                         },
@@ -78,6 +87,7 @@ $page = $_GET['page'] ?? 'category';
                             title: "Created By",
                             field: "created_by",
                             width: 160,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
@@ -85,12 +95,14 @@ $page = $_GET['page'] ?? 'category';
                             title: "Updated By",
                             field: "updated_by",
                             width: 160,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Action",
                             width: 140,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center",
                             formatter: function(cell) {
@@ -273,15 +285,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     layout: "fitColumns",
                     pagination: true,
                     paginationSize: 10,
+                    paginationSizeSelector: [10, 25, 50, 100],
+
+                    initialSort: [{
+                        column: "id",
+                        dir: "asc"
+                    }],
                     columns: [{
                             title: "ID",
                             field: "id",
                             width: 120,
+                            sorter: "number",
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Category Name",
+                            resizable: false,
                             field: "category_name",
                             headerHozAlign: "center"
                         },
@@ -289,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             title: "Created By",
                             field: "created_by",
                             width: 160,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
@@ -296,12 +318,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             title: "Deleted By",
                             field: "updated_by",
                             width: 160,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Action",
                             width: 120,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center",
                             formatter: function(cell) {

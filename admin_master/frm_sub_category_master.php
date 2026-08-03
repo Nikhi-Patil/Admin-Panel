@@ -116,26 +116,37 @@ function setCategorySelection(id) {
                     layout: "fitColumns",
                     pagination: true,
                     paginationSize: 10,
+                    paginationSizeSelector: [10, 25, 50, 100],
+
+                    initialSort: [{
+                        column: "id",
+                        dir: "asc"
+                    }],
                     columns: [{
                             title: "ID",
                             field: "id",
                             width: 90,
+                            sorter: "number",
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Supplier",
                             field: "supplier_name",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Category",
                             field: "category_name",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Sub Category",
                             field: "sub_category_name",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -143,6 +154,7 @@ function setCategorySelection(id) {
                             field: "created_by",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -150,12 +162,14 @@ function setCategorySelection(id) {
                             field: "updated_by",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Action",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center",
                             formatter: function(cell) {
                                 let row = cell.getRow().getData();
@@ -422,26 +436,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     layout: "fitColumns",
                     pagination: true,
                     paginationSize: 10,
+                    paginationSizeSelector: [10, 25, 50, 100],
+
+                    initialSort: [{
+                        column: "id",
+                        dir: "asc"
+                    }],
                     columns: [{
                             title: "ID",
                             field: "id",
                             width: 90,
+                            sorter: "number",
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Supplier",
                             field: "supplier_name",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Category",
                             field: "category_name",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Sub Category",
                             field: "sub_category_name",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -449,6 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             field: "created_by",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -456,12 +482,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             field: "updated_by",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Action",
                             width: 120,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center",
                             formatter: function(cell) {
                                 let row = cell.getRow().getData();

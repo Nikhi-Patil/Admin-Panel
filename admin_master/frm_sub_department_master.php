@@ -66,30 +66,41 @@ $page = $_GET['page'] ?? 'sub_department';
                         pagination: true,
                         paginationSize: 10,
                         hozAlign: "center",
+                        paginationSizeSelector: [10, 25, 50, 100],
+
+                        initialSort: [{
+                            column: "id",
+                            dir: "asc"
+                        }],
 
                         columns: [{
                                 title: "ID",
                                 field: "id",
                                 width: 120,
+                                sorter: "number",
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Unit",
                                 field: "unit",
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Department",
                                 field: "department_name",
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Sub Department",
                                 field: "sub_department_name",
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -97,6 +108,7 @@ $page = $_GET['page'] ?? 'sub_department';
                                 field: "created_by",
                                 width: 150,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -104,6 +116,7 @@ $page = $_GET['page'] ?? 'sub_department';
                                 field: "updated_by",
                                 width: 150,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
 
                             },
@@ -111,6 +124,7 @@ $page = $_GET['page'] ?? 'sub_department';
                                 title: "Action",
                                 width: 100,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center",
 
                                 formatter: function(cell) {
@@ -408,30 +422,41 @@ $page = $_GET['page'] ?? 'sub_department';
                             pagination: true,
                             paginationSize: 10,
                             hozAlign: "center",
+                            paginationSizeSelector: [10, 25, 50, 100],
+
+                            initialSort: [{
+                                column: "id",
+                                dir: "asc"
+                            }],
 
                             columns: [{
                                     title: "ID",
                                     field: "id",
                                     width: 120,
+                                    sorter: "number",
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Unit",
                                     field: "unit",
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Department",
                                     field: "department_name",
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Sub Department",
                                     field: "sub_department_name",
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -439,6 +464,7 @@ $page = $_GET['page'] ?? 'sub_department';
                                     field: "created_by",
                                     width: 120,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -446,6 +472,7 @@ $page = $_GET['page'] ?? 'sub_department';
                                     field: "updated_by",
                                     width: 120,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
 
                                 },
@@ -453,6 +480,7 @@ $page = $_GET['page'] ?? 'sub_department';
                                     title: "Action",
                                     width: 100,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center",
 
                                     formatter: function(cell) {

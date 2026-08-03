@@ -231,11 +231,19 @@ const table = new Tabulator("#part_table", {
     layout: "fitColumns",
     pagination: true,
     paginationSize: 10,
+    paginationSizeSelector: [10, 25, 50, 100],
+
+    initialSort: [{
+        column: "id",
+        dir: "asc"
+    }],
     columns: [{
             title: "ID",
             field: "id",
             width: 55,
+            sorter: "number",
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -243,6 +251,7 @@ const table = new Tabulator("#part_table", {
             field: "part_name",
             width: 150,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -250,6 +259,7 @@ const table = new Tabulator("#part_table", {
             field: "part_no",
             width: 100,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -257,6 +267,7 @@ const table = new Tabulator("#part_table", {
             field: "fg_code",
             width: 105,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -264,6 +275,7 @@ const table = new Tabulator("#part_table", {
             field: "im_code",
             width: 105,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -271,6 +283,7 @@ const table = new Tabulator("#part_table", {
             field: "inter_code",
             width: 210,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -278,6 +291,7 @@ const table = new Tabulator("#part_table", {
             field: "unit",
             width: 140,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -285,6 +299,7 @@ const table = new Tabulator("#part_table", {
             field: "department_name",
             width: 140,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -292,6 +307,7 @@ const table = new Tabulator("#part_table", {
             field: "sub_department_name",
             width: 165,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -299,6 +315,7 @@ const table = new Tabulator("#part_table", {
             field: "created_by",
             width: 130,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -306,12 +323,14 @@ const table = new Tabulator("#part_table", {
             field: "updated_by",
             width: 130,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
             title: "Action",
             width: 90,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center",
             formatter: function(cell) {
                 const row = cell.getRow().getData();
@@ -523,11 +542,19 @@ document.getElementById("partImportForm").addEventListener("submit", function(e)
                     layout: "fitColumns",
                     pagination: true,
                     paginationSize: 10,
+                    paginationSizeSelector: [10, 25, 50, 100],
+
+                    initialSort: [{
+                        column: "id",
+                        dir: "asc"
+                    }],
                     columns: [{
                             title: "ID",
                             field: "id",
                             width: 55,
+                            sorter: "number",
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -535,6 +562,7 @@ document.getElementById("partImportForm").addEventListener("submit", function(e)
                             field: "part_name",
                             width: 150,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -542,6 +570,7 @@ document.getElementById("partImportForm").addEventListener("submit", function(e)
                             field: "part_no",
                             width: 100,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -549,6 +578,7 @@ document.getElementById("partImportForm").addEventListener("submit", function(e)
                             field: "fg_code",
                             width: 105,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -556,6 +586,7 @@ document.getElementById("partImportForm").addEventListener("submit", function(e)
                             field: "im_code",
                             width: 105,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -563,6 +594,7 @@ document.getElementById("partImportForm").addEventListener("submit", function(e)
                             field: "inter_code",
                             width: 105,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -570,6 +602,7 @@ document.getElementById("partImportForm").addEventListener("submit", function(e)
                             field: "unit",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -577,6 +610,7 @@ document.getElementById("partImportForm").addEventListener("submit", function(e)
                             field: "department_name",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -584,6 +618,7 @@ document.getElementById("partImportForm").addEventListener("submit", function(e)
                             field: "sub_department_name",
                             width: 165,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -591,6 +626,7 @@ document.getElementById("partImportForm").addEventListener("submit", function(e)
                             field: "created_by",
                             width: 130,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -598,12 +634,14 @@ document.getElementById("partImportForm").addEventListener("submit", function(e)
                             field: "updated_by",
                             width: 130,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Action",
                             width: 90,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center",
                             formatter: function(cell) {
                                 const row = cell.getRow().getData();

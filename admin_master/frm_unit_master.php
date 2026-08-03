@@ -64,12 +64,20 @@ $page = $_GET['page'] ?? 'plant';
                         pagination: true,
                         paginationSize: 10,
                         hozAlign: "center",
+                        paginationSizeSelector: [10, 25, 50, 100],
+
+                        initialSort: [{
+                            column: "id",
+                            dir: "asc"
+                        }],
 
                         columns: [{
                                 title: "ID",
                                 field: "id",
                                 width: 120,
+                                sorter: "number",
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -77,6 +85,7 @@ $page = $_GET['page'] ?? 'plant';
                                 field: "unit",
                                 width: 150,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -84,11 +93,13 @@ $page = $_GET['page'] ?? 'plant';
                                 field: "location",
                                 width: 150,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Address",
                                 field: "address",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -96,6 +107,7 @@ $page = $_GET['page'] ?? 'plant';
                                 field: "created_by",
                                 width: 160,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -103,6 +115,7 @@ $page = $_GET['page'] ?? 'plant';
                                 field: "updated_by",
                                 width: 160,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
 
                             },
@@ -110,6 +123,7 @@ $page = $_GET['page'] ?? 'plant';
                                 title: "Action",
                                 width: 100,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center",
 
                                 formatter: function(cell) {
@@ -369,12 +383,20 @@ $page = $_GET['page'] ?? 'plant';
                             pagination: true,
                             paginationSize: 10,
                             hozAlign: "center",
+                            paginationSizeSelector: [10, 25, 50, 100],
+
+                            initialSort: [{
+                                column: "id",
+                                dir: "asc"
+                            }],
 
                             columns: [{
                                     title: "ID",
                                     field: "id",
                                     width: 120,
+                                    sorter: "number",
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -382,6 +404,7 @@ $page = $_GET['page'] ?? 'plant';
                                     field: "unit",
                                     width: 150,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -389,11 +412,13 @@ $page = $_GET['page'] ?? 'plant';
                                     field: "location",
                                     width: 150,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Address",
                                     field: "address",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -401,6 +426,7 @@ $page = $_GET['page'] ?? 'plant';
                                     field: "created_by",
                                     width: 160,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -408,6 +434,7 @@ $page = $_GET['page'] ?? 'plant';
                                     field: "updated_by",
                                     width: 160,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
 
                                 },
@@ -415,6 +442,7 @@ $page = $_GET['page'] ?? 'plant';
                                     title: "Action",
                                     width: 100,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center",
 
                                     formatter: function(cell) {

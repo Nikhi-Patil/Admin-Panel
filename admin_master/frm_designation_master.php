@@ -62,16 +62,25 @@ $page = $_GET['page'] ?? 'designation';
                     layout: "fitColumns",
                     pagination: true,
                     paginationSize: 10,
+                    paginationSizeSelector: [10, 25, 50, 100],
+
+                    initialSort: [{
+                        column: "id",
+                        dir: "asc"
+                    }],
                     columns: [{
                             title: "ID",
                             field: "id",
                             width: 120,
+                            sorter: "number",
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Designation",
                             field: "designation",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -79,6 +88,7 @@ $page = $_GET['page'] ?? 'designation';
                             field: "created_by",
                             width: 160,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -86,12 +96,14 @@ $page = $_GET['page'] ?? 'designation';
                             field: "updated_by",
                             width: 160,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Action",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center",
                             formatter: function(cell) {
                                 let row = cell.getRow().getData();
@@ -273,16 +285,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     layout: "fitColumns",
                     pagination: true,
                     paginationSize: 10,
+                    paginationSizeSelector: [10, 25, 50, 100],
+
+                    initialSort: [{
+                        column: "id",
+                        dir: "asc"
+                    }],
                     columns: [{
                             title: "ID",
                             field: "id",
                             width: 120,
+                            sorter: "number",
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Designation Name",
                             field: "designation",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -290,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             field: "created_by",
                             width: 160,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -297,12 +319,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             field: "updated_by",
                             width: 160,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Action",
                             width: 120,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center",
                             formatter: function(cell) {
                                 let row = cell.getRow().getData();

@@ -62,28 +62,39 @@ $page = $_GET['page'] ?? 'currency';
                     layout: "fitColumns",
                     pagination: true,
                     paginationSize: 10,
+                    paginationSizeSelector: [10, 25, 50, 100],
+
+                    initialSort: [{
+                        column: "id",
+                        dir: "asc"
+                    }],
                     columns: [{
                             title: "ID",
                             field: "id",
                             width: 100,
+                            sorter: "number",
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Currency Name",
                             field: "currency_name",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Currency Symbol",
                             field: "currency_symbol",
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Exchange Rate",
                             field: "exchange_rate",
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center",
                             formatter: function(cell) {
                                 let value = parseFloat(cell.getValue());
@@ -95,6 +106,7 @@ $page = $_GET['page'] ?? 'currency';
                             field: "created_by",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -102,12 +114,14 @@ $page = $_GET['page'] ?? 'currency';
                             field: "updated_by",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Action",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center",
                             formatter: function(cell) {
                                 let row = cell.getRow().getData();
@@ -310,16 +324,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     layout: "fitColumns",
                     pagination: true,
                     paginationSize: 10,
+                    paginationSizeSelector: [10, 25, 50, 100],
+
+                    initialSort: [{
+                        column: "id",
+                        dir: "asc"
+                    }],
                     columns: [{
                             title: "ID",
                             field: "id",
                             width: 100,
+                            sorter: "number",
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Currency Name",
                             field: "currency_name",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -327,6 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             field: "currency_symbol",
                             width: 160,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -334,6 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             field: "exchange_rate",
                             width: 160,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -341,6 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             field: "created_by",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
@@ -348,12 +374,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             field: "updated_by",
                             width: 140,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Action",
                             width: 120,
                             hozAlign: "center",
+                            resizable: false,
                             headerHozAlign: "center",
                             formatter: function(cell) {
                                 let row = cell.getRow().getData();

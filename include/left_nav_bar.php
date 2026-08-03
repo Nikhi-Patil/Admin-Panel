@@ -148,6 +148,14 @@ document.addEventListener("DOMContentLoaded", function() {
                                 </li>
 
                                 <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_geographical_master.php?page=geographical"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-earth-asia"></i>
+                                        <p>Geographical Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
                                     <a href="<?= BASE_URL ?>admin_master/frm_incoterms_master.php?page=incoterms"
                                         class="nav-link">
                                         <i class="fa-solid fa-shipping-fast"></i>
@@ -210,13 +218,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                         <p>Unit Master</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_geographical_master.php?page=geographical"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-boxes-stacked"></i>
-                                        <p>Geographical Master</p>
-                                    </a>
-                                </li>
+
 
                             </ul>
                         </li>
@@ -230,68 +232,13 @@ document.addEventListener("DOMContentLoaded", function() {
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_employee_master.php?page=recycle"
+                                    <a href="<?= BASE_URL ?>admin_master/frm_bop_master.php?page=recycle"
                                         class="nav-link">
-                                        <i class="fa-solid fa-user-tie"></i>
-                                        <p>Employee Master</p>
+                                        <i class="fa-solid fa-boxes-stacked"></i>
+                                        <p>BOP Master</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_unit_master.php?page=recycle"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-warehouse"></i>
-                                        <p>Unit Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_plant_master.php?page=recycle"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-industry"></i>
-                                        <p>Plant Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_department_master.php?page=recycle"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-building"></i>
-                                        <p>Department Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_designation_master.php?page=recycle"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-id-badge"></i>
-                                        <p>Designation Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_incoterms_master.php?page=recycle"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-shipping-fast"></i>
-                                        <p>Incoterms Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_currency_master.php?page=recycle"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-coins"></i>
-                                        <p>Currency Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_sub_department_master.php?page=recycle"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-diagram-project"></i>
-                                        <p>Sub Department Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_Supplier_master.php?page=recycle"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-truck"></i>
-                                        <p>Supplier Master</p>
-                                    </a>
-                                </li>
+
                                 <li class="nav-item">
                                     <a href="<?= BASE_URL ?>admin_master/frm_Category_master.php?page=recycle"
                                         class="nav-link">
@@ -299,27 +246,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                         <p>Category Master</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_sub_category_master.php?page=recycle"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-sitemap"></i>
-                                        <p>Sub Category Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_customer_master.php?page=recycle"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-users"></i>
-                                        <p>Customer Master</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_part_master.php?page=recycle"
-                                        class="nav-link">
-                                        <i class="fa-solid fa-puzzle-piece"></i>
-                                        <p>Part Master</p>
-                                    </a>
-                                </li>
+
                                 <li class="nav-item">
                                     <a href="<?= BASE_URL ?>admin_master/frm_compound_master.php?page=recycle"
                                         class="nav-link">
@@ -327,6 +254,55 @@ document.addEventListener("DOMContentLoaded", function() {
                                         <p>Compound Master</p>
                                     </a>
                                 </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_currency_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-coins"></i>
+                                        <p>Currency Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_customer_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-users"></i>
+                                        <p>Customer Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_department_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-building"></i>
+                                        <p>Department Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_designation_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-id-badge"></i>
+                                        <p>Designation Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_geographical_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-earth-asia"></i>
+                                        <p>Geographical Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_incoterms_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-shipping-fast"></i>
+                                        <p>Incoterms Master</p>
+                                    </a>
+                                </li>
+
                                 <li class="nav-item">
                                     <a href="<?= BASE_URL ?>admin_master/frm_molding_machine_master.php?page=recycle"
                                         class="nav-link">
@@ -334,18 +310,52 @@ document.addEventListener("DOMContentLoaded", function() {
                                         <p>Molding Machine Master</p>
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_bop_master.php?page=recycle"
+                                    <a href="<?= BASE_URL ?>admin_master/frm_part_master.php?page=recycle"
                                         class="nav-link">
-                                        <i class="fa-solid fa-boxes-stacked"></i>
-                                        <p>BOP Master</p>
+                                        <i class="fa-solid fa-puzzle-piece"></i>
+                                        <p>Part Master</p>
                                     </a>
                                 </li>
+
                                 <li class="nav-item">
-                                    <a href="<?= BASE_URL ?>admin_master/frm_geographical_master.php?page=recycle"
+                                    <a href="<?= BASE_URL ?>admin_master/frm_plant_master.php?page=recycle"
                                         class="nav-link">
-                                        <i class="fa-solid fa-boxes-stacked"></i>
-                                        <p>Geographical Master</p>
+                                        <i class="fa-solid fa-industry"></i>
+                                        <p>Plant Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_sub_category_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-sitemap"></i>
+                                        <p>Sub Category Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_sub_department_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-diagram-project"></i>
+                                        <p>Sub Department Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_Supplier_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-truck"></i>
+                                        <p>Supplier Master</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= BASE_URL ?>admin_master/frm_unit_master.php?page=recycle"
+                                        class="nav-link">
+                                        <i class="fa-solid fa-warehouse"></i>
+                                        <p>Unit Master</p>
                                     </a>
                                 </li>
                             </ul>

@@ -153,23 +153,33 @@ const table = new Tabulator("#permission_table", {
     layout: "fitColumns",
     pagination: true,
     paginationSize: 10,
+    paginationSizeSelector: [10, 25, 50, 100],
+
+    initialSort: [{
+        column: "id",
+        dir: "asc"
+    }],
     columns: [{
             title: "ID",
             field: "id",
             width: 70,
+            sorter: "number",
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
             title: "Software Module",
             field: "module_name",
             width: 180,
+            resizable: false,
             headerHozAlign: "center"
         },
         {
             title: "Assigned Masters",
             field: "masters",
             widthGrow: 3,
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -177,6 +187,7 @@ const table = new Tabulator("#permission_table", {
             field: "created_by",
             width: 120,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
         {
@@ -184,6 +195,7 @@ const table = new Tabulator("#permission_table", {
             field: "updated_by",
             width: 120,
             hozAlign: "center",
+            resizable: false,
             headerHozAlign: "center"
         },
     ]

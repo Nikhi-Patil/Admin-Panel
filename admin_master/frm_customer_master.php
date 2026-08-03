@@ -143,11 +143,18 @@ $page = $_GET['page'] ?? 'customer';
                         paginationSize: 10,
                         hozAlign: "center",
                         paginationSizeSelector: [10, 25, 50, 100],
+
+                        initialSort: [{
+                            column: "id",
+                            dir: "asc"
+                        }],
                         columns: [{
                                 title: "ID",
                                 field: "id",
                                 width: 55,
+                                sorter: "number",
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -155,6 +162,7 @@ $page = $_GET['page'] ?? 'customer';
                                 field: "customer_name",
 
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -162,6 +170,7 @@ $page = $_GET['page'] ?? 'customer';
                                 field: "sub_customer",
 
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -169,6 +178,7 @@ $page = $_GET['page'] ?? 'customer';
                                 field: "geo_type",
                                 width: 170,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -176,6 +186,7 @@ $page = $_GET['page'] ?? 'customer';
                                 field: "zone",
                                 width: 150,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -183,6 +194,7 @@ $page = $_GET['page'] ?? 'customer';
                                 field: "created_by",
                                 width: 150,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -190,6 +202,7 @@ $page = $_GET['page'] ?? 'customer';
                                 field: "updated_by",
                                 width: 150,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
 
                             },
@@ -197,6 +210,7 @@ $page = $_GET['page'] ?? 'customer';
                                 title: "Action",
                                 width: 90,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center",
 
                                 formatter: function(cell) {
@@ -568,26 +582,34 @@ $page = $_GET['page'] ?? 'customer';
                             pagination: true,
                             paginationSize: 10,
                             hozAlign: "center",
+                            paginationSizeSelector: [10, 25, 50, 100],
+
+                            initialSort: [{
+                                column: "id",
+                                dir: "asc"
+                            }],
 
                             columns: [{
                                     title: "ID",
                                     field: "id",
                                     width: 55,
+                                    sorter: "number",
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Customer Name",
                                     field: "customer_name",
-
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Sub Customer Name",
                                     field: "sub_customer",
-
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -595,6 +617,7 @@ $page = $_GET['page'] ?? 'customer';
                                     field: "geo_type",
                                     width: 170,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -602,6 +625,7 @@ $page = $_GET['page'] ?? 'customer';
                                     field: "zone",
                                     width: 150,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -609,6 +633,7 @@ $page = $_GET['page'] ?? 'customer';
                                     field: "created_by",
                                     width: 150,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -616,6 +641,7 @@ $page = $_GET['page'] ?? 'customer';
                                     field: "updated_by",
                                     width: 150,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
 
                                 },
@@ -623,6 +649,7 @@ $page = $_GET['page'] ?? 'customer';
                                     title: "Action",
                                     width: 90,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center",
 
                                     formatter: function(cell) {

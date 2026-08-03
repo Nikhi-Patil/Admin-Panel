@@ -112,22 +112,32 @@ function refreshUnitSummary() {
                         pagination: true,
                         paginationSize: 10,
                         hozAlign: "center",
+                        paginationSizeSelector: [10, 25, 50, 100],
+
+                        initialSort: [{
+                            column: "id",
+                            dir: "asc"
+                        }],
                         columns: [{
                                 title: "ID",
                                 field: "id",
                                 width: 120,
+                                sorter: "number",
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Unit",
                                 field: "unit",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Plant Name",
                                 field: "plant_name",
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -135,6 +145,7 @@ function refreshUnitSummary() {
                                 field: "created_by",
                                 width: 150,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -142,12 +153,14 @@ function refreshUnitSummary() {
                                 field: "updated_by",
                                 width: 150,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Action",
                                 width: 120,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center",
                                 formatter: function(cell) {
                                     let row = cell.getRow().getData();
@@ -390,23 +403,33 @@ function refreshUnitSummary() {
                             pagination: true,
                             paginationSize: 10,
                             hozAlign: "center",
+                            paginationSizeSelector: [10, 25, 50, 100],
+
+                            initialSort: [{
+                                column: "id",
+                                dir: "asc"
+                            }],
                             columns: [{
                                     title: "ID",
                                     field: "id",
                                     width: 120,
+                                    sorter: "number",
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Plant Name",
                                     field: "plant_name",
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Unit",
                                     field: "unit",
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -414,6 +437,7 @@ function refreshUnitSummary() {
                                     field: "created_by",
                                     width: 150,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
@@ -421,12 +445,14 @@ function refreshUnitSummary() {
                                     field: "updated_by",
                                     width: 150,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Action",
                                     width: 100,
                                     hozAlign: "center",
+                                    resizable: false,
                                     headerHozAlign: "center",
                                     formatter: function(cell) {
                                         let row = cell.getRow().getData();

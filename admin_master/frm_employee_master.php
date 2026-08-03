@@ -181,10 +181,17 @@ const table = new Tabulator("#employee_table", {
     pagination: true,
     paginationSize: 10,
     hozAlign: "center",
+    paginationSizeSelector: [10, 25, 50, 100],
+
+    initialSort: [{
+        column: "id",
+        dir: "asc"
+    }],
     columns: [{
             title: "ID",
             field: "id",
             width: 55,
+            sorter: "number",
             hozAlign: "center",
             resizable: false,
             headerHozAlign: "center"

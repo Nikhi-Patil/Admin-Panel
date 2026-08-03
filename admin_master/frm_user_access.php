@@ -59,24 +59,34 @@ include "../include/left_nav_bar.php";
                         layout: "fitColumns",
                         pagination: true,
                         paginationSize: 10,
+                        paginationSizeSelector: [10, 25, 50, 100],
+
+                        initialSort: [{
+                            column: "id",
+                            dir: "asc"
+                        }],
 
 
                         columns: [{
                                 title: "Employee",
                                 field: "employee_name",
                                 width: 150,
+                                sorter: "number",
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Sub Departments",
                                 field: "sub_departments",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Modules",
                                 field: "modules",
                                 width: 200,
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -84,6 +94,7 @@ include "../include/left_nav_bar.php";
                                 field: "created_by",
                                 width: 110,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
@@ -91,12 +102,14 @@ include "../include/left_nav_bar.php";
                                 field: "updated_by",
                                 width: 110,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center"
                             },
                             {
                                 title: "Action",
                                 width: 90,
                                 hozAlign: "center",
+                                resizable: false,
                                 headerHozAlign: "center",
                                 formatter: function(cell) {
                                     let row = cell.getRow().getData();

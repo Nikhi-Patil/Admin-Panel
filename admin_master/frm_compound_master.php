@@ -150,6 +150,12 @@ $page = $_GET['page'] ?? 'compound';
                         pagination: true,
                         paginationSize: 10,
                         hozAlign: "center",
+                        paginationSizeSelector: [10, 25, 50, 100],
+
+                        initialSort: [{
+                            column: "id",
+                            dir: "asc"
+                        }],
 
 
                         resizableColumns: false,
@@ -160,6 +166,7 @@ $page = $_GET['page'] ?? 'compound';
                                 title: "ID",
                                 field: "id",
                                 width: 100,
+                                sorter: "number",
                                 resizable: false,
                                 hozAlign: "center",
                                 headerHozAlign: "center"
@@ -501,18 +508,26 @@ $page = $_GET['page'] ?? 'compound';
                             pagination: true,
                             paginationSize: 10,
                             hozAlign: "center",
+                            paginationSizeSelector: [10, 25, 50, 100],
+
+                            initialSort: [{
+                                column: "id",
+                                dir: "asc"
+                            }],
 
                             columns: [{
                                     title: "ID",
                                     field: "id",
                                     width: 100,
+                                    sorter: "number",
+                                    resizable: false,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
                                 {
                                     title: "Polymer Name",
                                     field: "polymer",
-
+                                    resizable: false,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
@@ -520,6 +535,7 @@ $page = $_GET['page'] ?? 'compound';
                                     title: "Compund Code",
                                     field: "compound_code",
                                     width: 180,
+                                    resizable: false,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
@@ -527,6 +543,7 @@ $page = $_GET['page'] ?? 'compound';
                                     title: "IM Code",
                                     field: "im_code",
                                     width: 150,
+                                    resizable: false,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
@@ -534,6 +551,7 @@ $page = $_GET['page'] ?? 'compound';
                                     title: "Created By",
                                     field: "created_by",
                                     width: 160,
+                                    resizable: false,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
                                 },
@@ -541,6 +559,7 @@ $page = $_GET['page'] ?? 'compound';
                                     title: "Deleted By",
                                     field: "updated_by",
                                     width: 160,
+                                    resizable: false,
                                     hozAlign: "center",
                                     headerHozAlign: "center"
 
@@ -548,6 +567,7 @@ $page = $_GET['page'] ?? 'compound';
                                 {
                                     title: "Action",
                                     width: 100,
+                                    resizable: false,
                                     hozAlign: "center",
                                     headerHozAlign: "center",
 

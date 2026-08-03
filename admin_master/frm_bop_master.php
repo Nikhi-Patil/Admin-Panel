@@ -254,8 +254,9 @@ function populatePartNoOptions(selectedId = "") {
         select.innerHTML += `<option value="${item.id}"
                                 data-fgcode="${item.fg_code || ''}"
                                 ${selected}>
-                                ${item.part_name} ${item.fg_code ? `(${item.fg_code})` : ""}
+                                ${item.part_name}
                             </option>`;
+        // ${item.fg_code ? `(${item.fg_code})` : ""}
     });
 }
 
@@ -361,10 +362,19 @@ const table = new Tabulator("#bop_table", {
     layout: "fitColumns",
     pagination: true,
     paginationSize: 10,
+    paginationSizeSelector: [10, 25, 50, 100],
+
+    initialSort: [{
+        column: "id",
+        dir: "asc"
+    }],
+
     columns: [{
             title: "ID",
             field: "id",
+            sorter: "number",
             width: 55,
+            resizable: false,
             hozAlign: "center",
             headerHozAlign: "center"
         },
@@ -372,6 +382,7 @@ const table = new Tabulator("#bop_table", {
             title: "Part No",
             field: "part_no",
             width: 135,
+            resizable: false,
             hozAlign: "center",
             headerHozAlign: "center"
         },
@@ -379,6 +390,7 @@ const table = new Tabulator("#bop_table", {
             title: "FG Code",
             field: "fg_code",
             width: 135,
+            resizable: false,
             hozAlign: "center",
             headerHozAlign: "center"
         },
@@ -386,24 +398,28 @@ const table = new Tabulator("#bop_table", {
         {
             title: "BOP Part Name",
             field: "bop_part_name",
+            resizable: false,
             width: 160,
             headerHozAlign: "center"
         },
         {
             title: "BOP Part No",
             field: "bop_part_no",
+            resizable: false,
             width: 140,
             headerHozAlign: "center"
         },
         {
             title: "BOP ERP Code",
             field: "bop_erp_code",
+            resizable: false,
             width: 150,
             headerHozAlign: "center"
         },
         {
             title: "Supplier Name",
             field: "supplier_name",
+            resizable: false,
             width: 170,
             headerHozAlign: "center"
         },
@@ -411,6 +427,7 @@ const table = new Tabulator("#bop_table", {
             title: "Quantity",
             field: "bop_quantity",
             width: 110,
+            resizable: false,
             hozAlign: "center",
             headerHozAlign: "center"
         },
@@ -418,6 +435,7 @@ const table = new Tabulator("#bop_table", {
             title: "UMO",
             field: "umo",
             width: 80,
+            resizable: false,
             hozAlign: "center",
             headerHozAlign: "center"
         },
@@ -425,6 +443,7 @@ const table = new Tabulator("#bop_table", {
             title: "Created By",
             field: "created_by",
             width: 120,
+            resizable: false,
             hozAlign: "center",
             headerHozAlign: "center"
         },
@@ -432,12 +451,14 @@ const table = new Tabulator("#bop_table", {
             title: "Updated By",
             field: "updated_by",
             width: 130,
+            resizable: false,
             hozAlign: "center",
             headerHozAlign: "center"
         },
         {
             title: "Action",
             width: 90,
+            resizable: false,
             hozAlign: "center",
             headerHozAlign: "center",
             formatter: function(cell) {
@@ -654,10 +675,18 @@ document.getElementById("bulkUploadForm")
                     layout: "fitColumns",
                     pagination: true,
                     paginationSize: 10,
+                    paginationSizeSelector: [10, 25, 50, 100],
+
+                    initialSort: [{
+                        column: "id",
+                        dir: "asc"
+                    }],
                     columns: [{
                             title: "ID",
                             field: "id",
                             width: 55,
+                            sorter: "number",
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
@@ -665,6 +694,7 @@ document.getElementById("bulkUploadForm")
                             title: "Part No",
                             field: "part_no",
                             width: 135,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
@@ -672,6 +702,7 @@ document.getElementById("bulkUploadForm")
                             title: "FG Code",
                             field: "fg_code",
                             width: 135,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
@@ -679,24 +710,28 @@ document.getElementById("bulkUploadForm")
                         {
                             title: "BOP Part Name",
                             field: "bop_part_name",
+                            resizable: false,
                             width: 160,
                             headerHozAlign: "center"
                         },
                         {
                             title: "BOP Part No",
                             field: "bop_part_no",
+                            resizable: false,
                             width: 140,
                             headerHozAlign: "center"
                         },
                         {
                             title: "BOP ERP Code",
                             field: "bop_erp_code",
+                            resizable: false,
                             width: 150,
                             headerHozAlign: "center"
                         },
                         {
                             title: "Supplier Name",
                             field: "supplier_name",
+                            resizable: false,
                             width: 170,
                             headerHozAlign: "center"
                         },
@@ -704,6 +739,7 @@ document.getElementById("bulkUploadForm")
                             title: "Quantity",
                             field: "bop_quantity",
                             width: 110,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
@@ -711,6 +747,7 @@ document.getElementById("bulkUploadForm")
                             title: "UMO",
                             field: "umo",
                             width: 80,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
@@ -718,6 +755,7 @@ document.getElementById("bulkUploadForm")
                             title: "Created By",
                             field: "created_by",
                             width: 120,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
@@ -725,12 +763,14 @@ document.getElementById("bulkUploadForm")
                             title: "Updated By",
                             field: "updated_by",
                             width: 130,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center"
                         },
                         {
                             title: "Action",
                             width: 90,
+                            resizable: false,
                             hozAlign: "center",
                             headerHozAlign: "center",
                             formatter: function(cell) {
