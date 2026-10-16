@@ -2,22 +2,7 @@
 session_start();
 include "../inc/db_cfg.php";
 
-/*
-|--------------------------------------------------------------------------
-| Employee Master Backend
-|--------------------------------------------------------------------------
-| Actions:
-|   list
-|   get
-|   designations
-|   get_sub_departments
-|   save
-|
-| Login table is intentionally NOT modified by this file.
-| Employee credentials are stored only in employee_master.
-|--------------------------------------------------------------------------
-*/
-
+/* Employee Master Backend*/
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 
 $generateTempPassword = function (int $length = 10): string {
@@ -33,11 +18,7 @@ $generateTempPassword = function (int $length = 10): string {
 
 $action = $_REQUEST['action'] ?? '';
 
-/*
-|--------------------------------------------------------------------------
-| Helper: Return JSON and stop
-|--------------------------------------------------------------------------
-*/
+/* Helper: Return JSON and stop */
 function jsonResponse(array $data): void
 {
     header("Content-Type: application/json; charset=utf-8");
@@ -45,14 +26,7 @@ function jsonResponse(array $data): void
     exit;
 }
 
-/*
-|--------------------------------------------------------------------------
-| Helper: Convert array/scalar select value into one ID
-|--------------------------------------------------------------------------
-| Frontend currently sends unit[], department[], sub_department[].
-| This helper safely handles both array and normal scalar values.
-|--------------------------------------------------------------------------
-*/
+/* Helper: Convert array/scalar select value into one ID */
 function getMultiPostValue(string $key): string
 {
     if (!isset($_POST[$key])) {
@@ -80,11 +54,7 @@ function getMultiPostValue(string $key): string
     return implode(',', array_values(array_unique($ids)));
 }
 
-/*
-|--------------------------------------------------------------------------
-| Helper: Escape value
-|--------------------------------------------------------------------------
-*/
+/* Helper: Escape value */
 function dbEscape(mysqli $conn, string $value): string
 {
     return mysqli_real_escape_string($conn, $value);
@@ -92,9 +62,7 @@ function dbEscape(mysqli $conn, string $value): string
 
 switch ($action) {
 
-    // =========================================================
     // GET EMPLOYEE TABLE
-    // =========================================================
     case "list":
 
         $sql = "SELECT
@@ -104,6 +72,8 @@ switch ($action) {
                     e.email,
                     e.location,
                     e.contact_no,
+                    e.reporting_manager_id,
+                   COALESCE(rm.employee_name, '-') AS reporting_to_name,
 
                     e.unit,
                     e.department,
@@ -127,6 +97,9 @@ switch ($action) {
                 LEFT JOIN designation_master d
                     ON e.designation_id = d.id
 
+                LEFT JOIN employee_master rm
+                    ON rm.id = e.reporting_manager_id
+
                 LEFT JOIN unit_master um
                     ON FIND_IN_SET(um.id, e.unit)
 
@@ -143,6 +116,9 @@ switch ($action) {
                     e.email,
                     e.location,
                     e.contact_no,
+                    e.reporting_manager_id,
+                    rm.employee_name,
+                    rm.user_name,
                     e.unit,
                     e.department,
                     e.sub_department,
@@ -175,9 +151,7 @@ switch ($action) {
         break;
 
 
-    // =========================================================
     // GET SINGLE EMPLOYEE
-    // =========================================================
     case "get":
 
         $id = intval($_GET['id'] ?? 0);
@@ -196,6 +170,8 @@ switch ($action) {
                     e.email,
                     e.location,
                     e.contact_no,
+                    e.reporting_manager_id,
+                    COALESCE(rm.employee_name, '-') AS reporting_to_name,
 
                     e.unit,
                     e.department,
@@ -219,6 +195,9 @@ switch ($action) {
                 LEFT JOIN designation_master d
                     ON e.designation_id = d.id
 
+                LEFT JOIN employee_master rm
+                    ON rm.id = e.reporting_manager_id
+
                 LEFT JOIN unit_master um
                     ON FIND_IN_SET(um.id, e.unit)
 
@@ -236,6 +215,9 @@ switch ($action) {
                     e.email,
                     e.location,
                     e.contact_no,
+                    e.reporting_manager_id,
+                    rm.employee_name,
+                    rm.user_name,
                     e.unit,
                     e.department,
                     e.sub_department,
@@ -271,9 +253,38 @@ switch ($action) {
         break;
 
 
-    // =========================================================
+    // GET REPORTING MANAGER OPTIONS
+    case "reporting_managers":
+
+        $excludeId = (int)($_GET['exclude_id'] ?? 0);
+        $designationId = (int)($_GET['designation_id'] ?? 0);
+
+        // Only return employees with the designation required by the selected employee.
+        $sql = "SELECT id, employee_name, user_name,
+                       CONCAT(employee_name) AS employee_label
+                FROM employee_master
+                WHERE status = 'Active'
+                  AND id <> " . $excludeId . "
+                  AND designation_id = " . $designationId . "
+                ORDER BY employee_name ASC";
+
+        $result = mysqli_query($conn, $sql);
+        if (!$result) {
+            jsonResponse([
+                "status" => "error",
+                "message" => mysqli_error($conn)
+            ]);
+        }
+
+        $data = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $data[] = $row;
+        }
+        jsonResponse($data);
+        break;
+
+
     // GET DESIGNATIONS
-    // =========================================================
     case "designations":
 
         $sql = "SELECT
@@ -302,9 +313,7 @@ switch ($action) {
         break;
 
 
-    // =========================================================
     // GET SUB DEPARTMENTS
-    // =========================================================
     case "get_sub_departments":
 
         $unitIds = $_POST['unit'] ?? $_GET['unit'] ?? [];
@@ -363,9 +372,7 @@ switch ($action) {
         break;
 
 
-    // =========================================================
     // SAVE / UPDATE EMPLOYEE
-    // =========================================================
     case "save":
 
         header("Content-Type: application/json; charset=utf-8");
@@ -435,6 +442,17 @@ switch ($action) {
             trim((string)($_POST['status'] ?? 'Active'))
         );
 
+        $reportingManagerRaw = trim((string)($_POST['reporting_manager_id'] ?? ''));
+        $reporting_manager_id = ($reportingManagerRaw !== '' && ctype_digit($reportingManagerRaw))
+            ? (int)$reportingManagerRaw
+            : 0;
+
+        // Super Admin (1), Admin (2), and Vice President (3) do not report to anyone.
+        if (in_array((int)$designation_id, [1, 2, 3], true)) {
+            $reporting_manager_id = 0;
+            $reportingManagerRaw = '';
+        }
+
         $user_id = $_SESSION['user_name'] ?? '';
         $creator = substr((string)$user_id, 0, 10);
 
@@ -459,6 +477,50 @@ switch ($action) {
             ]);
         }
 
+        // Reporting To is optional, but a supplied manager must exist and be active.
+        if ($reportingManagerRaw !== '' && $reporting_manager_id <= 0) {
+            jsonResponse(["status" => "error", "message" => "Please select a valid Reporting To employee."]);
+        }
+
+        if ($reporting_manager_id > 0) {
+            if ($id !== '' && $reporting_manager_id === (int)$id) {
+                jsonResponse(["status" => "error", "message" => "An employee cannot report to themselves."]);
+            }
+
+            $requiredReportingDesignation = [7 => 6, 6 => 4, 4 => 3][(int)$designation_id] ?? 0;
+            if ($requiredReportingDesignation === 0) {
+                jsonResponse(["status" => "error", "message" => "Reporting To is not configured for this designation."]);
+            }
+
+            $managerCheck = mysqli_query(
+                $conn,
+                "SELECT id FROM employee_master WHERE id = " . $reporting_manager_id .
+                    " AND status = 'Active' AND designation_id = " . $requiredReportingDesignation . " LIMIT 1"
+            );
+            if (!$managerCheck || mysqli_num_rows($managerCheck) === 0) {
+                jsonResponse(["status" => "error", "message" => "Please select an active employee with the required reporting designation."]);
+            }
+
+            // Prevent reporting loops such as A -> B -> C -> A.
+            $visited = [];
+            $cursor = $reporting_manager_id;
+            while ($cursor > 0) {
+                if ($id !== '' && $cursor === (int)$id) {
+                    jsonResponse(["status" => "error", "message" => "This Reporting To selection would create a reporting cycle."]);
+                }
+                if (isset($visited[$cursor])) {
+                    jsonResponse(["status" => "error", "message" => "The selected manager already belongs to an invalid reporting cycle."]);
+                }
+                $visited[$cursor] = true;
+                $nextResult = mysqli_query($conn, "SELECT reporting_manager_id FROM employee_master WHERE id = " . $cursor . " LIMIT 1");
+                if (!$nextResult || mysqli_num_rows($nextResult) === 0) {
+                    break;
+                }
+                $nextRow = mysqli_fetch_assoc($nextResult);
+                $cursor = (int)($nextRow['reporting_manager_id'] ?? 0);
+            }
+        }
+
         mysqli_begin_transaction($conn);
 
         try {
@@ -479,6 +541,7 @@ switch ($action) {
                             email,
                             location,
                             contact_no,
+                            reporting_manager_id,
                             unit,
                             department,
                             sub_department,
@@ -495,6 +558,7 @@ switch ($action) {
                             '$email',
                             '$location',
                             '$contact_no',
+                            " . ($reporting_manager_id > 0 ? $reporting_manager_id : 'NULL') . ",
                             '$unit',
                             '$department',
                             '$sub_department',
@@ -538,6 +602,7 @@ switch ($action) {
                         email = '$email',
                         location = '$location',
                         contact_no = '$contact_no',
+                        reporting_manager_id = " . ($reporting_manager_id > 0 ? $reporting_manager_id : 'NULL') . ",
                         unit = '$unit',
                         department = '$department',
                         sub_department = '$sub_department',
@@ -565,7 +630,6 @@ switch ($action) {
 
 
             echo json_encode($response);
-
         } catch (Throwable $e) {
 
             mysqli_rollback($conn);
@@ -579,9 +643,7 @@ switch ($action) {
         break;
 
 
-    // =========================================================
     // INVALID ACTION
-    // =========================================================
     default:
 
         jsonResponse([
@@ -591,4 +653,3 @@ switch ($action) {
 
         break;
 }
-?>

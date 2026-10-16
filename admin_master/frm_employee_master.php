@@ -9,10 +9,7 @@ $page = $_GET['page'] ?? 'employee';
 
 $unitOptions = [];
 
-$unitQry = mysqli_query(
-    $conn,
-    "SELECT id, unit FROM unit_master ORDER BY unit"
-);
+$unitQry = mysqli_query($conn, "SELECT id, unit FROM unit_master ORDER BY unit");
 
 if ($unitQry) {
     while ($row = mysqli_fetch_assoc($unitQry)) {
@@ -21,10 +18,7 @@ if ($unitQry) {
 }
 
 $departmentOptions = [];
-$deptQry = mysqli_query(
-    $conn,
-    "SELECT id, department_name FROM department_master ORDER BY department_name"
-);
+$deptQry = mysqli_query($conn, "SELECT id, department_name FROM department_master ORDER BY department_name");
 
 if ($deptQry) {
     while ($row = mysqli_fetch_assoc($deptQry)) {
@@ -34,609 +28,673 @@ if ($deptQry) {
 ?>
 
 <style>
-body {
-    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
+    body {
+        font-family: "Open Sans",
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            Roboto,
+            Oxygen-Sans,
+            Ubuntu,
+            Cantarell,
+            "Helvetica Neue",
+            Helvetica,
+            Arial,
+            sans-serif;
+    }
 
-.small-popup {
-    padding: 0.75rem !important;
-    border-radius: 0.9rem !important;
-}
+    .small-popup {
+        padding: 0.75rem !important;
+        border-radius: 0.9rem !important;
+    }
 
-.small-title {
-    font-size: 1rem !important;
-    line-height: 1.2 !important;
-    margin: 0 !important;
-}
+    .small-title {
+        font-size: 1rem !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
+    }
 </style>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<script src="https\://cdn.jsdelivr.net/npm/sweetalert2\@11"></script>
 <?php if ($page == "employee") { ?>
-<div class="app-content-header" style="padding: 6px 0.5rem;">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <h1 class="mb-0 fs-3">Employee Master</h1>
-            </div>
-            <div class="col-sm-6">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb float-sm-end">
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#employeeModal">
-                            <i class="fas fa-plus"></i>
-                            Add Employee
-                        </button>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="app-content">
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-header">
-                <button id="export-csv" type="button" class="btn btn-sm btn-warning">
-                    <i class="fa-solid fa-file-csv"></i>
-                    Export CSV
-                </button>
-
-                <button id="print-table" type="button" class="btn btn-sm btn-info">
-                    <i class="fa-solid fa-print"></i>
-                    Print
-                </button>
-
-                <div class="card-tools m-0 d-flex align-items-center ms-auto">
-                    <div class="input-group input-group-sm" style="width: 16rem">
-                        <span class="input-group-text">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </span>
-                        <input id="table-filter" type="search" class="form-control" placeholder="Filter rows&hellip;"
-                            aria-label="Filter rows" />
-                    </div>
+    <div class="app-content-header" style="padding: 6px 0.5rem;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h1 class="mb-0 fs-3">Employee Master</h1>
+                </div>
+                <div class="col-sm-6">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb float-sm-end">
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#employeeModal">
+                                <i class="fas fa-plus"></i>
+                                Add Employee
+                            </button>
+                        </ol>
+                    </nav>
                 </div>
             </div>
-
-            <div class="card-body">
-                <div id="employee_table"></div>
-            </div>
         </div>
     </div>
-</div>
+    <div class="app-content">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-header">
+                    <button id="export-csv" type="button" class="btn btn-sm btn-warning">
+                        <i class="fa-solid fa-file-csv"></i>
+                        Export CSV
+                    </button>
 
-<div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="employeeModalLabel">Add Employee</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="employeeForm">
-                    <input type="hidden" id="employee_id" name="id">
+                    <button id="print-table" type="button" class="btn btn-sm btn-info">
+                        <i class="fa-solid fa-print"></i>
+                        Print
+                    </button>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label>Employee Name</label>
-                            <input type="text" id="employee_name" name="employee_name" class="form-control" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>User Name</label>
-                            <input type="text" id="user_name" name="user_name" class="form-control" required>
-                        </div>
+                    <div class="card-tools m-0 d-flex align-items-center ms-auto">
+                        <div class="input-group input-group-sm" style="width: 16rem">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
 
-                        <div class="col-md-6 mb-3">
-                            <label>Email</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label>Location</label>
-                            <input type="text" id="location" name="location" class="form-control" required>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label>Contact No</label>
-                            <input type="text" id="contact_no" name="contact_no" class="form-control" required>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label>Unit</label>
-                            <select id="unit" name="unit[]" class="form-select" multiple size="4" required>
-                                <option value="">Select Unit</option>
-                                <?php foreach ($unitOptions as $row) { ?>
-                                    <option value="<?php echo (int)$row['id']; ?>">
-                                        <?php echo htmlspecialchars($row['unit']); ?>
-                                    </option>
-                                <?php } ?>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label>Department</label>
-                            <select id="department" name="department[]" class="form-select" multiple size="4" required>
-                                <option value="">Select Department</option>
-                                <?php foreach ($departmentOptions as $row) { ?>
-                                    <option value="<?php echo (int)$row['id']; ?>">
-                                        <?php echo htmlspecialchars($row['department_name']); ?>
-                                    </option>
-                                <?php } ?>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label>Sub Department</label>
-                            <select id="sub_department" name="sub_department[]" class="form-select" multiple size="5" required disabled>
-                                <option value="">Select Sub Department</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label>Designation</label>
-                            <select class="form-select" id="designation_id" name="designation_id" required>
-                                <option value="">Select Designation</option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label>Level</label>
-                            <select class="form-select" id="level_select" required>
-                                <option value="">Select Level</option>
-                                <option value="Level 1">Level 1(Admin)</option>
-                                <option value="Level 2">Level 2(Plant Head)</option>
-                                <option value="Level 3">Level 3(User)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Status</label>
-                            <select class="form-select" id="status" name="status">
-                                <option value="Active" selected>Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
+                            <input id="table-filter" type="search" class="form-control" placeholder="Filter rows&hellip;"
+                                aria-label="Filter rows" />
                         </div>
                     </div>
+                </div>
 
-                    <button type="submit" class="btn btn-success" id="saveBtn">Save</button>
-                </form>
+                <div class="card-body">
+                    <div id="employee_table"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-document.getElementById("status").value = "Active";
+    <div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="employeeModalLabel">Add Employee</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-const presetLevels = ["Level 1", "Level 2", "Level 3"];
+                <div class="modal-body">
+                    <form id="employeeForm">
+                        <input type="hidden" id="employee_id" name="id">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>Employee Name</label>
+                                <input type="text" id="employee_name" name="employee_name" class="form-control" required>
+                            </div>
 
-const levelSelect = document.getElementById("level_select");
-const levelOtherWrap = document.getElementById("level_other_wrap");
-const levelOther = document.getElementById("level_other");
+                            <div class="col-md-6 mb-3">
+                                <label>User Name</label>
+                                <input type="text" id="user_name" name="user_name" class="form-control" required>
+                            </div>
 
-function toggleLevelOther() {
-    if (!levelOtherWrap || !levelOther) {
-        return;
-    }
+                            <div class="col-md-6 mb-3">
+                                <label>Email</label>
+                                <input type="email" id="email" name="email" class="form-control" required>
+                            </div>
 
-    if (levelSelect.value === "Other") {
-        levelOtherWrap.classList.remove("d-none");
-        levelOther.required = true;
-    } else {
-        levelOtherWrap.classList.add("d-none");
-        levelOther.required = false;
-        levelOther.value = "";
-    }
-}
+                            <div class="col-md-6 mb-3">
+                                <label>Location</label>
+                                <input type="text" id="location" name="location" class="form-control" required>
+                            </div>
 
-levelSelect.addEventListener("change", toggleLevelOther);
+                            <div class="col-md-6 mb-3">
+                                <label>Contact No</label>
+                                <input type="text" id="contact_no" name="contact_no" class="form-control" required>
+                            </div>
 
-const table = new Tabulator("#employee_table", {
-    ajaxURL: "qur_employee_master.php?action=list",
-    ajaxConfig: "GET",
-    layout: "fitColumns",
-    pagination: true,
-    paginationSize: 10,
-    hozAlign: "center",
-    paginationSizeSelector: [10, 25, 50, 100],
+                            <div class="col-md-6 mb-3">
+                                <label>Unit</label>
+                                <select id="unit" name="unit[]" class="form-select" multiple size="4" required>
+                                    <option value="">Select Unit</option>
+                                    <?php foreach ($unitOptions as $row) { ?>
+                                        <option value="<?php echo (int)$row['id']; ?>">
+                                            <?php echo htmlspecialchars($row['unit']); ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </div>
 
-    initialSort: [{
-        column: "id",
-        dir: "asc"
-    }],
-    columns: [{
-            title: "ID",
-            field: "id",
-            width: 55,
-            sorter: "number",
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Employee Name",
-            field: "employee_name",
-            width: 160,
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "User Name",
-            field: "user_name",
-            width: 150,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Email",
-            field: "email",
-            width: 180,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Location",
-            field: "location",
-            width: 105,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Contact No",
-            field: "contact_no",
-            width: 140,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Unit",
-            field: "unit_name",
-            width: 120,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Department",
-            field: "department_name",
-            width: 150,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Sub Department",
-            field: "sub_department_display",
-            width: 160,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Password",
-            field: "password",
-            width: 150,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Designation",
-            field: "designation_name",
-            width: 130,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Level",
-            field: "level",
-            width: 80,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Status",
-            field: "status",
-            width: 100,
-            hozAlign: "center",
-            headerHozAlign: "center",
-            formatter: function(cell) {
-                if (cell.getValue() === "Active") {
-                    return "<span class='badge bg-success'>Active</span>";
-                }
-                return "<span class='badge bg-danger'>Inactive</span>";
+                            <div class="col-md-6 mb-3">
+                                <label>Department</label>
+                                <select id="department" name="department[]" class="form-select" multiple size="4" required>
+                                    <option value="">Select Department</option>
+                                    <?php foreach ($departmentOptions as $row) { ?>
+                                        <option value="<?php echo (int)$row['id']; ?>">
+                                            <?php echo htmlspecialchars($row['department_name']); ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Sub Department</label>
+                                <select id="sub_department" name="sub_department[]" class="form-select" multiple size="5" required disabled>
+                                    <option value="">Select Sub Department</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Designation</label>
+                                <select class="form-select" id="designation_id" name="designation_id" required>
+                                    <option value="">Select Designation</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Reporting To</label>
+                                <select class="form-select" id="reporting_manager_id" name="reporting_manager_id">
+                                    <option value="">Select Reporting Manager (Optional)</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Level</label>
+                                <select class="form-select" id="level_select" required>
+                                    <option value="">Select Level</option>
+                                    <option value="Level 1">Level 1(Admin)</option>
+                                    <option value="Level 2">Level 2(Plant Head)</option>
+                                    <option value="Level 3">Level 3(User)</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label>Status</label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="Active" selected>Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success" id="saveBtn">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("status").value = "Active";
+        const presetLevels = ["Level 1", "Level 2", "Level 3"];
+        const levelSelect = document.getElementById("level_select");
+        const levelOtherWrap = document.getElementById("level_other_wrap");
+        const levelOther = document.getElementById("level_other");
+
+        function toggleLevelOther() {
+            if (!levelOtherWrap || !levelOther) {
+                return;
             }
-        },
-        {
-            title: "Created By",
-            field: "created_by",
-            width: 120,
+            if (levelSelect.value === "Other") {
+                levelOtherWrap.classList.remove("d-none");
+                levelOther.required = true;
+            } else {
+                levelOtherWrap.classList.add("d-none");
+                levelOther.required = false;
+                levelOther.value = "";
+            }
+        }
+        levelSelect.addEventListener("change", toggleLevelOther);
+
+        const table = new Tabulator("#employee_table", {
+            ajaxURL: "qur_employee_master.php?action=list",
+            ajaxConfig: "GET",
+            layout: "fitColumns",
+            pagination: true,
+            paginationSize: 10,
             hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Updated By",
-            field: "updated_by",
-            width: 130,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center"
-        },
-        {
-            title: "Action",
-            width: 90,
-            hozAlign: "center",
-            resizable: false,
-            headerHozAlign: "center",
-            formatter: function(cell) {
-                let row = cell.getRow().getData();
-                return `
+            paginationSizeSelector: [10, 25, 50, 100],
+            initialSort: [{
+                column: "id",
+                dir: "asc"
+            }],
+            columns: [{
+                    title: "ID",
+                    field: "id",
+                    width: 55,
+                    sorter: "number",
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Employee Name",
+                    field: "employee_name",
+                    width: 160,
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "User Name",
+                    field: "user_name",
+                    width: 150,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Email",
+                    field: "email",
+                    width: 180,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Location",
+                    field: "location",
+                    width: 105,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Contact No",
+                    field: "contact_no",
+                    width: 140,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Unit",
+                    field: "unit_name",
+                    width: 120,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Department",
+                    field: "department_name",
+                    width: 150,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Sub Department",
+                    field: "sub_department_display",
+                    width: 160,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Password",
+                    field: "password",
+                    width: 150,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Designation",
+                    field: "designation_name",
+                    width: 130,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Reporting To",
+                    field: "reporting_to_name",
+                    width: 170,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Level",
+                    field: "level",
+                    width: 80,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Status",
+                    field: "status",
+                    width: 100,
+                    hozAlign: "center",
+                    headerHozAlign: "center",
+                    formatter: function(cell) {
+                        if (cell.getValue() === "Active") {
+                            return "<span class='badge bg-success'>Active</span>";
+                        }
+                        return "<span class='badge bg-danger'>Inactive</span>";
+                    }
+                },
+                {
+                    title: "Created By",
+                    field: "created_by",
+                    width: 120,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Updated By",
+                    field: "updated_by",
+                    width: 130,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center"
+                },
+                {
+                    title: "Action",
+                    width: 90,
+                    hozAlign: "center",
+                    resizable: false,
+                    headerHozAlign: "center",
+                    formatter: function(cell) {
+                        let row = cell.getRow().getData();
+                        return `
                     <button class="btn btn-primary action-btn edit-btn" data-id="${row.id}">
                         <i class="fa-solid fa-pen"></i>
                     </button>
                 `;
-            }
-        }
-    ]
-});
-
-
-const unitSelect = document.getElementById("unit");
-const departmentSelect = document.getElementById("department");
-const subDepartmentSelect = document.getElementById("sub_department");
-
-function normalizeMultiValues(value) {
-    if (Array.isArray(value)) {
-        return value.map(v => String(v).trim()).filter(Boolean);
-    }
-
-    return String(value || "")
-        .split(",")
-        .map(v => v.trim())
-        .filter(Boolean);
-}
-
-function getSelectedValues(select) {
-    return Array.from(select.selectedOptions)
-        .map(option => option.value)
-        .filter(Boolean);
-}
-
-function setMultiSelectValues(select, values) {
-    const selectedValues = new Set(normalizeMultiValues(values));
-
-    Array.from(select.options).forEach(option => {
-        option.selected = selectedValues.has(String(option.value));
-    });
-}
-
-function loadSubDepartments(unitIds, departmentIds, selectedSubDepartments = []) {
-    const units = normalizeMultiValues(unitIds);
-    const departments = normalizeMultiValues(departmentIds);
-    const selectedSubs = normalizeMultiValues(selectedSubDepartments);
-
-    subDepartmentSelect.innerHTML =
-        '<option value="">Loading Sub Departments...</option>';
-    subDepartmentSelect.disabled = true;
-
-    if (units.length === 0 || departments.length === 0) {
-        subDepartmentSelect.innerHTML =
-            '<option value="">Select Unit & Department First</option>';
-        return Promise.resolve();
-    }
-
-    const fd = new FormData();
-    fd.append("action", "get_sub_departments");
-
-    units.forEach(id => fd.append("unit[]", id));
-    departments.forEach(id => fd.append("department[]", id));
-
-    return fetch("qur_employee_master.php", {
-        method: "POST",
-        body: fd
-    })
-    .then(response => response.json())
-    .then(data => {
-        subDepartmentSelect.innerHTML = "";
-
-        if (!Array.isArray(data) || data.length === 0) {
-            subDepartmentSelect.innerHTML =
-                '<option value="">No Sub Department Found</option>';
-            return;
-        }
-
-        const selectedSet = new Set(selectedSubs);
-
-        data.forEach(item => {
-            const option = document.createElement("option");
-            option.value = item.id;
-            option.textContent = item.sub_department_name;
-            option.selected = selectedSet.has(String(item.id));
-            subDepartmentSelect.appendChild(option);
-        });
-
-        subDepartmentSelect.disabled = false;
-    })
-    .catch(error => {
-        console.error("Sub Department load failed:", error);
-        subDepartmentSelect.innerHTML =
-            '<option value="">Sub Department Load Failed</option>';
-    });
-}
-
-function refreshSubDepartments() {
-    loadSubDepartments(
-        getSelectedValues(unitSelect),
-        getSelectedValues(departmentSelect)
-    );
-}
-
-unitSelect.addEventListener("change", refreshSubDepartments);
-departmentSelect.addEventListener("change", refreshSubDepartments);
-
-function resetOrgSelects() {
-    setMultiSelectValues(unitSelect, []);
-    setMultiSelectValues(departmentSelect, []);
-
-    subDepartmentSelect.innerHTML =
-        '<option value="">Select Unit & Department First</option>';
-    subDepartmentSelect.disabled = true;
-}
-
-function loadOptions(url, elementId, labelField) {
-    fetch(url)
-        .then(res => res.json())
-        .then(data => {
-            const el = document.getElementById(elementId);
-            el.innerHTML = `<option value="">Select ${labelField}</option>`;
-            data.forEach(item => {
-                el.innerHTML += `<option value="${item.id}">${item[labelField]}</option>`;
-            });
-        });
-}
-
-loadOptions("qur_employee_master.php?action=designations", "designation_id", "designation");
-
-document.addEventListener("click", function(e) {
-    const editBtn = e.target.closest(".edit-btn");
-
-    if (editBtn) {
-        const id = editBtn.dataset.id;
-        fetch("qur_employee_master.php?action=get&id=" + encodeURIComponent(id))
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("employee_id").value = data.id || "";
-                document.getElementById("employee_name").value = data.employee_name || "";
-                document.getElementById("user_name").value = data.user_name || "";
-                document.getElementById("email").value = data.email || "";
-                document.getElementById("location").value = data.location || "";
-                document.getElementById("contact_no").value = data.contact_no || "";
-
-                const editUnits = normalizeMultiValues(data.unit);
-                const editDepartments = normalizeMultiValues(data.department);
-                const editSubDepartments = normalizeMultiValues(data.sub_department);
-
-                setMultiSelectValues(unitSelect, editUnits);
-                setMultiSelectValues(departmentSelect, editDepartments);
-
-                loadSubDepartments(
-                    editUnits,
-                    editDepartments,
-                    editSubDepartments
-                );
-
-                document.getElementById("designation_id").value = data.designation_id || "";
-                document.getElementById("status").value = data.status || "Active";
-
-                if (presetLevels.includes(data.level)) {
-                    levelSelect.value = data.level;
-                    toggleLevelOther();
-                } else {
-                    levelSelect.value = "Other";
-                    toggleLevelOther();
-                    levelOther.value = data.level || "";
-                }
-
-                document.getElementById("employeeModalLabel").innerHTML = "Edit Employee";
-                document.getElementById("saveBtn").innerHTML = "Update";
-                new bootstrap.Modal(document.getElementById("employeeModal")).show();
-            });
-    }
-});
-
-document.querySelector('[data-bs-target="#employeeModal"]').addEventListener("click", function() {
-    document.getElementById("employeeForm").reset();
-    document.getElementById("employee_id").value = "";
-    document.getElementById("employeeModalLabel").innerHTML = "Add Employee";
-    document.getElementById("saveBtn").innerHTML = "Save";
-
-    document.getElementById("status").value = "Active";
-
-    resetOrgSelects();
-
-    toggleLevelOther();
-});
-
-
-/*
- * Capitalize first letter while typing.
- * Example:
- *   rutuja       -> Rutuja
- *   rutuja rajmane -> Rutuja Rajmane
- *
- * Applied to text fields where names/details are entered.
- */
-function capitalizeFirstLetters(value) {
-    return String(value || "")
-        .replace(/\b\p{L}/gu, function(letter) {
-            return letter.toUpperCase();
-        });
-}
-
-function attachCapitalFirstLetter(inputId) {
-    const input = document.getElementById(inputId);
-
-    if (!input) {
-        return;
-    }
-
-    input.addEventListener("input", function() {
-        const start = this.selectionStart;
-        const end = this.selectionEnd;
-
-        this.value = capitalizeFirstLetters(this.value);
-
-        try {
-            this.setSelectionRange(start, end);
-        } catch (e) {}
-    });
-}
-
-attachCapitalFirstLetter("employee_name");
-attachCapitalFirstLetter("location");
-
-document.getElementById("employeeForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-    const levelValue = levelSelect.value === "Other" ? levelOther.value.trim() : levelSelect.value;
-    formData.set("level", levelValue);
-
-    fetch("qur_employee_master.php?action=save", {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "success") {
-                try {
-                    const modalEl = document.getElementById("employeeModal");
-                    const modalInstance = bootstrap.Modal.getInstance(modalEl) || bootstrap.Modal
-                        .getOrCreateInstance(modalEl);
-                    if (modalInstance) {
-                        modalInstance.hide();
                     }
+                }
+            ]
+        });
 
-                    document.getElementById("employeeForm").reset();
-                    document.getElementById("employee_id").value = "";
-                    document.getElementById("employeeModalLabel").innerHTML = "Add Employee";
-                    document.getElementById("saveBtn").innerHTML = "Save";
-                    toggleLevelOther();
-                    table.replaceData();
+        const unitSelect = document.getElementById("unit");
+        const departmentSelect = document.getElementById("department");
+        const subDepartmentSelect = document.getElementById("sub_department");
 
-                    if (data.temp_password) {
+        function normalizeMultiValues(value) {
+            if (Array.isArray(value)) {
+                return value.map(v => String(v).trim()).filter(Boolean);
+            }
 
-                        Swal.fire({
-                            position: "center",
-                            icon: "success",
-                            title: "Employee Created Successfully",
-                            html: `
+            return String(value || "")
+                .split(",")
+                .map(v => v.trim())
+                .filter(Boolean);
+        }
+
+        function getSelectedValues(select) {
+            return Array.from(select.selectedOptions)
+                .map(option => option.value)
+                .filter(Boolean);
+        }
+
+        function setMultiSelectValues(select, values) {
+            const selectedValues = new Set(normalizeMultiValues(values));
+            Array.from(select.options).forEach(option => {
+                option.selected = selectedValues.has(String(option.value));
+            });
+        }
+
+        function loadSubDepartments(unitIds, departmentIds, selectedSubDepartments = []) {
+            const units = normalizeMultiValues(unitIds);
+            const departments = normalizeMultiValues(departmentIds);
+            const selectedSubs = normalizeMultiValues(selectedSubDepartments);
+
+            subDepartmentSelect.innerHTML =
+                '<option value="">Loading Sub Departments...</option>';
+            subDepartmentSelect.disabled = true;
+
+            if (units.length === 0 || departments.length === 0) {
+                subDepartmentSelect.innerHTML =
+                    '<option value="">Select Unit & Department First</option>';
+                return Promise.resolve();
+            }
+
+            const fd = new FormData();
+            fd.append("action", "get_sub_departments");
+            units.forEach(id => fd.append("unit[]", id));
+            departments.forEach(id => fd.append("department[]", id));
+            return fetch("qur_employee_master.php", {
+                    method: "POST",
+                    body: fd
+                })
+                .then(response => response.json())
+                .then(data => {
+                    subDepartmentSelect.innerHTML = "";
+                    if (!Array.isArray(data) || data.length === 0) {
+                        subDepartmentSelect.innerHTML =
+                            '<option value="">No Sub Department Found</option>';
+                        return;
+                    }
+                    const selectedSet = new Set(selectedSubs);
+                    data.forEach(item => {
+                        const option = document.createElement("option");
+                        option.value = item.id;
+                        option.textContent = item.sub_department_name;
+                        option.selected = selectedSet.has(String(item.id));
+                        subDepartmentSelect.appendChild(option);
+                    });
+                    subDepartmentSelect.disabled = false;
+                })
+                .catch(error => {
+                    console.error("Sub Department load failed:", error);
+                    subDepartmentSelect.innerHTML =
+                        '<option value="">Sub Department Load Failed</option>';
+                });
+        }
+
+        function refreshSubDepartments() {
+            loadSubDepartments(
+                getSelectedValues(unitSelect),
+                getSelectedValues(departmentSelect)
+            );
+        }
+
+        unitSelect.addEventListener("change", refreshSubDepartments);
+        departmentSelect.addEventListener("change", refreshSubDepartments);
+
+        function resetOrgSelects() {
+            setMultiSelectValues(unitSelect, []);
+            setMultiSelectValues(departmentSelect, []);
+            subDepartmentSelect.innerHTML =
+                '<option value="">Select Unit & Department First</option>';
+            subDepartmentSelect.disabled = true;
+        }
+
+        function loadOptions(url, elementId, labelField) {
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    const el = document.getElementById(elementId);
+                    el.innerHTML = `<option value="">Select ${labelField}</option>`;
+                    data.forEach(item => {
+                        el.innerHTML += `<option value="${item.id}">${item[labelField]}</option>`;
+                    });
+                });
+        }
+
+        loadOptions("qur_employee_master.php?action=designations", "designation_id", "designation");
+        const reportingManagerSelect = document.getElementById("reporting_manager_id");
+        const designationSelect = document.getElementById("designation_id");
+
+        // Reporting hierarchy: User -> Manager -> Plant Head -> Vice President
+        const reportingDesignationMap = {
+            "7": {
+                id: "6",
+                label: "Manager"
+            },
+            "6": {
+                id: "4",
+                label: "Plant Head"
+            },
+            "4": {
+                id: "3",
+                label: "Vice President"
+            }
+        };
+
+        function updateReportingToState(employeeDesignationId = designationSelect.value) {
+            const designationId = String(employeeDesignationId || "");
+            const noReportingRequired = ["1", "2", "3"].includes(designationId); // Super Admin, Admin, VP
+            reportingManagerSelect.disabled = noReportingRequired;
+            reportingManagerSelect.required = false;
+            if (noReportingRequired) {
+                reportingManagerSelect.innerHTML = '<option value="">N/A</option>';
+                reportingManagerSelect.value = "";
+                return true;
+            }
+            return false;
+        }
+
+        function loadReportingManagers(excludeId = 0, selectedId = "", employeeDesignationId = designationSelect.value) {
+            const noReportingRequired = updateReportingToState(employeeDesignationId);
+            if (noReportingRequired) return Promise.resolve();
+            const requiredReportingDesignation = reportingDesignationMap[String(employeeDesignationId || "")];
+            reportingManagerSelect.innerHTML = "";
+            if (!employeeDesignationId) {
+                reportingManagerSelect.innerHTML = '<option value="">Select Designation First</option>';
+                return Promise.resolve();
+            }
+            if (!requiredReportingDesignation) {
+                reportingManagerSelect.innerHTML = '<option value="">No reporting designation configured</option>';
+                return Promise.resolve();
+            }
+            reportingManagerSelect.innerHTML = `<option value="">Select ${requiredReportingDesignation.label}</option>`;
+            const url = "qur_employee_master.php?action=reporting_managers&exclude_id=" +
+                encodeURIComponent(excludeId) + "&designation_id=" +
+                encodeURIComponent(requiredReportingDesignation.id);
+            return fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (!Array.isArray(data)) {
+                        throw new Error(data.message || "Could not load reporting employees.");
+                    }
+                    if (data.length === 0) {
+                        reportingManagerSelect.innerHTML = `<option value="">No active ${requiredReportingDesignation.label} found</option>`;
+                        return;
+                    }
+                    data.forEach(item => {
+                        const option = document.createElement("option");
+                        option.value = item.id;
+                        option.textContent = item.employee_label || (item.employee_name + " (" + item.user_name + ")");
+                        option.selected = String(item.id) === String(selectedId || "");
+                        reportingManagerSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error("Reporting employee load failed:", error);
+                    reportingManagerSelect.innerHTML = '<option value="">Unable to load reporting employees</option>';
+                });
+        }
+        designationSelect.addEventListener("change", function() {
+            loadReportingManagers(document.getElementById("employee_id").value || 0, "", this.value);
+        });
+        document.addEventListener("click", function(e) {
+            const editBtn = e.target.closest(".edit-btn");
+            if (editBtn) {
+                const id = editBtn.dataset.id;
+                fetch("qur_employee_master.php?action=get&id=" + encodeURIComponent(id))
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("employee_id").value = data.id || "";
+                        document.getElementById("employee_name").value = data.employee_name || "";
+                        document.getElementById("user_name").value = data.user_name || "";
+                        document.getElementById("email").value = data.email || "";
+                        document.getElementById("location").value = data.location || "";
+                        document.getElementById("contact_no").value = data.contact_no || "";
+                        const editUnits = normalizeMultiValues(data.unit);
+                        const editDepartments = normalizeMultiValues(data.department);
+                        const editSubDepartments = normalizeMultiValues(data.sub_department);
+                        setMultiSelectValues(unitSelect, editUnits);
+                        setMultiSelectValues(departmentSelect, editDepartments);
+                        loadSubDepartments(
+                            editUnits,
+                            editDepartments,
+                            editSubDepartments
+                        );
+                        document.getElementById("designation_id").value = data.designation_id || "";
+                        document.getElementById("status").value = data.status || "Active";
+                        loadReportingManagers(data.id, data.reporting_manager_id || "", data.designation_id || "").then(() => {
+                            reportingManagerSelect.value = data.reporting_manager_id || "";
+                        });
+
+                        if (presetLevels.includes(data.level)) {
+                            levelSelect.value = data.level;
+                            toggleLevelOther();
+                        } else {
+                            levelSelect.value = "Other";
+                            toggleLevelOther();
+                            levelOther.value = data.level || "";
+                        }
+
+                        document.getElementById("employeeModalLabel").innerHTML = "Edit Employee";
+                        document.getElementById("saveBtn").innerHTML = "Update";
+                        new bootstrap.Modal(document.getElementById("employeeModal")).show();
+                    });
+            }
+        });
+
+        document.querySelector('[data-bs-target="#employeeModal"]').addEventListener("click", function() {
+            document.getElementById("employeeForm").reset();
+            document.getElementById("employee_id").value = "";
+            document.getElementById("employeeModalLabel").innerHTML = "Add Employee";
+            document.getElementById("saveBtn").innerHTML = "Save";
+            document.getElementById("status").value = "Active";
+            resetOrgSelects();
+            loadReportingManagers(0, "", "");
+            toggleLevelOther();
+        });
+
+        /* Capitalize first letter while typing. */
+        function capitalizeFirstLetters(value) {
+            return String(value || "")
+                .replace(/\b\p{L}/gu, function(letter) {
+                    return letter.toUpperCase();
+                });
+        }
+
+        function attachCapitalFirstLetter(inputId) {
+            const input = document.getElementById(inputId);
+            if (!input) {
+                return;
+            }
+
+            input.addEventListener("input", function() {
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                this.value = capitalizeFirstLetters(this.value);
+                try {
+                    this.setSelectionRange(start, end);
+                } catch (e) {}
+            });
+        }
+        attachCapitalFirstLetter("employee_name");
+        attachCapitalFirstLetter("location");
+        document.getElementById("employeeForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const levelValue = levelSelect.value === "Other" ? levelOther.value.trim() : levelSelect.value;
+            formData.set("level", levelValue);
+            fetch("qur_employee_master.php?action=save", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        try {
+                            const modalEl = document.getElementById("employeeModal");
+                            const modalInstance = bootstrap.Modal.getInstance(modalEl) || bootstrap.Modal
+                                .getOrCreateInstance(modalEl);
+                            if (modalInstance) {
+                                modalInstance.hide();
+                            }
+                            document.getElementById("employeeForm").reset();
+                            document.getElementById("employee_id").value = "";
+                            document.getElementById("employeeModalLabel").innerHTML = "Add Employee";
+                            document.getElementById("saveBtn").innerHTML = "Save";
+                            toggleLevelOther();
+                            table.replaceData();
+                            if (data.temp_password) {
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "success",
+                                    title: "Employee Created Successfully",
+                                    html: `
                                     <div style="text-align:left">
                                         <p><strong>Username:</strong> ${data.username}</p>
                                         <p><strong>Temporary Password:</strong> ${data.temp_password}</p>
@@ -647,114 +705,109 @@ document.getElementById("employeeForm").addEventListener("submit", function(e) {
                                         </small>
                                     </div>
                                 `,
-                            confirmButtonText: "I have noted the credentials",
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            width: "430px",
-                            customClass: {
-                                popup: "small-popup",
-                                title: "small-title"
+                                    confirmButtonText: "I have noted the credentials",
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    width: "430px",
+                                    customClass: {
+                                        popup: "small-popup",
+                                        title: "small-title"
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "success",
+                                    title: "Employee Updated Successfully",
+                                    confirmButtonText: "OK",
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    width: "280px",
+                                    customClass: {
+                                        popup: "small-popup",
+                                        title: "small-title"
+                                    }
+                                });
                             }
-
-                        });
-
+                        } catch (uiError) {
+                            console.error("Employee save UI error:", uiError);
+                            table.replaceData();
+                            Swal.fire({
+                                position: "center",
+                                icon: "success",
+                                title: "Saved Successfully",
+                                showConfirmButton: false,
+                                timer: 1500,
+                                width: "260px",
+                                customClass: {
+                                    popup: "small-popup",
+                                    title: "small-title"
+                                }
+                            });
+                        }
                     } else {
-
                         Swal.fire({
                             position: "center",
-                            icon: "success",
-                            title: "Employee Updated Successfully",
-                            confirmButtonText: "OK",
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            width: "280px",
+                            icon: "error",
+                            title: data.message || "Save failed.",
+                            showConfirmButton: true,
+                            width: "300px",
                             customClass: {
                                 popup: "small-popup",
                                 title: "small-title"
                             }
                         });
-
                     }
-                } catch (uiError) {
-                    console.error("Employee save UI error:", uiError);
-                    table.replaceData();
+                })
+                .catch(() => {
                     Swal.fire({
                         position: "center",
-                        icon: "success",
-                        title: "Saved Successfully",
-                        showConfirmButton: false,
-                        timer: 1500,
-                        width: "260px",
+                        icon: "error",
+                        title: "Save failed.",
+                        showConfirmButton: true,
+                        width: "300px",
                         customClass: {
                             popup: "small-popup",
                             title: "small-title"
                         }
                     });
-                }
-            } else {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: data.message || "Save failed.",
-                    showConfirmButton: true,
-                    width: "300px",
-                    customClass: {
-                        popup: "small-popup",
-                        title: "small-title"
-                    }
                 });
-            }
-        })
-        .catch(() => {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "Save failed.",
-                showConfirmButton: true,
-                width: "300px",
-                customClass: {
-                    popup: "small-popup",
-                    title: "small-title"
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('table-filter').addEventListener('input', (e) => {
+                const value = e.target.value;
+                if (value) {
+                    const term = value.toLowerCase();
+
+                    table.setFilter(function(data) {
+                        return [
+                            data.id,
+                            data.employee_name,
+                            data.user_name,
+                            data.email,
+                            data.location,
+                            data.contact_no,
+                            data.unit_name,
+                            data.department_name,
+                            data.sub_department_display,
+                            data.password,
+                            data.designation_name,
+                            data.reporting_to_name,
+                            data.status,
+                            data.level
+                        ].some(field => String(field ?? "").toLowerCase().includes(term));
+                    });
+                } else {
+                    table.clearFilter();
                 }
             });
+            document.getElementById('print-table').addEventListener('click', () => table.print(false, true));
+            document.getElementById('export-csv').addEventListener('click', () => table.download('csv', 'employee_master.csv'));
         });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('table-filter').addEventListener('input', (e) => {
-        const value = e.target.value;
-        if (value) {
-            const term = value.toLowerCase();
-            table.setFilter(function(data) {
-                return [
-                    data.id,
-                    data.employee_name,
-                    data.user_name,
-                    data.email,
-                    data.location,
-                    data.contact_no,
-                    data.unit_name,
-                    data.department_name,
-                    data.sub_department_display,
-                    data.password,
-                    data.designation_name,
-                    data.status,
-                    data.level
-                ].some(field => String(field ?? "").toLowerCase().includes(term));
-            });
-        } else {
-            table.clearFilter();
-        }
-    });
-
-    document.getElementById('print-table').addEventListener('click', () => table.print(false, true));
-    document.getElementById('export-csv').addEventListener('click', () => table.download('csv',
-        'employee_master.csv'));
-});
-</script>
-</main>
+    </script>
+    </main>
 <?php } ?>
-
 
 <?php
 include "../include/footer.php";
